@@ -15,7 +15,7 @@
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
     </head>
-    <body>
+    <body data-layout-mode="dark">
         @inertia
     </body>
 </html>

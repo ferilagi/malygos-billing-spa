@@ -1,5 +1,7 @@
 import PropTypes from "prop-types"
 import React, { useEffect, useRef } from "react"
+import { usePage } from '@inertiajs/react'
+
 
 // //Import Scrollbar
 import SimpleBar from "simplebar-react"
@@ -13,10 +15,10 @@ import { withTranslation } from "react-i18next";
 
 const SidebarContent = props => {
   const ref = useRef()
+  const { url, component } = usePage()
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
-    const pathName = props.location
-
+    const pathName = url
     const initMenu = () => {
       new MetisMenu("#side-menu")
       let matchingMenuItem = null
@@ -33,7 +35,7 @@ const SidebarContent = props => {
       }
     }
     initMenu()
-  }, [route()])
+  }, [url])
 
   useEffect(() => {
     ref.current.recalculate()
@@ -93,25 +95,25 @@ const SidebarContent = props => {
           <ul className="metismenu list-unstyled" id="side-menu">
             <li className="menu-title">{props.t("Menu")} </li>
             <li>
-              <Link to="/#" className="has-arrow">
+              <Link href="/#" className="has-arrow">
                 <i className="bx bx-home-circle"></i>
                 <span>{props.t("Dashboards")}</span>
               </Link>
               <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  <Link href={route('dashboard')}>{props.t("Default")}</Link>
+                  <Link href="/dashboard">{props.t("Default")}</Link>
                 </li>
                 <li>
-                  <Link href={route('profile.edit')}>{props.t("Saas")}</Link>
+                  <Link href="/profile">{props.t("Edit Profile")}</Link>
                 </li>
                 <li>
-                  <Link to="/dashboard-crypto">{props.t("Crypto")}</Link>
+                  <Link href="/dashboard-crypto">{props.t("Crypto")}</Link>
                 </li>
                 <li>
-                  <Link to="/blog">{props.t("Blog")}</Link>
+                  <Link href="/blog">{props.t("Blog")}</Link>
                 </li>
                 <li>
-                  <Link to="/dashboard-job">
+                  <Link href="/dashboard-job">
                     <span className="badge rounded-pill text-bg-success float-end" key="t-new">New</span>
                     {props.t("Jobs")}
                   </Link>
@@ -122,75 +124,75 @@ const SidebarContent = props => {
             <li className="menu-title">{props.t("Apps")}</li>
 
             <li>
-              <Link to="/calendar" className=" ">
+              <Link href="/calendar" className="">
                 <i className="bx bx-calendar"></i>
                 <span>{props.t("Calendar")}</span>
               </Link>
             </li>
 
             <li>
-              <Link href={route('subs.index')} className="">
+              <Link href="/subs" className="">
                 <i className="bx bx-chat"></i>
                 <span>{props.t("Subscription")}</span>
               </Link>
             </li>
             <li>
-              <Link to="/apps-filemanager" >
+              <Link href="/apps-filemanager" className="">
                 <i className="bx bx-file"></i>
                 <span>{props.t("File Manager")}</span>
               </Link>
             </li>
 
             <li>
-              <Link href={route('setting.custom')}>
+              <Link href='/custom' className="">
                 <i className="bx bx-store"></i>
                 <span>{props.t("Setting")}</span>
               </Link>
             </li>
 
             <li>
-              <Link to="/#" className="has-arrow ">
+              <Link href="/#" className="has-arrow ">
                 <i className="bx bx-bitcoin"></i>
                 <span>{props.t("Crypto")}</span>
               </Link>
               <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  <Link to="/crypto-wallet">{props.t("Wallet")}</Link>
+                  <Link href="/crypto-wallet">{props.t("Wallet")}</Link>
                 </li>
                 <li>
-                  <Link to="/crypto-buy-sell">{props.t("Buy/Sell")}</Link>
+                  <Link href="/crypto-buy-sell">{props.t("Buy/Sell")}</Link>
                 </li>
                 <li>
-                  <Link to="/crypto-exchange">{props.t("Exchange")}</Link>
+                  <Link href="/crypto-exchange">{props.t("Exchange")}</Link>
                 </li>
                 <li>
-                  <Link to="/crypto-lending">{props.t("Lending")}</Link>
+                  <Link href="/crypto-lending">{props.t("Lending")}</Link>
                 </li>
                 <li>
-                  <Link to="/crypto-orders">{props.t("Orders")}</Link>
+                  <Link href="/crypto-orders">{props.t("Orders")}</Link>
                 </li>
                 <li>
-                  <Link to="/crypto-kyc-application">
+                  <Link href="/crypto-kyc-application">
                     {props.t("KYC Application")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/crypto-ico-landing">{props.t("ICO Landing")}</Link>
+                  <Link href="/crypto-ico-landing">{props.t("ICO Landing")}</Link>
                 </li>
               </ul>
             </li>
 
             <li>
-              <Link to="/#" className="has-arrow ">
+              <Link href="/#" className="has-arrow">
                 <i className="bx bx-receipt"></i>
                 <span>{props.t("Invoices")}</span>
               </Link>
               <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  <Link to="/invoices-list">{props.t("Invoice List")}</Link>
+                  <Link href="/invoices-list">{props.t("Invoice List")}</Link>
                 </li>
                 <li>
-                  <Link to="/invoices-detail">{props.t("Invoice Detail")}</Link>
+                  <Link href="/invoices-detail">{props.t("Invoice Detail")}</Link>
                 </li>
               </ul>
             </li>
@@ -198,66 +200,66 @@ const SidebarContent = props => {
             <li className="menu-title">Pages</li>
 
             <li>
-              <Link to="/#" className="has-arrow ">
+              <Link href="/#" className="has-arrow ">
                 <i className="bx bx-user-circle"></i>
                 <span>{props.t("Authentication")}</span>
               </Link>
               <ul className="sub-menu">
                 <li>
-                  <Link to="/pages-login">{props.t("Login")}</Link>
+                  <Link href="/pages-login">{props.t("Login")}</Link>
                 </li>
                 <li>
-                  <Link to="/pages-login-2">{props.t("Login 2")}</Link>
+                  <Link href="/pages-login-2">{props.t("Login 2")}</Link>
                 </li>
                 <li>
-                  <Link to="/pages-register">{props.t("Register")}</Link>
+                  <Link href="/pages-register">{props.t("Register")}</Link>
                 </li>
                 <li>
-                  <Link to="/pages-register-2">{props.t("Register 2")}</Link>
+                  <Link href="/pages-register-2">{props.t("Register 2")}</Link>
                 </li>
                 <li>
-                  <Link to="/page-recoverpw">
+                  <Link href="/page-recoverpw">
                     {props.t("Recover Password")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/page-recoverpw-2">
+                  <Link href="/page-recoverpw-2">
                     {props.t("Recover Password 2")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/auth-lock-screen">{props.t("Lock Screen")}</Link>
+                  <Link href="/auth-lock-screen">{props.t("Lock Screen")}</Link>
                 </li>
                 <li>
-                  <Link to="/auth-lock-screen-2">
+                  <Link href="/auth-lock-screen-2">
                     {props.t("Lock Screen 2")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/page-confirm-mail">{props.t("Confirm Mail")}</Link>
+                  <Link href="/page-confirm-mail">{props.t("Confirm Mail")}</Link>
                 </li>
                 <li>
-                  <Link to="/page-confirm-mail-2">
+                  <Link href="/page-confirm-mail-2">
                     {props.t("Confirm Mail 2")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/auth-email-verification">
+                  <Link href="/auth-email-verification">
                     {props.t("Email Verification")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/auth-email-verification-2">
+                  <Link href="/auth-email-verification-2">
                     {props.t("Email Verification 2")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/auth-two-step-verification">
+                  <Link href="/auth-two-step-verification">
                     {props.t("Two Step Verification")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/auth-two-step-verification-2">
+                  <Link href="/auth-two-step-verification-2">
                     {props.t("Two Step Verification 2")}
                   </Link>
                 </li>

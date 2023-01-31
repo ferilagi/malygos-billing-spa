@@ -16,7 +16,7 @@ const Sidebar = props => {
         <>
         <div className="vertical-menu">
             <div className="navbar-brand-box">
-            <Link to="/" className="logo logo-dark">
+            <Link href="/" className="logo logo-dark">
                 <span className="logo-sm">
                 <img src={logo} alt="" height="22" />
                 </span>
@@ -25,7 +25,7 @@ const Sidebar = props => {
                 </span>
             </Link>
 
-            <Link to="/" className="logo logo-light">
+            <Link href="/" className="logo logo-light">
                 <span className="logo-sm">
                     <img src={logoLightSvg} alt="" height="22" />
                 </span>
