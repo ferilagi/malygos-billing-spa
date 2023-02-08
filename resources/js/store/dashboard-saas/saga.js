@@ -7,9 +7,8 @@ import { DashboardSaasapiSuccess, DashboardSaasapiFail } from "./actions";
 //Include Both Helper File with needed methods
 import {
     topSellingData as topSellingDataApi,
-    getEarningChartsData as getEarningChartsDataApi
-}
-    from "../../helpers/fakebackend_helper";
+    getEarningChartsData as getEarningChartsDataApi,
+} from "../../helpers/fakebackend_helper";
 
 function* getSellingData({ payload: month }) {
     try {
@@ -19,7 +18,6 @@ function* getSellingData({ payload: month }) {
         yield put(DashboardSaasapiFail(GET_TOP_SELLING_PRODUCT, error));
     }
 }
-
 
 function* getEarningChartsData({ payload: month }) {
     try {
@@ -38,9 +36,9 @@ export function* watchGetEarningChartsData() {
     yield takeEvery(GET_EARNING_DATA, getEarningChartsData);
 }
 
-
 function* dashboardSaasSaga() {
-    yield all([fork(watchGetSellingdata)],
+    yield all(
+        [fork(watchGetSellingdata)],
         yield all([fork(watchGetEarningChartsData)])
     );
 }

@@ -1,76 +1,72 @@
 import React, { useEffect, useState } from "react";
-import { Head } from '@inertiajs/react';
+import { Head } from "@inertiajs/react";
+import GuestLayout from "@/Layouts/GuestLayout";
 
 //Import Components
-import Navbar from "./Navbar/Navbar"
-import Section from "./HeroSection/Section"
-import CardsMini from "./HeroSection/cards-mini"
-import AboutUs from "./AboutUs/about-us"
-import Features from "./Features/features"
-import RoadMap from "./RoadMap/road-map"
-import OurTeam from "./Team/our-team"
-import Blog from "./Blog/blog"
-import FAQs from "./Faqs/FAQs"
-import Footer from "./Footer/footer"
+import Navbar from "./Navbar/Navbar";
+import Section from "./HeroSection/Section";
+import CardsMini from "./HeroSection/cards-mini";
+import AboutUs from "./AboutUs/about-us";
+import Features from "./Features/features";
+import RoadMap from "./RoadMap/road-map";
+import OurTeam from "./Team/our-team";
+import Blog from "./Blog/blog";
+import FAQs from "./Faqs/FAQs";
+import Footer from "./Footer/footer";
 
 const Landing = () => {
+    //meta title
 
-  //meta title
+    const [imglight, setimglight] = useState(true);
+    const [navClass, setnavClass] = useState("");
 
-  const [imglight, setimglight] = useState(true);
-  const [navClass, setnavClass] = useState("");
+    // Use ComponentDidMount
+    useEffect(() => {
+        window.addEventListener("scroll", scrollNavigation, true);
+    }, []);
 
-  // Use ComponentDidMount
-  useEffect(() => {
-    window.addEventListener("scroll", scrollNavigation, true)
-  },[])
-
-  function scrollNavigation() {
-    var scrollup = document.documentElement.scrollTop
-    if (scrollup > 80) {
-      setimglight(false)
-      setnavClass("nav-sticky")
-    } else {
-      setimglight(true)
-      setnavClass("")
+    function scrollNavigation() {
+        var scrollup = document.documentElement.scrollTop;
+        if (scrollup > 80) {
+            setimglight(false);
+            setnavClass("nav-sticky");
+        } else {
+            setimglight(true);
+            setnavClass("");
+        }
     }
-  }
 
-  return (
-    <>
-    <Head title="Landing" />
+    return (
+        <>
+            <Head title="Landing" />
 
-      {/* import navbar */}
-      <Navbar navClass={navClass} imglight={imglight} />
+            {/* import navbar */}
+            <Navbar navClass={navClass} imglight={imglight} />
 
-      {/* Hero section */}
-      <Section />
+            {/* Hero section */}
+            <Section />
 
-      {/* mini cards */}
-      <CardsMini />
+            {/* mini cards */}
+            <CardsMini />
 
-      {/* aboutus */}
-      <AboutUs />
+            {/* aboutus */}
+            <AboutUs />
 
-      {/* features */}
-      <Features />
+            {/* features */}
+            <Features />
 
-      {/* roadmap */}
-      <RoadMap />
+            {/* roadmap */}
+            <RoadMap />
 
-      {/* our team */}
-      <OurTeam />
+            {/* our team */}
+            <OurTeam />
 
-      {/* blog */}
-      <Blog />
+            {/* faqs */}
+            <Footer />
+        </>
+    );
+};
 
-      {/* faqs */}
-      <FAQs />
+Landing.layout = (page) => <GuestLayout children={page} />;
 
-      {/* footer */}
-      <Footer />
-    </>
-  )
-}
-
-export default Landing
+export default Landing;

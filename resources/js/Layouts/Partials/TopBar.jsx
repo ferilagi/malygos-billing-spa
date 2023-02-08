@@ -1,9 +1,13 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link } from '@inertiajs/react';
+import { Link } from "@inertiajs/react";
 
 // Redux Store
-import { showRightSidebarAction, toggleLeftmenu , changeSidebarType} from "../../store/actions";
+import {
+    showRightSidebarAction,
+    toggleLeftmenu,
+    changeSidebarType,
+} from "../../store/actions";
 // reactstrap
 import { Row, Col, Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
 
@@ -17,62 +21,71 @@ import logoLightSvg from "../../../assets/images/logo-light.svg";
 //i18n
 import { withTranslation } from "react-i18next";
 
-const TopBar = props => {
+const TopBar = (props) => {
     function toggleFullscreen() {
         if (
-          !document.fullscreenElement &&
-          /* alternative standard method */ !document.mozFullScreenElement &&
-          !document.webkitFullscreenElement
+            !document.fullscreenElement &&
+            /* alternative standard method */ !document.mozFullScreenElement &&
+            !document.webkitFullscreenElement
         ) {
-          // current working methods
-          if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
-          } else if (document.documentElement.mozRequestFullScreen) {
-            document.documentElement.mozRequestFullScreen();
-          } else if (document.documentElement.webkitRequestFullscreen) {
-            document.documentElement.webkitRequestFullscreen(
-              Element.ALLOW_KEYBOARD_INPUT
-            );
-          }
+            // current working methods
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) {
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen(
+                    Element.ALLOW_KEYBOARD_INPUT
+                );
+            }
         } else {
-          if (document.cancelFullScreen) {
-            document.cancelFullScreen();
-          } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-          } else if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
-          }
+            if (document.cancelFullScreen) {
+                document.cancelFullScreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+            }
         }
     }
 
     function tToggle() {
         var body = document.body;
         if (window.screen.width <= 998) {
-          body.classList.toggle("sidebar-enable");
+            body.classList.toggle("sidebar-enable");
         } else {
-          body.classList.toggle("vertical-collpsed");
-          body.classList.toggle("sidebar-enable");
+            body.classList.toggle("vertical-collpsed");
+            body.classList.toggle("sidebar-enable");
         }
-      }
+    }
 
     return (
         <>
             <header id="page-topbar">
                 <div className="navbar-header">
                     <div className="d-flex">
-
                         <div className="navbar-brand-box d-lg-none d-md-block">
-                        <Link to="/" className="logo logo-dark">
-                            <span className="logo-sm">
-                            <img src={logo} alt="" height="22" />
-                            </span>
-                        </Link>
+                            <Link
+                                href={route("dashboard")}
+                                className="logo logo-dark"
+                            >
+                                <span className="logo-sm">
+                                    <img src={logo} alt="" height="22" />
+                                </span>
+                            </Link>
 
-                        <Link to="/" className="logo logo-light">
-                            <span className="logo-sm">
-                            <img src={logoLightSvg} alt="" height="22" />
-                            </span>
-                        </Link>
+                            <Link
+                                href={route("dashboard")}
+                                className="logo logo-light"
+                            >
+                                <span className="logo-sm">
+                                    <img
+                                        src={logoLightSvg}
+                                        alt=""
+                                        height="22"
+                                    />
+                                </span>
+                            </Link>
                         </div>
 
                         <button
@@ -82,21 +95,19 @@ const TopBar = props => {
                             }}
                             className="btn btn-sm px-3 font-size-16 header-item "
                             id="vertical-menu-btn"
-                            >
+                        >
                             <i className="fa fa-fw fa-bars" />
                         </button>
-
                     </div>
 
                     <div className="d-flex">
-
                         <LanguageDropdown />
 
                         <div className="dropdown d-none d-lg-inline-block ms-1">
                             <button
                                 type="button"
                                 onClick={() => {
-                                toggleFullscreen();
+                                    toggleFullscreen();
                                 }}
                                 className="btn header-item noti-icon "
                                 data-toggle="fullscreen"
@@ -110,10 +121,12 @@ const TopBar = props => {
 
                         <div
                             onClick={() => {
-                                props.showRightSidebarAction(!props.showRightSidebar);
+                                props.showRightSidebarAction(
+                                    !props.showRightSidebar
+                                );
                             }}
                             className="dropdown d-inline-block"
-                            >
+                        >
                             <button
                                 type="button"
                                 className="btn header-item noti-icon right-bar-toggle "
@@ -135,17 +148,13 @@ TopBar.propTypes = {
     showRightSidebar: PropTypes.any,
     showRightSidebarAction: PropTypes.func,
     t: PropTypes.any,
-    toggleLeftmenu: PropTypes.func
+    toggleLeftmenu: PropTypes.func,
 };
 
-const mapStatetoProps = state => {
-const {
-    layoutType,
-    showRightSidebar,
-    leftMenu,
-    leftSideBarType,
-} = state.Layout;
-return { layoutType, showRightSidebar, leftMenu, leftSideBarType };
+const mapStatetoProps = (state) => {
+    const { layoutType, showRightSidebar, leftMenu, leftSideBarType } =
+        state.Layout;
+    return { layoutType, showRightSidebar, leftMenu, leftSideBarType };
 };
 
 export default connect(mapStatetoProps, {

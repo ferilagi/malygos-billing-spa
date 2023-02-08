@@ -1,8 +1,4 @@
-import {
-    API_SUCCESS,
-    API_FAIL,
-    GET_CHARTS_DATA
-} from "./actionTypes";
+import { API_SUCCESS, API_FAIL, GET_CHARTS_DATA } from "./actionTypes";
 
 export const apiSuccess = (actionType, data) => ({
     type: API_SUCCESS,
@@ -17,5 +13,5 @@ export const apiFail = (actionType, error) => ({
 // charts data
 export const getChartsData = (periodType) => ({
     type: GET_CHARTS_DATA,
-    payload: periodType
+    payload: periodType,
 });

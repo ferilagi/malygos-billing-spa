@@ -1,11 +1,7 @@
-import {
-    API_SUCCESS,
-    API_FAIL,
-    GET_CHARTS_DATA
-} from "./actionTypes";
+import { API_SUCCESS, API_FAIL, GET_CHARTS_DATA } from "./actionTypes";
 
 const INIT_STATE = {
-    chartsData: []
+    chartsData: [],
 };
 
 const Dashboard = (state = INIT_STATE, action) => {
@@ -15,7 +11,7 @@ const Dashboard = (state = INIT_STATE, action) => {
                 case GET_CHARTS_DATA:
                     return {
                         ...state,
-                        chartsData: action.payload.data
+                        chartsData: action.payload.data,
                     };
                 default:
                     return state;
@@ -25,9 +21,8 @@ const Dashboard = (state = INIT_STATE, action) => {
                 case GET_CHARTS_DATA:
                     return {
                         ...state,
-                        chartsDataError: action.payload.error
+                        chartsDataError: action.payload.error,
                     };
-
 
                 default:
                     return state;
@@ -35,7 +30,6 @@ const Dashboard = (state = INIT_STATE, action) => {
         default:
             return state;
     }
-}
-
+};
 
 export default Dashboard;

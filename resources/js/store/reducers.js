@@ -1,7 +1,7 @@
-import { combineReducers } from "redux"
+import { combineReducers } from "redux";
 
 // Front
-import Layout from "./layout/reducer"
+import Layout from "./layout/reducer";
 
 // // Authentication
 // import Login from "./auth/login/reducer"
@@ -30,41 +30,40 @@ import Layout from "./layout/reducer"
 // //projects
 // import projects from "./projects/reducer"
 
-
 // //tasks
 // import tasks from "./tasks/reducer"
 
 // //contacts
-// import contacts from "./contacts/reducer"
+import contacts from "./contacts/reducer";
 
 // //mails
 // import mails from "./mails/reducer";
 
-// //Dashboard
-// import Dashboard from "./dashboard/reducer";
+//Dashboard
+import Dashboard from "./dashboard/reducer";
 
 // //Dasboard saas
 // import DashboardSaas from "./dashboard-saas/reducer";
 
 const rootReducer = combineReducers({
-  // public
-  Layout,
-//   Login,
-//   Account,
-//   ForgetPassword,
-//   Profile,
-//   ecommerce,
-//   calendar,
-//   chat,
-//   mails,
-//   crypto,
-//   invoices,
-//   JobReducer,
-//   projects,
-//   tasks,
-//   contacts,
-//   Dashboard,
-//   DashboardSaas
-})
+    // public
+    Layout,
+    //   Login,
+    //   Account,
+    //   ForgetPassword,
+    //   Profile,
+    //   ecommerce,
+    //   calendar,
+    //   chat,
+    //   mails,
+    //   crypto,
+    //   invoices,
+    //   JobReducer,
+    //   projects,
+    //   tasks,
+    contacts,
+    Dashboard,
+    //   DashboardSaas
+});
 
-export default rootReducer
+export default rootReducer;

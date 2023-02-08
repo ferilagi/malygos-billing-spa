@@ -1,20 +1,29 @@
-import './bootstrap';
+import "./bootstrap";
 // Import scss
-import "../assets/scss/theme.scss"
+import "../assets/scss/theme.scss";
 
-import { createRoot } from 'react-dom/client';
-import { createInertiaApp } from '@inertiajs/react';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { createRoot } from "react-dom/client";
+import { createInertiaApp } from "@inertiajs/react";
+import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 
-import { Provider } from "react-redux"
+import MainLayout from "./Layouts/MainLayout";
 
-import store  from "./store";
+import { Provider } from "react-redux";
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+import store from "./store";
+
+const appName =
+    window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./Pages/${name}.jsx`, import.meta.glob('./Pages/**/*.jsx')),
+    title: (title) => `${title}`,
+    resolve: (name) => {
+        const pages = import.meta.glob("./Pages/**/*.jsx", { eager: true });
+        let page = pages[`./Pages/${name}.jsx`];
+        page.default.layout =
+            page.default.layout || ((page) => <MainLayout children={page} />);
+        return page;
+    },
     setup({ el, App, props }) {
         const root = createRoot(el);
 
@@ -25,6 +34,6 @@ createInertiaApp({
         );
     },
     progress: {
-        color: '#4B5563',
+        color: "#4B5563",
     },
 });

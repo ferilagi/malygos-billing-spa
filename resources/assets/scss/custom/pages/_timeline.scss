@@ -1,19 +1,18 @@
-// 
+//
 // timeline.scss
 //
 
-/************** Horizontal timeline **************/ 
+/************** Horizontal timeline **************/
 
-
-.hori-timeline{
-    .events{
-        .event-list{
+.hori-timeline {
+    .events {
+        .event-list {
             text-align: center;
             display: block;
 
-            .event-down-icon{
+            .event-down-icon {
                 position: relative;
-                &::before{
+                &::before {
                     content: "";
                     position: absolute;
                     width: 100%;
@@ -22,21 +21,21 @@
                     right: 0;
                     border-bottom: 3px dashed var(--#{$prefix}gray-300);
                 }
-                .down-arrow-icon{
+                .down-arrow-icon {
                     position: relative;
                     background-color: var(--#{$prefix}custom-white);
                     padding: 4px;
                 }
             }
 
-            &:hover{
-                .down-arrow-icon{
+            &:hover {
+                .down-arrow-icon {
                     animation: fade-down 1.5s infinite linear;
                 }
             }
 
-            &.active{
-                .down-arrow-icon{
+            &.active {
+                .down-arrow-icon {
                     animation: fade-down 1.5s infinite linear;
                     &:before {
                         content: "\ec4c";
@@ -47,36 +46,35 @@
     }
 }
 
+/************** vertical timeline **************/
 
-/************** vertical timeline **************/ 
-
-.verti-timeline{
+.verti-timeline {
     border-left: 3px dashed var(--#{$prefix}gray-300);
     margin: 0 10px;
-    .event-list{
+    .event-list {
         position: relative;
         padding: 0px 0px 40px 30px;
 
-        .event-timeline-dot{
+        .event-timeline-dot {
             position: absolute;
             left: -9px;
             top: 0px;
             z-index: 9;
             font-size: 16px;
         }
-        .event-content{
+        .event-content {
             position: relative;
             border: 2px solid var(--#{$prefix}border-color);
             border-radius: 7px;
         }
 
-        &.active{
-            .event-timeline-dot{
+        &.active {
+            .event-timeline-dot {
                 color: $primary;
             }
         }
 
-        &:last-child{
+        &:last-child {
             padding-bottom: 0px;
         }
     }

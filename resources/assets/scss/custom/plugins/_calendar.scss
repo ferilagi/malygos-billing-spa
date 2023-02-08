@@ -4,18 +4,12 @@
 
 .lnb-calendars-item {
     display: inline-block;
-    margin-right: 7px
-        /*rtl: margin-left: 7px*/
-    ;
+    margin-right: 7px /*rtl: margin-left: 7px*/;
 }
 
-input[type="checkbox"].tui-full-calendar-checkbox-round+span {
-    margin-right: 4px
-        /*rtl: 0*/
-    ;
-    margin-left: 0
-        /*rtl: 4px*/
-    ;
+input[type="checkbox"].tui-full-calendar-checkbox-round + span {
+    margin-right: 4px /*rtl: 0*/;
+    margin-left: 0 /*rtl: 4px*/;
 }
 
 .tui-full-calendar-layout,
@@ -64,13 +58,14 @@ input[type="checkbox"].tui-full-calendar-checkbox-round+span {
 .tui-full-calendar-dropdown {
     &:hover {
         .tui-full-calendar-dropdown-button {
-            border-color: var(--#{$prefix}border-color)
+            border-color: var(--#{$prefix}border-color);
         }
     }
 }
 
 .tui-full-calendar-popup-section-item {
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         border-color: var(--#{$prefix}border-color);
     }
 }
@@ -89,7 +84,7 @@ input[type="checkbox"].tui-full-calendar-checkbox-round+span {
 
 .tui-full-calendar-button {
     color: $input-color;
-    background-color: $input-bg  !important;
+    background-color: $input-bg !important;
     border-color: var(--#{$prefix}border-color);
 }
 
@@ -112,7 +107,7 @@ input[type="checkbox"].tui-full-calendar-checkbox-round+span {
 
 .tui-full-calendar-dropdown-menu-item,
 .tui-full-calendar-dropdown-menu {
-    background-color: $input-bg  !important;
+    background-color: $input-bg !important;
 }
 
 .tui-full-calendar-arrow-bottom .tui-full-calendar-popup-arrow-border {
@@ -120,17 +115,17 @@ input[type="checkbox"].tui-full-calendar-checkbox-round+span {
 }
 
 .tui-full-calendar-content {
-    background-color: $input-bg  !important;
-    color: $input-color  !important;
+    background-color: $input-bg !important;
+    color: $input-color !important;
 }
 
 .tui-full-calendar-confirm {
-    background-color: $danger  !important;
-    color: $white  !important;
+    background-color: $danger !important;
+    color: $white !important;
 
     &:hover {
-        background-color: $red-600  !important;
-        color: $white  !important;
+        background-color: $red-600 !important;
+        color: $white !important;
     }
 }
 
@@ -151,7 +146,6 @@ input[type="checkbox"].tui-full-calendar-checkbox-round+span {
         }
     }
 }
-
 
 .tui-full-calendar-weekday-grid-line {
     &.tui-full-calendar-near-month-day {

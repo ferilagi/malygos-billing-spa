@@ -16,7 +16,7 @@ import {
 const INIT_STATE = {
     jobs: [],
     error: {},
-}
+};
 
 const JobReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
@@ -47,7 +47,7 @@ const JobReducer = (state = INIT_STATE, action) => {
         case UPDATE_JOB_LIST_SUCCESS:
             return {
                 ...state,
-                jobs: state.jobs.map(job =>
+                jobs: state.jobs.map((job) =>
                     job.id.toString() === action.payload.id.toString()
                         ? { job, ...action.payload }
                         : job
@@ -64,7 +64,7 @@ const JobReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 jobs: state.jobs.filter(
-                    job => job.id.toString() !== action.payload.id.toString()
+                    (job) => job.id.toString() !== action.payload.id.toString()
                 ),
             };
 
@@ -86,7 +86,10 @@ const JobReducer = (state = INIT_STATE, action) => {
         case DELETE_APPLY_JOB_SUCCESS:
             return {
                 ...state,
-                jobApply: state.jobApply.filter(data => data.id.toString() !== action.payload.id.toString())
+                jobApply: state.jobApply.filter(
+                    (data) =>
+                        data.id.toString() !== action.payload.id.toString()
+                ),
             };
         case DELETE_APPLY_JOB_FAIL:
             return {
@@ -94,8 +97,8 @@ const JobReducer = (state = INIT_STATE, action) => {
                 error: action.payload,
             };
         default:
-            return state
+            return state;
     }
-}
+};
 
 export default JobReducer;

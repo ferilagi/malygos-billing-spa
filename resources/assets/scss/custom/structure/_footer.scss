@@ -1,6 +1,6 @@
-// 
+//
 // _footer.scss
-// 
+//
 
 .footer {
     bottom: 0;
@@ -16,7 +16,7 @@
         left: 0;
     }
 }
-  
+
 // Enlarge menu
 .vertical-collpsed {
     .footer {
@@ -31,5 +31,5 @@
 body[data-layout="horizontal"] {
     .footer {
         left: 0 !important;
-    }  
+    }
 }

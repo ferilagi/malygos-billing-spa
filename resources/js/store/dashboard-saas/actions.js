@@ -2,7 +2,7 @@ import {
     API_SUCCESS,
     API_FAIL,
     GET_TOP_SELLING_PRODUCT,
-    GET_EARNING_DATA
+    GET_EARNING_DATA,
 } from "./actionType";
 
 export const DashboardSaasapiSuccess = (actionType, data) => ({
@@ -18,11 +18,11 @@ export const DashboardSaasapiFail = (actionType, error) => ({
 // charts data
 export const getTopSellingProduct = (month) => ({
     type: GET_TOP_SELLING_PRODUCT,
-    payload: month
+    payload: month,
 });
 
 /** Earning chart data */
 export const getEarningChartsData = (month) => ({
     type: GET_EARNING_DATA,
-    payload: month
-})
+    payload: month,
+});

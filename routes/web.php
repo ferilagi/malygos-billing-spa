@@ -1,8 +1,14 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\MikrotikController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,23 +31,35 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-Route::middleware('auth')->group(function () {
-    // Setting
-    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
-    Route::get('/custom', [SettingController::class, 'testing'])->name('setting.custom');
+    // Customer
+    Route::resource('/customer', CustomerController::class);
 
     // Subscription
-    Route::get('/subs', [SubscriptionController::class, 'index'])->name('subs.index');
+    Route::resource('/subscription', SubscriptionController::class);
+
+    // Invoice
+    Route::resource('/invoice', InvoiceController::class);
+    // Report
+    Route::resource('/report', ReportController::class);
+
+    // Settings
+    Route::prefix('setting')->group( function () {
+      Route::resource('/billing', SettingController::class);
+      Route::resource('/mikrotik', MikrotikController::class);
+      Route::resource('/user', UserController::class);
+
+      // Setting Test
+      Route::get('/custom', [SettingController::class, 'testing'])->name('setting.custom');
+    });
 });
 
 require __DIR__.'/auth.php';

@@ -15,7 +15,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Setting/Index', [
+        return Inertia::render('Setting/Billing/Index', [
             'name' => 'feril'
         ]);
     }

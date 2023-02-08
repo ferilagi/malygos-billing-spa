@@ -75,7 +75,6 @@
     }
 }
 
-
 .w-xs {
     min-width: 80px;
 }
@@ -96,14 +95,14 @@
     min-width: 160px;
 }
 
-
 // alert
 
 .alert-dismissible {
     .btn-close {
         font-size: 10px;
         padding: $alert-padding-y * 1.4 $alert-padding-x;
-        background: transparent escape-svg($btn-close-bg-dark) center / $btn-close-width auto no-repeat;
+        background: transparent escape-svg($btn-close-bg-dark) center /
+            $btn-close-width auto no-repeat;
     }
 }
 

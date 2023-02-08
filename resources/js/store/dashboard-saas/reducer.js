@@ -2,12 +2,12 @@ import {
     API_SUCCESS,
     API_FAIL,
     GET_TOP_SELLING_PRODUCT,
-    GET_EARNING_DATA
+    GET_EARNING_DATA,
 } from "./actionType";
 
 const INIT_STATE = {
     sellingData: [],
-    earningChartData: []
+    earningChartData: [],
 };
 
 const DashboardSaas = (state = INIT_STATE, action) => {
@@ -17,13 +17,13 @@ const DashboardSaas = (state = INIT_STATE, action) => {
                 case GET_TOP_SELLING_PRODUCT:
                     return {
                         ...state,
-                        sellingData: action.payload.data
+                        sellingData: action.payload.data,
                     };
 
                 case GET_EARNING_DATA:
                     return {
                         ...state,
-                        earningChartData: action.payload.data
+                        earningChartData: action.payload.data,
                     };
                 default:
                     return state;
@@ -33,15 +33,14 @@ const DashboardSaas = (state = INIT_STATE, action) => {
                 case GET_TOP_SELLING_PRODUCT:
                     return {
                         ...state,
-                        sellingDataError: action.payload.error
+                        sellingDataError: action.payload.error,
                     };
 
                 case GET_EARNING_DATA:
                     return {
                         ...state,
-                        earningChartDataError: action.payload.error
+                        earningChartDataError: action.payload.error,
                     };
-
 
                 default:
                     return state;
@@ -49,7 +48,6 @@ const DashboardSaas = (state = INIT_STATE, action) => {
         default:
             return state;
     }
-}
-
+};
 
 export default DashboardSaas;

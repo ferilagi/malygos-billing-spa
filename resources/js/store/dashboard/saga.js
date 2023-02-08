@@ -8,9 +8,8 @@ import { apiSuccess, apiFail } from "./actions";
 import {
     getWeeklyData,
     getYearlyData,
-    getMonthlyData
-}
-    from "../../helpers/fakebackend_helper";
+    getMonthlyData,
+} from "../../helpers/fakebackend_helper";
 
 function* getChartsData({ payload: periodType }) {
     try {

@@ -63,8 +63,9 @@
     background: var(--#{$prefix}custom-white);
 }
 
-.swal2-title, .swal2-html-container{
-     color: var(--#{$prefix}gray-700);
+.swal2-title,
+.swal2-html-container {
+    color: var(--#{$prefix}gray-700);
 }
 
 .swal2-file,

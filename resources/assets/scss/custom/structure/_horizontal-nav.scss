@@ -1,6 +1,6 @@
-// 
+//
 // _horizontal.scss
-// 
+//
 
 .topnav {
     background: $topnav-bg;
@@ -11,44 +11,45 @@
     left: 0;
     right: 0;
     z-index: 100;
-    
+
     .topnav-menu {
         margin: 0;
         padding: 0;
     }
 
     .navbar-nav {
-        
         .nav-link {
             font-size: 14px;
             position: relative;
             padding: 1rem 1.3rem;
             color: $menu-item-color;
-            i{
+            i {
                 font-size: 15px;
             }
-            &:focus, &:hover{
+            &:focus,
+            &:hover {
                 color: $menu-item-active-color;
                 background-color: transparent;
             }
         }
-        
-        .dropdown-item{
+
+        .dropdown-item {
             color: $menu-item-color;
-            &.active, &:hover{
-                color: $menu-item-active-color;
-            }
-        }
-        
-        .nav-item{
-            .nav-link.active{
+            &.active,
+            &:hover {
                 color: $menu-item-active-color;
             }
         }
 
-        .dropdown{
-            &.active{
-              >a {
+        .nav-item {
+            .nav-link.active {
+                color: $menu-item-active-color;
+            }
+        }
+
+        .dropdown {
+            &.active {
+                > a {
                     color: $menu-item-active-color;
                     background-color: transparent;
                 }
@@ -58,13 +59,12 @@
 }
 
 body[data-layout="horizontal"] {
-    #page-topbar{
+    #page-topbar {
         left: 0;
     }
 }
 
 @include media-breakpoint-up(xl) {
-
     body[data-layout="horizontal"] {
         .container-fluid,
         .navbar-header {
@@ -86,21 +86,22 @@ body[data-layout="horizontal"] {
         }
 
         .dropdown-item {
-            padding: .5rem 1.5rem;
+            padding: 0.5rem 1.5rem;
             min-width: 180px;
         }
 
         .dropdown {
-            &.mega-dropdown{
+            &.mega-dropdown {
                 // position: static;
-                .mega-dropdown-menu{
+                .mega-dropdown-menu {
                     left: 0px;
                     right: auto;
                 }
             }
             .dropdown-menu {
                 margin-top: 0;
-                border-radius: 0 0 $dropdown-border-radius $dropdown-border-radius;
+                border-radius: 0 0 $dropdown-border-radius
+                    $dropdown-border-radius;
 
                 .arrow-down {
                     &::after {
@@ -115,20 +116,20 @@ body[data-layout="horizontal"] {
                         position: absolute;
                         top: 0 !important;
                         left: 100%;
-                        display: none
+                        display: none;
                     }
                 }
             }
 
             &:hover {
-                >.dropdown-menu {
+                > .dropdown-menu {
                     display: block;
                 }
             }
         }
 
-        .dropdown:hover>.dropdown-menu>.dropdown:hover>.dropdown-menu {
-            display: block
+        .dropdown:hover > .dropdown-menu > .dropdown:hover > .dropdown-menu {
+            display: block;
         }
     }
 
@@ -145,18 +146,17 @@ body[data-layout="horizontal"] {
         border-style: solid;
         border-width: 0 0 1px 1px;
         content: "";
-        height: .4em;
+        height: 0.4em;
         display: inline-block;
         right: 5px;
         top: 50%;
         margin-left: 10px;
         transform: rotate(-45deg) translateY(-50%);
         transform-origin: top;
-        transition: all .3s ease-out;
-        width: .4em;
+        transition: all 0.3s ease-out;
+        width: 0.4em;
     }
 }
-
 
 @include media-breakpoint-down(xl) {
     .topnav-menu {
@@ -176,20 +176,19 @@ body[data-layout="horizontal"] {
 }
 
 @include media-breakpoint-down(lg) {
-
-    .navbar-brand-box{
+    .navbar-brand-box {
         .logo-dark {
             display: $display-block;
-            span.logo-sm{
+            span.logo-sm {
                 display: $display-block;
             }
         }
-    
+
         .logo-light {
             display: $display-none;
         }
     }
-    
+
     .topnav {
         max-height: 360px;
         overflow-y: auto;
@@ -206,10 +205,10 @@ body[data-layout="horizontal"] {
                 border: none;
                 box-shadow: none;
                 padding-left: 15px;
-                &.dropdown-mega-menu-xl{
+                &.dropdown-mega-menu-xl {
                     width: auto;
-    
-                    .row{
+
+                    .row {
                         margin: 0px;
                     }
                 }
@@ -235,35 +234,33 @@ body[data-layout="horizontal"] {
     }
 }
 
-
 @include media-breakpoint-up(lg) {
-
     body[data-layout="horizontal"][data-topbar="light"] {
-        .navbar-brand-box{
+        .navbar-brand-box {
             .logo-dark {
                 display: $display-block;
             }
-        
+
             .logo-light {
                 display: $display-none;
             }
         }
 
-        .topnav{
+        .topnav {
             background-color: $primary;
             .navbar-nav {
-        
                 .nav-link {
                     color: rgba($white, 0.6);
-                    
-                    &:focus, &:hover{
+
+                    &:focus,
+                    &:hover {
                         color: rgba($white, 0.9);
                     }
                 }
-        
-                > .dropdown{
-                    &.active{
-                    >a {
+
+                > .dropdown {
+                    &.active {
+                        > a {
                             color: rgba($white, 0.9) !important;
                         }
                     }
@@ -273,10 +270,10 @@ body[data-layout="horizontal"] {
     }
 }
 
-// Colored Topbar 
+// Colored Topbar
 
 body[data-layout="horizontal"][data-topbar="colored"] {
-    #page-topbar{
+    #page-topbar {
         background-color: $primary;
         box-shadow: none;
     }
@@ -290,19 +287,18 @@ body[data-layout="horizontal"][data-topbar="colored"] {
     }
 
     .app-search {
-    
         .form-control {
-            background-color: rgba($topbar-search-bg,0.07);
+            background-color: rgba($topbar-search-bg, 0.07);
             color: $white;
         }
         span,
         input.form-control::-webkit-input-placeholder {
-            color: rgba($white,0.5);
+            color: rgba($white, 0.5);
         }
     }
     .header-item {
         color: $header-dark-item-color;
-    
+
         &:hover {
             color: $header-dark-item-color;
         }
@@ -310,8 +306,8 @@ body[data-layout="horizontal"][data-topbar="colored"] {
 
     .navbar-header {
         .dropdown .show {
-            &.header-item{
-                background-color: rgba($white,0.1);
+            &.header-item {
+                background-color: rgba($white, 0.1);
             }
         }
 
@@ -327,21 +323,21 @@ body[data-layout="horizontal"][data-topbar="colored"] {
     }
 
     @include media-breakpoint-up(lg) {
-        .topnav{
+        .topnav {
             background-color: $primary;
             .navbar-nav {
-        
                 .nav-link {
                     color: rgba($white, 0.6);
-                    
-                    &:focus, &:hover{
+
+                    &:focus,
+                    &:hover {
                         color: rgba($white, 0.9);
                     }
                 }
-        
-                > .dropdown{
-                    &.active{
-                      >a {
+
+                > .dropdown {
+                    &.active {
+                        > a {
                             color: rgba($white, 0.9) !important;
                         }
                     }
@@ -350,4 +346,3 @@ body[data-layout="horizontal"][data-topbar="colored"] {
         }
     }
 }
-

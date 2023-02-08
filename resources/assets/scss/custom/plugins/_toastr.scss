@@ -1,8 +1,6 @@
-
 //
 // toastr.scss
 //
-
 
 /* =============
    Notification
@@ -17,15 +15,14 @@
         }
     }
 
-    &.toast-top-full-width, &.toast-bottom-full-width{
-        > div{
-          min-width: 96%;
-          margin: 4px auto;
+    &.toast-top-full-width,
+    &.toast-bottom-full-width {
+        > div {
+            min-width: 96%;
+            margin: 4px auto;
         }
-      }
-
+    }
 }
-
 
 @each $color, $value in $theme-colors {
     .toast-#{$color} {
@@ -34,15 +31,14 @@
     }
 }
 
-
 // for error
 
 .toast-error {
-    background-color: rgba($danger,0.8);
+    background-color: rgba($danger, 0.8);
     border: 2px solid $danger;
 }
 
-.toastr-options{
+.toastr-options {
     padding: 24px;
     background-color: lighten($gray-200, 2%);
     margin-bottom: 0;
