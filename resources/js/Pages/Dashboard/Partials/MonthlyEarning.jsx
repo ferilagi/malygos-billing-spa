@@ -1,21 +1,87 @@
-import React from "react";
-
-import { Row, Col, Card, CardBody, CardTitle } from "reactstrap";
+import React, { useState } from "react";
 import { Link } from "@inertiajs/react";
+
+import {
+    Row,
+    Col,
+    Card,
+    CardBody,
+    CardTitle,
+    Dropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem
+} from "reactstrap";
 
 import ApexRadial from "./ApexRadial";
 
-const MonthlyEarning = () => {
+//i18n
+import { withTranslation } from "react-i18next";
+
+const MonthlyEarning = (props) => {
+
+    const monthly = props.monthly
+
+    const currFormat = (num) => {
+        return "IDR " + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };
+
+    const [isMenu, setIsMenu] = useState(false);
+
+    const toggleMenu = () => {
+        setIsMenu(!isMenu);
+    };
+
     return (
         <React.Fragment>
             {" "}
             <Card>
                 <CardBody>
-                    <CardTitle className="mb-4">Monthly Earning</CardTitle>
+                    <div className="d-flex align-items-start mb-3">
+                        <div className="flex-grow-1 align-self-center">
+                        <Link href={route('report.index')}>
+                        <CardTitle className="mb-4">
+                            <h5>Monthly Earning</h5>
+                        </CardTitle>
+                        </Link>
+                        </div>
+                        <Dropdown
+                        isOpen={isMenu}
+                        toggle={toggleMenu}
+                        >
+                            <DropdownToggle
+                                type="button"
+                                tag="button"
+                                className="btn btn-light"
+                            >
+                                <i className="mdi mdi-wallet me-1" />
+                                <span className="d-none d-sm-inline-block">
+                                    <i className="mdi mdi-chevron-down" />
+                                </span>
+                            </DropdownToggle>
+                            <DropdownMenu className="dropdown-menu-end dropdown-menu-md">
+                                <div className="dropdown-item-text">
+                                    <div>
+                                        <p className="text-muted mb-2">{props.t("Cash")}</p>
+                                        <h6 className="mb-0">{currFormat(monthly.earncash)}</h6>
+                                    </div>
+                                </div>
+
+                                <DropdownItem divider />
+
+                                <div className="dropdown-item-text">
+                                    <div>
+                                        <p className="text-muted mb-2">{props.t("Transfer")}</p>
+                                        <h6 className="mb-0">{currFormat(monthly.earntransfer)}</h6>
+                                    </div>
+                                </div>
+                            </DropdownMenu>
+                        </Dropdown>
+                    </div>
                     <Row>
                         <Col sm="6">
                             <p className="text-muted">This month</p>
-                            <h3>$34,252</h3>
+                            <h3>{currFormat(monthly.earnmonth)}</h3>
                             <p className="text-muted">
                                 <span className="text-success me-2">
                                     {" "}
@@ -25,7 +91,7 @@ const MonthlyEarning = () => {
                             </p>
                             <div className="mt-4">
                                 <Link
-                                    to=""
+                                    href={route('report.index')}
                                     className="btn btn-primary waves-effect waves-light btn-sm"
                                 >
                                     View More{" "}
@@ -48,4 +114,4 @@ const MonthlyEarning = () => {
     );
 };
 
-export default MonthlyEarning;
+export default (withTranslation()(MonthlyEarning));

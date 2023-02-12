@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "@inertiajs/react";
 import { Card, CardBody, Col, Row } from "reactstrap";
+import { Alignment } from "react-data-table-component";
 
 const UserList = (props) => {
     const users = props.data;
@@ -45,11 +46,20 @@ const UserList = (props) => {
                                     </button>
                                 </div>
                                 <div className="text-center mb-3">
-                                    <img
-                                        src={user.avatar}
-                                        alt=""
-                                        className="avatar-sm rounded-circle"
-                                    />
+                                    {user.avatar ? (
+                                        <img
+                                            className="avatar-sm rounded-circle"
+                                            src={user.avatar}
+                                            alt="Header Avatar"
+                                        />
+                                    ): (
+                                        <div
+                                            className="avatar-sm mx-auto">
+                                            <span className="avatar-title rounded-circle">
+                                            {user.name.charAt(0)}
+                                            </span>
+                                        </div>
+                                     )}
                                     <h6 className="font-size-15 mt-3 mb-1">
                                         {user.name}
                                     </h6>

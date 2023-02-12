@@ -30,8 +30,10 @@ return new class extends Migration
             $table->boolean('first_transaction')->default(1);
             $table->tinyInteger('custom_duedate')->default(0);
             $table->foreignId('area_id')
+                    ->unsigned()
+                    ->nullable()
                     ->constrained('areas')
-                    ->onDelete('cascade');
+                    ->nullOnDelete();
             $table->integer('planable_id');
             $table->string('planable_type');
             $table->timestamps();

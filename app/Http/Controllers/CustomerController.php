@@ -132,9 +132,12 @@ class CustomerController extends Controller
         //     ->notify(new CrudNotification($nc_data));
         // }
 
-		// return redirect('customers')->with('success',$msg);
-        return redirect()->back()->with('success', $msg);
-        // return to_route('customer.index');
+        return redirect()->back()->with([
+            'message' => [
+                'status' => 'success',
+                'text' => $msg,
+            ]
+        ]);
     }
 
     /**
@@ -145,7 +148,12 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        return redirect()->back()->with([
+            'message' => [
+                'status' => 'success',
+                'text' => 'Test Toast Globally!',
+            ]
+        ]);
     }
 
     /**

@@ -77,11 +77,11 @@ const Customer = (props) => {
 
             // update user
             // dispatch(onUpdateUser(updateCustomer));
-            validation.resetForm();
-            setIsEdit(false);
             router.post('/customer', updateCustomer, {
                 preserveState: (page) => Object.keys(page.props.errors).length,
               });
+            validation.resetForm();
+            setIsEdit(false);
         } else {
             const newCustomer = {
             // id: Math.floor(Math.random() * (30 - 20)) + 20,
@@ -95,11 +95,11 @@ const Customer = (props) => {
             };
             // save new user
             // dispatch(onAddNewUser(newCustomer));
-            validation.resetForm();
-            toggle();
             router.post('/customer', newCustomer, {
                 preserveState: (page) => Object.keys(page.props.errors).length,
               });
+            validation.resetForm();
+            toggle();
         }
         },
     });

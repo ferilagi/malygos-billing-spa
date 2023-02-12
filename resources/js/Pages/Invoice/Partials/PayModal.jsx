@@ -25,18 +25,18 @@ const PayModal = ({ show, onCashClick, onTransClick, onCloseClick }) => {
                 className="btn btn-success btn-lg ms-2 my-2"
                 onClick={onCashClick}
               >
-                Yes, Pay Cash!
+                Yes, Cash..!
               </button>
               <button
                 type="button"
                 className="btn btn-info btn-lg ms-2 my-2"
                 onClick={onTransClick}
               >
-                Yes, Pay Transfer!
+                Yes, Transfer!
               </button>
               <button
                 type="button"
-                className="btn btn-danger btn-lg ms-2 my-2"
+                className="btn btn-secondary btn-lg ms-2 my-2"
                 onClick={onCloseClick}
               >
                 Cancel

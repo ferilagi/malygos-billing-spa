@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Row, Col, FormGroup } from "reactstrap";
+import "./RightSidebar.scss";
 
 import { connect } from "react-redux";
 import {
@@ -19,8 +20,6 @@ import {
 import SimpleBar from "simplebar-react";
 
 import { Link } from "@inertiajs/react";
-
-import "./RightSidebar.scss";
 
 
 //constants
@@ -421,33 +420,6 @@ const RightSidebar = (props) => {
                                     </div>
                                 </>
                             ) : null}
-
-                            <FormGroup>
-                                <span className="mb-2 d-block" id="radio-title">
-                                    Preloader
-                                </span>
-
-                                <div className="form-check form-switch">
-                                    <input
-                                        type="checkbox"
-                                        className="form-check-input checkbox"
-                                        id="checkbox_1"
-                                        checked={props.isPreloader}
-                                        onChange={() => {
-                                            props.changePreloader(
-                                                !props.isPreloader
-                                            );
-                                        }}
-                                    />
-
-                                    <label
-                                        className="form-check-label"
-                                        htmlFor="checkbox_1"
-                                    >
-                                        Preloader
-                                    </label>
-                                </div>
-                            </FormGroup>
                         </div>
                     </div>
                 </SimpleBar>

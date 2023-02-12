@@ -25,8 +25,10 @@ class ReportController extends Controller
 
         if ($rangePeriod) {
             $dates = explode(" to ", $rangePeriod);
-            $start_date = Carbon::parse($dates[0])->toDateTimeString();
-            $end_date = Carbon::parse($dates[1])->toDateTimeString();
+            if (isset($dates[0]) && isset($dates[1])) {
+                $start_date = Carbon::parse($dates[0])->toDateTimeString();
+                $end_date = Carbon::parse($dates[1])->toDateTimeString();
+            }
         }
 
         $trans = Transaction::with(

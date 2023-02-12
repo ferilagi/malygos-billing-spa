@@ -10,7 +10,7 @@ import { withTranslation } from "react-i18next";
 
 //i18n
 import i18n from "../../../i18n";
-import languages from "../../Common/languages";
+import languages from "../../../Components/Common/languages";
 
 const LanguageDropdown = () => {
     // Declare a new state variable, which we'll call "menu"

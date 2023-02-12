@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id()->startingValue(1001);
             $table->foreignId('user_id')
+                    ->unsigned()
+                    ->nullable()
                     ->constrained('users')
-                    ->onDelete('cascade');
+                    ->nullOnDelete();
             $table->string('name');
             $table->string('phone')->unique()->nullable();
             $table->string('email')->unique();

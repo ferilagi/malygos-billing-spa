@@ -12,6 +12,10 @@ const toLowerCase1 = (str) => {
     return str === "" || str === undefined ? "" : str.toLowerCase();
 };
 
+const currencyFormat = (num) => {
+    return "IDR " + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
+
 const InvoiceID = (cell) => {
     return (
         cell.value ?
@@ -26,7 +30,7 @@ const Name = (cell) => {
 };
 
 const Total = (cell) => {
-    return cell.value ? cell.value : "";
+    return cell.value ? currencyFormat(cell.value) : "";
 };
 
 const Status = (cell) => {
@@ -57,8 +61,5 @@ const Period = (cell) => {
     return formateDate(cell.value, "MMM, Y");
 };
 
-const Coin = (cell) => {
-    return cell.value ? cell.value : "";
-};
 
 export { InvoiceID, Name, Total, Status, Period };

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 
 // Redux Store
 import {
@@ -11,9 +11,9 @@ import {
 // reactstrap
 import { Row, Col, Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
 
-import LanguageDropdown from "../../Components/CommonForBoth/TopbarDropdown/LanguageDropdown";
-import NotificationDropdown from "../../Components/CommonForBoth/TopbarDropdown/NotificationDropdown";
-import ProfileMenu from "../../Components/CommonForBoth/TopbarDropdown/ProfileMenu";
+import LanguageDropdown from "./TopbarDropdown/LanguageDropdown";
+import NotificationDropdown from "./TopbarDropdown/NotificationDropdown";
+import ProfileMenu from "./TopbarDropdown/ProfileMenu";
 
 import logo from "../../../assets/images/logo.svg";
 import logoLightSvg from "../../../assets/images/logo-light.svg";
@@ -22,6 +22,8 @@ import logoLightSvg from "../../../assets/images/logo-light.svg";
 import { withTranslation } from "react-i18next";
 
 const TopBar = (props) => {
+
+    const logonew = usePage().logo
     function toggleFullscreen() {
         if (
             !document.fullscreenElement &&
@@ -70,7 +72,7 @@ const TopBar = (props) => {
                                 className="logo logo-dark"
                             >
                                 <span className="logo-sm">
-                                    <img src={logo} alt="" height="22" />
+                                    <img src={logonew} alt="" height="22" />
                                 </span>
                             </Link>
 
@@ -80,7 +82,7 @@ const TopBar = (props) => {
                             >
                                 <span className="logo-sm">
                                     <img
-                                        src={logoLightSvg}
+                                        src={logonew}
                                         alt=""
                                         height="22"
                                     />

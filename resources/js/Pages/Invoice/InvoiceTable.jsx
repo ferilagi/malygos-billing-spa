@@ -12,12 +12,20 @@ import {
     TabContent,
     TabPane,
     Button,
+    Form,
+    Label,
+    InputGroup,
 } from "reactstrap";
 import classnames from "classnames";
+
+//Import Flatepicker
+import "flatpickr/dist/themes/dark.css";
+import Flatpickr from "react-flatpickr";
 
 import TableContainer from "../../Components/Common/TableContainer";
 
 import { InvoiceID, Name, Total, Status, Period } from "./InvoiceCol";
+import { router } from "@inertiajs/react";
 
 const InvoiceTable = ({ trans, activeTab, toggleTab, setPayModal, setPayInvoice }) => {
 
@@ -66,7 +74,8 @@ const InvoiceTable = ({ trans, activeTab, toggleTab, setPayModal, setPayInvoice 
                                 <i className="bx bx-check-double font-size-12 align-middle me-2"></i>
                                 {cellProps.value}
                             </Button>
-                        :   <Button color="danger" outline className="btn-sm"
+                        :
+                            <Button color="danger" outline className="btn-sm"
                                 onClick={() => {
                                     const invPay = cellProps.row.original;
                                     setPayInvoice(invPay);
@@ -93,6 +102,7 @@ const InvoiceTable = ({ trans, activeTab, toggleTab, setPayModal, setPayInvoice 
     );
 
     const [search, setSearch] = useState("");
+    const [period, setPeriod] = useState("");
     const [filters, setFilters] = useState(transData);
 
     const handleSearch = (e) => {
@@ -130,27 +140,58 @@ const InvoiceTable = ({ trans, activeTab, toggleTab, setPayModal, setPayInvoice 
         return () => clearTimeout(deBounce);
     }, [search]);
 
+    const handlePeriod = (e) => {
+        e.preventDefault();
+        // console.log(period)
+
+        router.get('/invoice',{rangePeriod: period}, {
+            // preserveState: true,
+            replace:true,
+            onSuccess: () => {
+                return Promise.all([
+                    setFilters(trans)
+                ])
+              }
+        });
+
+
+    };
+
     return (
         <Card>
             <CardBody>
                 <CardSubtitle className="mb-3">
                     <Row className="mb-3">
-                        {/* <Col sm={8}>
-                            <a>
-                                <Button
-                                    type="button"
-                                    color="primary"
-                                    className="btn mb-2 me-2"
-                                    onClick={() => {
-                                        handleCustomerAdd();
-                                    }}
-                                >
-                                    <i className="mdi mdi-plus-circle-outline me-1" />
-                                    Create New User
-                                </Button>
-                            </a>
-                        </Col> */}
+                        <Col md={8}>
+                            <Form onSubmit={handlePeriod}>
+                                <Label>('translation.Date_Range')</Label>
+                                <div className="form-group mb-3">
+                                    <InputGroup className="input-daterange input-group">
+                                        <Flatpickr
+                                        name="rangePeriod"
+                                        className="form-control"
+                                        value={period}
+                                        onChange={(e, dateStr) => setPeriod(dateStr)}
+                                        options={{
+                                            altInput: true,
+                                            mode: "range",
+                                            altFormat: "F j, Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
+                                        />
+                                        <button
+                                        disabled={period === ""}
+                                        type="submit"
+                                        className="btn btn-sm btn-primary waves-effect waves-light">
+                                            <span className="bx bx-search-alt me-1"></span>
+                                            Periode
+                                        </button>
+                                    </InputGroup>
+                                </div>
+                            </Form>
+                        </Col>
                         <Col sm={4}>
+                            <Label>('translation.Filter')</Label>
                             <input
                                 className="form-control"
                                 name="search"

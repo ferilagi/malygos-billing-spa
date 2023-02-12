@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mikrotik;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class MikrotikController extends Controller
@@ -14,8 +16,9 @@ class MikrotikController extends Controller
      */
     public function index()
     {
+
       return Inertia::render('Setting/Mikrotik/Index', [
-        'name' => 'feril'
+        'routers' => Mikrotik::all()
     ]);
     }
 
@@ -37,7 +40,38 @@ class MikrotikController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'=> 'required|min:3|unique:mikrotiks,name,' .$request->mkt_id,
+            'ip_addr'=> 'required|ipv4|unique:mikrotiks,ip_addr,' .$request->mkt_id,
+            'user'=> 'required',
+            'pass'=> 'required',
+            'port'=> 'required',
+            'description'=> 'nullable',
+        ]);
+
+
+        Mikrotik::updateOrCreate([
+            'id' => $request->mkt_id],
+            ['name' => $request->name,
+            'ip_addr' => $request->ip_addr,
+            'user' => $request->user,
+            'pass'=>$request->pass,
+            'port'=>$request->port,
+            'description'=> $request->description,
+            'is_active'=> 1,
+            ]);
+
+        if(empty($request->mkt_id))
+			$msg = 'Mikrotik added successfully.';
+		else
+			$msg = 'Mikrotik update successfully.';
+
+        return redirect()->back()->with([
+            'message' => [
+                'status' => 'success',
+                'text' => $msg,
+            ]
+        ]);
     }
 
     /**

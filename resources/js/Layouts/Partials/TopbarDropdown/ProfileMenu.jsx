@@ -13,12 +13,17 @@ import { withTranslation } from "react-i18next";
 
 import { Link } from "@inertiajs/react";
 
-// users
-import user1 from "../../../../assets/images/users/avatar-1.jpg";
+// Default Avatar
+import avdefault from "../../../../assets/images/users/default.jpeg";
+
 
 const ProfileMenu = (props) => {
     const { auth } = usePage().props;
     const avatar = auth.avatar;
+
+    const defaultSrc =(ev) => {
+        ev.target.src = avdefault
+      }
 
     // Declare a new state variable, which we'll call "menu"
     const [menu, setMenu] = useState(false);
@@ -36,9 +41,11 @@ const ProfileMenu = (props) => {
             >
                 <img
                     className="rounded-circle header-profile-user"
-                    src={avatar ? avatar : user1}
+                    src={avatar ? avatar : avdefault}
+                    onError={defaultSrc}
                     alt="Header Avatar"
                 />
+
                 <span className="d-none d-xl-inline-block ms-2 me-1">
                     {auth.name}
                 </span>

@@ -1,6 +1,6 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
     changeLayout,
@@ -17,11 +17,15 @@ import TopBar from "./Partials/TopBar";
 import Sidebar from "./Partials/SideBar";
 import Footer from "./Partials/Footer";
 import RightSidebar from "./Partials/RightSidebar";
+import ToastComp from "./Partials/ToastComp";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
 const MainLayout = ({ header, children, props }) => {
+
+    const toastData = usePage().props.toast;
+
     const dispatch = useDispatch();
 
     const {
@@ -134,6 +138,8 @@ const MainLayout = ({ header, children, props }) => {
 
     return (
         <>
+            <ToastComp toastData={toastData} />
+
             <div id="preloader">
                 <div id="status">
                     <div className="spinner-chase">

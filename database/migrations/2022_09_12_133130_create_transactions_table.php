@@ -17,8 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('invoice')->unique();
             $table->foreignId('sub_id')
+                    ->unsigned()
+                    ->nullable()
                     ->constrained('subscriptions')
-                    ->onDelete('cascade');
+                    ->nullOnDelete();
+            $table->string('name')->nullable();
             $table->integer('subtotal');
             $table->integer('taxtotal');
             $table->integer('total');

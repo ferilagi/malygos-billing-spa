@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -15,8 +17,12 @@ class SettingController extends Controller
      */
     public function index()
     {
+        $comp = Company::first();
+        $set = Setting::all();
+
         return Inertia::render('Setting/Billing/Index', [
-            'name' => 'feril'
+            'comp' => $comp,
+            'set' => $set,
         ]);
     }
 

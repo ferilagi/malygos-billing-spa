@@ -2,11 +2,6 @@ import React from "react";
 import { Container, Row, Col } from "reactstrap";
 import { Link } from "@inertiajs/react";
 
-//Import Images
-import blog1 from "../../../../assets/images/crypto/blog/img-1.jpg";
-import blog2 from "../../../../assets/images/crypto/blog/img-2.jpg";
-import blog3 from "../../../../assets/images/crypto/blog/img-3.jpg";
-
 const Blog = () => {
     const blogs = [
         {

@@ -42,32 +42,25 @@ import { withTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 
 const Dashboard = (props) => {
-    const [modal, setmodal] = useState(false);
-    const [subscribemodal, setSubscribemodal] = useState(false);
+
+    const substype = props.substype;
+    const totalsubs = props.totalsubs;
+    const comm = props.comm;
+    const monthly = props.monthly;
 
     const { chartsData } = useSelector((state) => ({
         chartsData: state.Dashboard.chartsData,
     }));
 
-    const reports = [
-        { title: "Orders", iconClass: "bx-copy-alt", description: "1,235" },
-        {
-            title: "Revenue",
-            iconClass: "bx-archive-in",
-            description: "$35, 723",
-        },
-        {
-            title: "Average Price",
-            iconClass: "bx-purchase-tag-alt",
-            description: "$16.2",
-        },
-    ];
+    const currFormat = (num) => {
+        return "IDR " + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };
 
-    useEffect(() => {
-        setTimeout(() => {
-            setSubscribemodal(true);
-        }, 2000);
-    }, []);
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setSubscribemodal(true);
+    //     }, 2000);
+    // }, []);
 
     const [periodData, setPeriodData] = useState([]);
     const [periodType, setPeriodType] = useState("yearly");
@@ -95,38 +88,37 @@ const Dashboard = (props) => {
 
                     <Row>
                         <Col xl="4">
-                            <WelcomeComp />
-                            <MonthlyEarning />
+                            <WelcomeComp totalsubs={totalsubs} comm={comm} />
+                            <MonthlyEarning monthly={monthly} />
                         </Col>
 
                         <Col xl="8">
                             <Row>
                                 {/* Reports Render */}
-                                {reports.map((report, key) => (
-                                    <Col md="4" key={"_col_" + key}>
+                                {substype.map((st, key) => (
+                                    <Col md="6" key={"_col_" + key}>
                                         <Card className="mini-stats-wid">
                                             <CardBody>
-                                                <div className="d-flex">
-                                                    <div className="flex-grow-1">
-                                                        <p className="text-muted fw-medium">
-                                                            {report.title}
-                                                        </p>
-                                                        <h4 className="mb-0">
-                                                            {report.description}
-                                                        </h4>
+
+                                                <h5 className="text-muted mb-4">
+                                                    <i className="mdi h2 text-warning align-middle mb-0 me-3"></i> {st.type} {`{ ${st.total} }`}
+                                                </h5>
+
+                                                <div className="row">
+                                                    <div className="col-6">
+                                                        <div>
+                                                            <h6 className="text-truncate">{`{ ${st.paid} }`} Paid</h6>
+                                                            <p className="text-muted text-truncate mb-0">{currFormat(st.earn)}<i className="mdi mdi-arrow-up ms-1 text-success"></i></p>
+                                                        </div>
                                                     </div>
-                                                    <div className="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
-                                                        <span className="avatar-title rounded-circle bg-primary">
-                                                            <i
-                                                                className={
-                                                                    "bx " +
-                                                                    report.iconClass +
-                                                                    " font-size-24"
-                                                                }
-                                                            ></i>
-                                                        </span>
+                                                    <div className="col-6">
+                                                        <div>
+                                                            <h6 className="text-truncate">{`{ ${st.total - st.paid} }`} Unpaid</h6>
+                                                            <p className="text-muted text-truncate mb-0">{currFormat(st.debt)}<i className="mdi mdi-arrow-down ms-1 text-danger"></i></p>
+                                                        </div>
                                                     </div>
                                                 </div>
+
                                             </CardBody>
                                         </Card>
                                     </Col>

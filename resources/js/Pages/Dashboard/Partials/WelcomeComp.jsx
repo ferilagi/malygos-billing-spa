@@ -4,12 +4,19 @@ import { Row, Col, Card, CardBody } from "reactstrap";
 import { Link } from "@inertiajs/react";
 import { usePage } from "@inertiajs/react";
 
-import avatar1 from "../../../../assets/images/users/avatar-1.jpg";
+// Default Avatar
+import avdefault from "../../../../assets/images/users/default.jpeg";
 import profileImg from "../../../../assets/images/profile-img.png";
 
 const WelcomeComp = (props) => {
     const { auth } = usePage().props;
+    const totalsubs = props.totalsubs;
+    const comm = props.comm;
     const avatar = auth.avatar;
+
+    const defaultSrc =(ev) => {
+        ev.target.src = avdefault
+      }
 
     return (
         <React.Fragment>
@@ -36,7 +43,8 @@ const WelcomeComp = (props) => {
                         <Col sm="4">
                             <div className="avatar-md profile-user-wid mb-4">
                                 <img
-                                    src={avatar ? avatar : avatar1}
+                                    src={avatar ? avatar : avdefault}
+                                    onError={defaultSrc}
                                     alt=""
                                     className="img-thumbnail rounded-circle"
                                 />
@@ -53,15 +61,15 @@ const WelcomeComp = (props) => {
                             <div className="pt-4">
                                 <Row>
                                     <Col xs="6">
-                                        <h5 className="font-size-15">125</h5>
+                                        <h5 className="font-size-15">{totalsubs}</h5>
                                         <p className="text-muted mb-0">
-                                            Projects
+                                            Subscriber
                                         </p>
                                     </Col>
                                     <Col xs="6">
-                                        <h5 className="font-size-15">$1245</h5>
+                                        <h5 className="font-size-15">{comm}</h5>
                                         <p className="text-muted mb-0">
-                                            Revenue
+                                            Commission
                                         </p>
                                     </Col>
                                 </Row>

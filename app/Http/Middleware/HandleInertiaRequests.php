@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 
@@ -32,20 +34,27 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
 
-          'auth' => fn () => $request->user()
+          'logo' => function () use ($request) {
+                $logo = Company::first()->value('logo');
+                    if (!$logo) {
+                        return "/assets/images/logo.svg";
+                    } else {
+                        return $logo;
+                    }
+                },
+
+            'auth' => fn () => $request->user()
             ? $request->user()->only('name', 'avatar')
             : null,
 
-          'ziggy' => function () use ($request) {
-              return array_merge((new Ziggy)->toArray(), [
-                  'location' => $request->url(),
-              ]);
+            'ziggy' => function () use ($request) {
+                return array_merge((new Ziggy)->toArray(), [
+                    'location' => $request->url(),
+                ]);
             },
 
-          'flash' => function () use ($request) {
-                return [
-                    'success' => $request->session()->get('success'),
-                ];
+            'toast' => function () use ($request) {
+                return Session::get('message');
             },
         ]);
     }

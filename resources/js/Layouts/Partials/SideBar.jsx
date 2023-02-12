@@ -100,6 +100,19 @@ const Sidebar = (props) => {
 
                                 <li
                                     className={
+                                        component.startsWith("Plan")
+                                            ? "mm-active"
+                                            : ""
+                                    }
+                                >
+                                    <Link href="/plan/ppp">
+                                        <i className="bx bx-server"></i>
+                                        <span>{props.t("Plan")}</span>
+                                    </Link>
+                                </li>
+
+                                <li
+                                    className={
                                         component.startsWith("Invoice")
                                             ? "mm-active"
                                             : ""

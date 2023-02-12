@@ -9,7 +9,7 @@ import Breadcrumbs from "../../Layouts/Partials/Breadcrumb";
 import ReportTable from "./ReportTable";
 
 //Import Flatepicker
-import "flatpickr/dist/themes/material_blue.css";
+import "flatpickr/dist/themes/dark.css";
 import Flatpickr from "react-flatpickr";
 
 //redux
@@ -79,6 +79,7 @@ const Report = (props) => {
     const handlePeriod = (e) => {
         e.preventDefault();
         // console.log(period)
+
         router.get('/report',{rangePeriod: period}, {
             // preserveState: true,
             replace:true,
@@ -90,6 +91,10 @@ const Report = (props) => {
         });
 
 
+    };
+
+    const currencyFormat = (num) => {
+        return "IDR " + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     };
 
     // useEffect(() => {
@@ -122,7 +127,7 @@ const Report = (props) => {
                                         <Flatpickr
                                         name="rangePeriod"
                                         className="form-control"
-                                        value={period}
+                                        selected={period}
                                         onChange={(e, dateStr) => setPeriod(dateStr)}
                                         options={{
                                             altInput: true,
@@ -133,9 +138,10 @@ const Report = (props) => {
                                         />
                                         <button
                                         type="submit"
+                                        disabled={period === ""}
                                         className="btn btn-sm btn-primary waves-effect waves-light">
                                             <span className="bx bx-search-alt me-1"></span>
-                                            Search
+                                            Periode
                                         </button>
                                     </InputGroup>
                                 </div>
@@ -143,18 +149,20 @@ const Report = (props) => {
                             </Col>
                             <Col md={6}>
                                 <Row className="mt-4 float-end">
+                                <div className="hstack gap-3">
                                     <Col>
                                         <p className="mb-3">('translation.Total')</p>
-                                        <h5 className="mb-3 text-center">{props.reports.sum}</h5>
+                                        <h5 className="mb-3 text-center">{currencyFormat(props.reports.sum)}</h5>
                                     </Col>
                                     <Col>
                                         <p className="mb-3">('translation.Paid')</p>
-                                        <h5 className="mb-3 text-center">{props.reports.plussum}</h5>
+                                        <h5 className="mb-3 text-center">{currencyFormat(props.reports.plussum)}</h5>
                                     </Col>
                                     <Col>
                                         <p className="mb-3 ">('translation.Unpaid')</p>
-                                        <h5 className="mb-3 text-center">{props.reports.negsum}</h5>
+                                        <h5 className="mb-3 text-center">{currencyFormat(props.reports.negsum)}</h5>
                                     </Col>
+                                    </div>
                                 </Row>
                             </Col>
                         </Row>

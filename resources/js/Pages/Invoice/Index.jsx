@@ -17,7 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 const Invoice = (props) => {
     const dispatch = useDispatch();
 
-    const trans = props.trans;
+    const [trans, setTrans] = useState(props.trans);
 
     const [payInvoice, setPayInvoice] = useState();
     const [payModal, setPayModal] = useState(false);
@@ -45,13 +45,17 @@ const Invoice = (props) => {
         const method = "cash"
 
         // console.log(invoice_id, invoice_status, method)
-        router.put(`/invoice/${invoice_id}`, {
-            id: invoice_id,
-            status: invoice_status,
-            method: method,
-          },)
-
-        // dispatch(onDeleteEvent(event));
+        router.visit(`/invoice/${invoice_id}`, {
+            method: 'put',
+            data: {
+                id: invoice_id,
+                status: invoice_status,
+                method: method,
+            },
+            replace: false,
+            preserveState: false,
+            preserveScroll: true,
+        })
         setPayModal(false);
         setPayInvoice();
     };
@@ -62,12 +66,17 @@ const Invoice = (props) => {
         const method = "transfer"
 
         // console.log(invoice_id, invoice_status, method)
-        router.put(`/invoice/${invoice_id}`, {
-            id: invoice_id,
-            status: invoice_status,
-            method: method,
-          },)
-        // dispatch(onDeleteEvent(event));
+        router.visit(`/invoice/${invoice_id}`, {
+            method: 'put',
+            data: {
+                id: invoice_id,
+                status: invoice_status,
+                method: method,
+            },
+            replace: false,
+            preserveState: false,
+            preserveScroll: true,
+        })
         setPayModal(false);
         setPayInvoice();
     };

@@ -8,6 +8,8 @@ use App\Models\Subscription;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserCommission;
+use App\Notifications\CrudNotification;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as FacadesRequest;
@@ -20,8 +22,21 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $start_date = Carbon::now()->startOfMonth()->toDateString();
+        $end_date = Carbon::now()->endOfMonth()->toDateString();
+
+        $rangePeriod = $request->query('rangePeriod');
+
+        if ($rangePeriod) {
+            $dates = explode(" to ", $rangePeriod);
+            if (isset($dates[0]) && isset($dates[1])) {
+                $start_date = Carbon::parse($dates[0])->toDateTimeString();
+                $end_date = Carbon::parse($dates[1])->toDateTimeString();
+            }
+        }
+
         $trans = Transaction::with(
                 'subscription.customer:id,user_id,name',
                 'subscription.customer.user:id,name',
@@ -33,6 +48,7 @@ class InvoiceController extends Controller
                     $w->where('user_id', Auth::user()->id);
                     });
                 })
+            ->whereBetween('created_at', [$start_date, $end_date])
             ->get();
 
         return Inertia::render('Invoice/Index', [
@@ -227,15 +243,20 @@ class InvoiceController extends Controller
                 'table' => 'Transactions',
                 'object' => $trans->invoice ." / ". $sub->customer->name,
             ];
-            // $nc_prime->notify(new CrudNotification($nc_data));
+            $nc_prime->notify(new CrudNotification($nc_data));
 
-            // if (Auth::user()->level != 'admin') {
-            //     User::where('id', Auth::user()->id)
-            //     ->firstOrFail()
-            //     ->notify(new CrudNotification($nc_data));
-            // }
+            if (Auth::user()->level != 'admin') {
+                User::where('id', Auth::user()->id)
+                ->firstOrFail()
+                ->notify(new CrudNotification($nc_data));
+            }
 
-            return redirect()->back()->with('success', 'Status Change to Paid!');
+            return redirect()->back()->with([
+                'message' => [
+                    'status' => 'success',
+                    'text' => $sub->customer->name . ', Status Change to Paid!',
+                ]
+            ]);
 
     }
 

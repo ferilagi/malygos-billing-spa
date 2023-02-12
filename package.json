@@ -29,6 +29,7 @@
         "leaflet": "^1.9.3",
         "metismenujs": "^1.4.0",
         "moment": "^2.29.4",
+        "nprogress": "^0.2.0",
         "prettier": "^2.8.3",
         "react-apexcharts": "^1.4.0",
         "react-countdown": "^2.3.5",

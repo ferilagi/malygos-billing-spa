@@ -6,8 +6,11 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MikrotikController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ServicePPPController;
+use App\Http\Controllers\ServiceStaticController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\SyncImportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +48,19 @@ Route::middleware('auth')->group(function () {
 
     // Subscription
     Route::resource('/subscription', SubscriptionController::class);
+    Route::post('/subscription/update/status', [SubscriptionController::class, 'changeStatus'])->name('subscription.change');
+
+    // Import or Sync Subscription
+    Route::get('/sync', [SyncImportController::class, 'index'])->name('sync.index');
+    Route::post('/sync/ppp', [SyncImportController::class, 'pppUserPost'])->name('sync.ppp.store');
+    Route::post('/sync/static', [SyncImportController::class, 'staticUserPost'])->name('sync.static.store');
+
+    Route::prefix('plan')->group(function () {
+        Route::resource('/ppp', ServicePPPController::class);
+        Route::get('/ppp-sync', [ServicePPPController::class, 'sync'])->name('ppp.sync');
+        Route::get('/ppp-syncget', [ServicePPPController::class, 'syncGet'])->name('syncGet');
+        Route::resource('/static', ServiceStaticController::class);
+    });
 
     // Invoice
     Route::resource('/invoice', InvoiceController::class);
