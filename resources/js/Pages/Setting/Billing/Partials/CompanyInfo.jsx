@@ -69,26 +69,26 @@ const CompanyInfo = (props) => {
 
                                 <div className="form-floating mb-3">
                                 <input type="text" className="form-control" id="nameInput" placeholder="Enter Name"/>
-                                <label htmlFor="nameInput">{data.name}</label>
+                                <label htmlFor="nameInput" className="text-success">{data.name}</label>
                                 </div>
                                 <Row>
                                 <Col md={6}>
                                     <div className="form-floating mb-3">
                                     <input type="email" className="form-control" id="emailInput" placeholder="Enter Email address"/>
-                                    <label htmlFor="emailInput">{data.email}</label>
+                                    <label htmlFor="emailInput" className="text-success">{data.email}</label>
                                     </div>
                                 </Col>
                                 <Col md={6}>
                                     <div className="form-floating mb-3">
                                     <input type="phone" className="form-control" id="phoneInput" placeholder="Enter Phone address"/>
-                                    <label htmlFor="phoneInput">{data.phone}</label>
+                                    <label htmlFor="phoneInput" className="text-success">{data.phone}</label>
                                     </div>
                                 </Col>
                                 </Row>
 
                                 <div className="form-floating mb-3">
                                 <input type="text" className="form-control" id="sloganInput" placeholder="Enter Slogan"/>
-                                <label htmlFor="sloganInput">{data.slogan}</label>
+                                <label htmlFor="sloganInput" className="text-success">{data.slogan}</label>
                                 </div>
                             </CardBody>
                         </Card>
@@ -102,27 +102,26 @@ const CompanyInfo = (props) => {
 
                                 <div className="form-floating mb-3">
                                 <input type="text" className="form-control" id="addressInput" placeholder="Enter Address"/>
-                                <label htmlFor="addressInput">{data.address}</label>
+                                <label htmlFor="addressInput" className="text-success">{data.address}</label>
                                 </div>
                                 <Row>
                                 <Col md={8}>
                                     <div className="form-floating mb-3">
                                     <input type="text" className="form-control" id="stateInput" placeholder="Enter State"/>
-                                    <label htmlFor="stateInput">{data.state}</label>
+                                    <label htmlFor="stateInput" className="text-success">{data.state}</label>
                                     </div>
                                 </Col>
                                 <Col md={4}>
                                     <div className="form-floating mb-3">
                                     <input type="number" className="form-control" id="zipcodeInput" placeholder="Enter Zipcode"/>
-                                    <label htmlFor="zipcodeInput">{data.zipcode}</label>
+                                    <label htmlFor="zipcodeInput" className="text-success">{data.zipcode}</label>
                                     </div>
                                 </Col>
                                 </Row>
                                 <div className="hstack gap-3">
-                                    <Input className="form-control me-auto" type="text" placeholder="Upload Logo here..."
-                                    aria-label="Upload Logo here..."/>
+                                    <Input className="form-control" type="file" id="logoInput" />
                                     <div className="vr"></div>
-                                    <button type="button" className="btn btn-success">Change</button>
+                                    <button type="submit" className="btn btn-success">Submit</button>
                                 </div>
                             </CardBody>
                         </Card>

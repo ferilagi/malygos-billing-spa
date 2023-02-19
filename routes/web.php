@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MikrotikController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ServicePPPController;
@@ -67,6 +69,9 @@ Route::middleware('auth')->group(function () {
     // Report
     Route::resource('/report', ReportController::class);
 
+    // Notification
+    Route::get('/notification', [NotificationController::class, 'index'])->name('notif.index');
+
     // Settings
     Route::prefix('setting')->group( function () {
       Route::resource('/billing', SettingController::class);
@@ -76,6 +81,13 @@ Route::middleware('auth')->group(function () {
       // Setting Test
       Route::get('/custom', [SettingController::class, 'testing'])->name('setting.custom');
     });
+
+    Route::prefix('map')->group(function () {
+        Route::resource('/area', AreaController::class);
+        Route::get('/views', [AreaController::class, 'detailShow'])->name('detailShow');
+        Route::get('/leaflet', function () {return view('maps.leaflet');});
+    });
+
 });
 
 require __DIR__.'/auth.php';

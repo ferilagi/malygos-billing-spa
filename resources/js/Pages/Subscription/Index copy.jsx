@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import { Head, Link, router } from "@inertiajs/react";
 
-//Import DataTable
-import DataTables from "@/Components/Common/DataTables";
-
+import TableContainer from "../../Components/Common/TableContainer";
 import {
     Button,
     Card,
@@ -16,8 +14,12 @@ import {
     Form,
 } from "reactstrap";
 
+import { Name, Email, Status, Tags, Projects, Img } from "./SubscriptionCol";
+
 //Import Breadcrumb
 import Breadcrumbs from "../../Layouts/Partials/Breadcrumb";
+
+import { isEmpty } from "lodash";
 
 import StatusModal from "./Partials/StatusModal";
 
@@ -36,24 +38,32 @@ const Subscription = (props) => {
 
     const columns = useMemo(
         () => [
-
+            // {
+            //     Header: "#",
+            //     Cell: (cellProps) => {
+            //         return (
+            //             <>{Number(cellProps.row.id) + 1}</>
+            //         );
+            //     },
+            // },
             {
-                name: "#",
-                maxWidth: '20px',
-                hide: 'md',
-                cell: row => (
+                Header: "Img",
+                // accessor: "name",
+                disableFilters: true,
+                filterable: true,
+                accessor: (cellProps) => (
                     <>
-                        {!row.img ? (
+                        {!cellProps.img ? (
                             <div className="avatar-xs">
                                 <span className="avatar-title rounded-circle">
-                                    {row.name.charAt(0)}
+                                    {cellProps.name.charAt(0)}
                                 </span>
                             </div>
                         ) : (
                             <div>
                                 <img
                                     className="rounded-circle avatar-xs"
-                                    src={row.img}
+                                    src={cellProps.img}
                                     alt=""
                                 />
                             </div>
@@ -62,62 +72,72 @@ const Subscription = (props) => {
                 ),
             },
             {
-                id: "name",
-                name: "NAME",
-                selector: (row) => row.name,
-                sortable: true,
+                Header: "Name",
+                accessor: "name",
+                disableFilters: true,
+                filterable: true,
+                Cell: (cellProps) => {
+                    return <Name {...cellProps} />;
+                },
             },
             {
-                id: "type",
-                name: "TYPE",
-                selector: (row) => row.type,
-                sortable: true,
-                hide: 'md',
+                Header: "Type",
+                accessor: "type",
+                disableFilters: true,
+                filterable: true,
+                Cell: (cellProps) => {
+                    return <Email {...cellProps} />;
+                },
             },
             {
-                id: "status",
-                name: "STATUS",
-                selector: (row) => row.status,
-                sortable: true,
-                button: true,
-                cell: (row) => (
-                    <>
-                        <Button
-                            type="button"
-                            className="btn-sm"
-                            color=
-                            { row.status === "active" ?
-                            "success"
-                            :
-                            "danger"}
-                            outline
-                            onClick={() => {
-                                const status = row;
-                                setStatusChange(status);
-                                setStatusModal(true);
-                            }}
-                        >
-                            {row.status}
-                        </Button>
-                    </>
-
-                ),
+                Header: "Status",
+                accessor: "status",
+                disableFilters: true,
+                filterable: true,
+                Cell: (cellProps) => {
+                    return  (
+                        <>
+                            <Button
+                                type="button"
+                                className="btn-sm"
+                                color=
+                                { cellProps.value == "active" ?
+                                "success"
+                                :
+                                "danger"}
+                                outline
+                                onClick={() => {
+                                    const status = cellProps.row.original;
+                                    setStatusChange(status);
+                                    setStatusModal(true);}}
+                            >
+                                {cellProps.value}
+                            </Button>
+                        </>
+                    )
+                },
             },
             {
-                id: "plan",
-                name: "PLAN",
-                selector: (row) => row.plan,
-                sortable: true,
-                hide: 'md',
+                Header: "Plan",
+                accessor: "plan",
+                disableFilters: true,
+                filterable: true,
+                Cell: (cellProps) => {
+                    return (
+                        <>
+                            {" "}
+                            <Projects {...cellProps} />{" "}
+                        </>
+                    );
+                },
             },
             {
-                name: "ACTION",
-                button: true,
-                cell: (row) => {
+                Header: "Action",
+                Cell: (cellProps) => {
                     return (
                         <div style={{ textAlign: "center" }}>
                             <Link
-                                href={`/subscription/${row.id}`}
+                                href={`/subscription/${cellProps.row.original.id}`}
                                 className="text-primary"
                                 // onClick={e => console.log(cellProps)}
                             >
@@ -139,6 +159,19 @@ const Subscription = (props) => {
         ],
         []
     );
+
+    var node = useRef();
+    const onPaginationPageChange = (page) => {
+        if (
+            node &&
+            node.current &&
+            node.current.props &&
+            node.current.props.pagination &&
+            node.current.props.pagination.options
+        ) {
+            node.current.props.pagination.options.onPageChange(page);
+        }
+    };
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
@@ -280,7 +313,7 @@ const Subscription = (props) => {
                                         </div>
                                     </Col>
 
-                                    {/* <TableContainer
+                                    <TableContainer
                                         columns={columns}
                                         data={filters}
                                         customPageSizeOptions={true}
@@ -288,14 +321,6 @@ const Subscription = (props) => {
                                         // isAddUserList={true}
                                         customPageSize={20}
                                         // className="custom-header-css"
-                                    /> */}
-
-                                    <DataTables
-                                        columns={columns}
-                                        data={filters}
-                                        pagination={true}
-                                        theme="malygos"
-                                        paginationPerPage={30}
                                     />
                                 </CardBody>
                             </Card>

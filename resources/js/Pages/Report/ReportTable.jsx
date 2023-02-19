@@ -2,6 +2,7 @@ import React from "react";
 import { useMemo } from "react";
 import PropTypes from "prop-types";
 import {
+    Button,
     Card,
     CardBody,
     Col,
@@ -11,11 +12,12 @@ import {
     TabContent,
     TabPane,
 } from "reactstrap";
+
+//Import DataTable
+import DataTables from "@/Components/Common/DataTables";
+
 import classnames from "classnames";
-
-import TableContainer from "../../Components/Common/TableContainer";
-
-import { InvoiceID, Name, Alias, Total, Status, Period } from "./ReportCol";
+import { currencyFormat, formatDate } from "@/helpers/formatValue";
 
 const ReportTable = ({ trans, activeTab, toggleTab }) => {
     // Table Data
@@ -26,52 +28,69 @@ const ReportTable = ({ trans, activeTab, toggleTab }) => {
     const columns = useMemo(
         () => [
             {
-                Header: "Name",
-                accessor: "name",
-                filterable: true,
-                Cell: (cellProps) => {
-                    return <Name {...cellProps} />;
-                },
+                id: "name",
+                name: "NAME",
+                selector: (row) => row.name,
+                sortable: true,
             },
             {
-                Header: "Type",
-                accessor: "type",
-                filterable: true,
-                Cell: (cellProps) => {
-                    return <Name {...cellProps} />;
-                },
+                id: "type",
+                name: "TYPE",
+                selector: (row) => row.type,
+                sortable: true,
+                maxWidth: '120px',
+                hide: 'md',
             },
             {
-                Header: "Packet",
-                accessor: "alias",
-                filterable: true,
-                Cell: (cellProps) => {
-                    return <Alias {...cellProps} />;
-                },
+                id: "alias",
+                name: "PACKET",
+                selector: (row) => row.alias,
+                sortable: true,
+                hide: 'md',
             },
             {
-                Header: "Total",
-                accessor: "total",
-                filterable: true,
-                Cell: (cellProps) => {
-                    return <Total {...cellProps} />;
-                },
+                id: "total",
+                name: "TOTAL",
+                selector: (row) => row.total,
+                format: (row) => currencyFormat(row.total),
+                sortable: true,
+                maxWidth: '150px',
+                hide: 'sm',
             },
             {
-                Header: "Status",
-                accessor: "status",
-                filterable: true,
-                Cell: (cellProps) => {
-                    return <Status {...cellProps} />;
-                },
+                id: "status",
+                name: "STATUS",
+                selector: (row) => row.status,
+                sortable: true,
+                maxWidth: '120px',
+                cell: (row) => (
+                    <>
+                        <Button
+                            type="button"
+                            className="btn-sm"
+                            color=
+                            { row.status === "paid" ?
+                            "success"
+                            :
+                            "danger"}
+                            outline
+                        >
+                            { row.status === "paid" ?
+                            <i className="bx bx-check-double font-size-12 align-middle me-2"></i> :
+                            <i className="bx bx-sad font-size-12 align-middle me-1"></i> }
+                            {row.status}
+                        </Button>
+                    </>
+                )
             },
             {
-                Header: "Period",
-                accessor: "period",
-                filterable: true,
-                Cell: (cellProps) => {
-                    return <Period {...cellProps} />;
-                },
+                id: "period",
+                name: "PERIOD",
+                selector: (row) => row.period,
+                format: (row) => formatDate(row.period, "MMM, Y"),
+                sortable: true,
+                maxWidth: '120px',
+                hide: 'xm',
             },
         ],
         []
@@ -122,29 +141,32 @@ const ReportTable = ({ trans, activeTab, toggleTab }) => {
                 <div className="mt-4">
                     <TabContent activeTab={activeTab}>
                         <TabPane tabId="1" id="all">
-                            <TableContainer
+                            <DataTables
                                 columns={columns}
                                 data={transData}
-                                // isGlobalFilter={true}
-                                customPageSize={30}
+                                pagination={true}
+                                theme="malygos"
+                                paginationPerPage={30}
                             />
                         </TabPane>
 
                         <TabPane tabId="2" id="paid">
-                            <TableContainer
+                            <DataTables
                                 columns={columns}
                                 data={paidData}
-                                // isGlobalFilter={true}
-                                customPageSize={30}
+                                pagination={true}
+                                theme="malygos"
+                                paginationPerPage={30}
                             />
                         </TabPane>
 
                         <TabPane tabId="3" id="unpaid">
-                            <TableContainer
+                            <DataTables
                                 columns={columns}
                                 data={unpaidData}
-                                // isGlobalFilter={true}
-                                customPageSize={30}
+                                pagination={true}
+                                theme="malygos"
+                                paginationPerPage={30}
                             />
                         </TabPane>
                     </TabContent>

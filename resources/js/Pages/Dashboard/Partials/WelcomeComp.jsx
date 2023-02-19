@@ -63,13 +63,13 @@ const WelcomeComp = (props) => {
                                     <Col xs="6">
                                         <h5 className="font-size-15">{totalsubs}</h5>
                                         <p className="text-muted mb-0">
-                                            Subscriber
+                                            Subscribers
                                         </p>
                                     </Col>
                                     <Col xs="6">
                                         <h5 className="font-size-15">{comm}</h5>
                                         <p className="text-muted mb-0">
-                                            Commission
+                                            Commissions
                                         </p>
                                     </Col>
                                 </Row>

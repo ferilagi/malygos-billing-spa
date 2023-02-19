@@ -19,6 +19,8 @@ import {
     UncontrolledTooltip,
 } from "reactstrap";
 
+import { formatDate, trunCate } from "../../helpers/formatValue";
+
 
 const CustomerCreate = (props) => {
     const datas = props.customers;
@@ -35,17 +37,22 @@ const CustomerCreate = (props) => {
                 id: "phone",
                 name: "PHONE",
                 selector: (row) => row.phone,
+                hide: 'sm',
             },
             {
                 id: "address",
                 name: "ADDRESS",
                 selector: (row) => row.address,
+                format: (row) => trunCate(row.address, 25),
+                hide: 'md',
             },
             {
                 id: "joined_at",
                 name: "JOINED",
                 selector: (row) => row.joined_at,
+                format: (row) => formatDate(row.joined_at, "MMM-Y"),
                 sortable: true,
+                hide: 'md',
             },
             {
                 name: "ACTION",
@@ -96,6 +103,7 @@ const CustomerCreate = (props) => {
         ],
         []
     );
+
 
     const [search, setSearch] = useState("");
     const [filters, setFilters] = useState(datas);
@@ -163,62 +171,11 @@ const CustomerCreate = (props) => {
                                         for responsive tables with complex data.
                                     </CardSubtitle>
 
-                                    {/* <div className="table-rep-plugin">
-                    <div
-                      className="table-responsive mb-0"
-                      data-pattern="priority-columns"
-                    >
-                      <Table
-                        id="customer-table"
-                        className="table table-bordered"
-                      >
-                        <Thead>
-                          <Tr>
-                            <Th data-priority="1">Name</Th>
-                            <Th data-priority="6">Phone</Th>
-                            <Th data-priority="6">Address</Th>
-                            <Th data-priority="6">Joined</Th>
-                            <Th data-priority="2">Action</Th>
-                          </Tr>
-                        </Thead>
-                        <Tbody>
-                        {filters.map(({ id, name, phone, address, joined_at}) => (
-                          <Tr key={id}>
-                            <Td>{name}</Td>
-                            <Td>{phone}</Td>
-                            <Td>{address}</Td>
-                            <Td>{joined_at}</Td>
-                            <Td>
-                                <ul className="list-inline font-size-16 contact-links mb-0">
-                                  <li className="list-inline-item">
-                                      <Link href={`/customer/${id}/edit`} type="button" title="Edit"><i className="bx bx-pencil"></i></Link>
-                                  </li>
-                                  <li className="list-inline-item">
-                                      <Link href="/customer/delete" type="button" id="deldata" data-id="{{ $customer->id }}" title="Delete"><i className="bx bx-trash"></i></Link>
-                                  </li>
-                                </ul>
-                            </Td>
-                          </Tr>
-                        ))}
-                        {filters.length === 0 && (
-                          <Tr>
-                              <Td
-                                  className="px-6 py-4 border-t text-center"
-                                  colSpan="5"
-
-                              >
-                                  No Customer found.
-                              </Td>
-                          </Tr>
-                        )}
-                        </Tbody>
-                      </Table>
-                    </div>
-                  </div> */}
                                     <DataTables
                                         columns={columns}
                                         data={filters}
                                         pagination={true}
+                                        paginationPerPage={30}
                                         theme="malygos"
                                     />
                                 </CardBody>

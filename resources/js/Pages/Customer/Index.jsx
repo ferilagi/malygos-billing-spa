@@ -300,7 +300,13 @@ const Customer = (props) => {
             />
 
             {/* Add / Edit Modal */}
-            <Modal size="lg" isOpen={modal} toggle={toggle}>
+            <Modal
+            size="lg"
+            isOpen={modal}
+            toggle={toggle}
+            centered={true}
+            backdrop={'static'}
+            >
                 <ModalHeader toggle={toggle} tag="h4">
                     {!!isEdit ? "Edit Customer" : "Add Customer"}
                 </ModalHeader>
@@ -513,13 +519,14 @@ const Customer = (props) => {
                                     </CardSubtitle>
 
                                     <TableContainer
-                                                columns={columns}
-                                                data={filters}
-                                                customPageSizeOptions={true}
-                                                // isGlobalFilter={true}
-                                                customPageSize={20}
-                                                // className="custom-header-css"
-                                            />
+                                        columns={columns}
+                                        data={filters}
+                                        customPageSizeOptions={true}
+                                        // isGlobalFilter={true}
+                                        customPageSize={20}
+                                        // className="custom-header-css"
+                                    />
+
                                 </CardBody>
                             </Card>
                         </Col>

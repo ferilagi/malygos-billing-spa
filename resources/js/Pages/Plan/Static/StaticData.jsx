@@ -21,9 +21,9 @@ import {
 import mapro from "../../../../assets/images/companies/img-5.png";
 import mipro from "../../../../assets/images/companies/img-6.png";
 
-const PppData = (props) => {
+const StaticData = (props) => {
 
-    const pprofiles = props.pprofiles;
+    const sprofiles = props.sprofiles;
 
     const [modal, setModal] = useState(false);
 
@@ -34,14 +34,14 @@ const PppData = (props) => {
     return (
         <React.Fragment>
             <Row>
-                {(pprofiles || []).map((item, key) => (
+                {(sprofiles || []).map((item, key) => (
                     <Col xl={3} md={6} key={key}>
                         <Card>
                             <CardBody>
                                 <div className="favorite-icon">
                                     <Link to="#"><i className="uil uil-heart-alt fs-18"></i></Link>
                                 </div>
-                                <img src={mipro} alt="" height="50" className="mb-3" />
+                                <img src={mapro} alt="" height="50" className="mb-3" />
                                 <h5 className="fs-17 mb-3">
                                     <Link to="/job-details" className="text-dark">{item.alias}</Link> <small className="text-muted fw-normal">({item.name_prof})</small></h5>
                                 <ul className="list-inline mb-0">
@@ -58,7 +58,7 @@ const PppData = (props) => {
                                     </li>
                                 </ul>
                                 <div className="mt-3 hstack gap-2">
-                                    <span className="badge rounded-1 badge-soft-primary">pppoe</span>
+                                    <span className="badge rounded-1 badge-soft-primary">static</span>
                                     <span className="badge rounded-1 badge-soft-danger">{item.routers}</span>
                                     <span className="badge rounded-1 badge-soft-info">{item.prefixQueue}</span>
                                     <span className="badge rounded-1 badge-soft-warning">{item.sufixQueue}</span>
@@ -66,7 +66,7 @@ const PppData = (props) => {
                                 </div>
                                 <div className="mt-4 hstack gap-2">
                                     <Link to="/job-details" className="btn btn-soft-success w-100">Details</Link>
-                                    <Button  onClick={() => setModal(true)} className="btn btn-soft-primary w-100">Sync</Button>
+                                    <Button  onClick={() => setModal(true)} className="btn btn-soft-primary w-100">Apply Now</Button>
                                 </div>
                             </CardBody>
                         </Card>
@@ -163,4 +163,4 @@ const PppData = (props) => {
     );
 }
 
-export default PppData;
+export default StaticData;

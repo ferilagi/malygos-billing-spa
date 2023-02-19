@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import { Head, Link } from "@inertiajs/react";
-import MainLayout from "../../Layouts/MainLayout";
 
-import TableContainer from "../../Components/Common/TableContainer";
 import {
     Card,
     CardBody,
@@ -17,251 +15,74 @@ import {
     UncontrolledTooltip,
     Input,
     Form,
+    FormGroup,
+    Button,
 } from "reactstrap";
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
-import { Name, Email, Tags, Projects, Img } from "./SubscriptionCol";
-
-//Import Breadcrumb
-import Breadcrumbs from "../../Layouts/Partials/Breadcrumb";
-import DeleteModal from "../../Components/Common/DeleteModal";
-
-import {
-    getUsers as onGetUsers,
-    addNewUser as onAddNewUser,
-    updateUser as onUpdateUser,
-    deleteUser as onDeleteUser,
-} from "../../store/contacts/actions";
 import { isEmpty } from "lodash";
 
-//redux
-import { useSelector, useDispatch } from "react-redux";
+//Import Breadcrumb
+import Breadcrumb from "../../Layouts/Partials/Breadcrumb";
 
-const ContactsList = (props) => {
-    const dispatch = useDispatch();
-    const [contact, setContact] = useState();
-    // validation
+const SubscriptionCreate = (props) => {
+
+    const cust = props.cust
+
+    const [subs, setSubs] = useState("")
+    const [selectedGroup, setselectedGroup] = useState(null);
+
+    const optionGroup = [
+        {
+          label: "Picnic",
+          options: [
+            { label: "Mustard", value: "Mustard" },
+            { label: "Ketchup", value: "Ketchup" },
+            { label: "Relish", value: "Relish" },
+          ],
+        },
+        {
+          label: "Camping",
+          options: [
+            { label: "Tent", value: "Tent" },
+            { label: "Flashlight", value: "Flashlight" },
+            { label: "Toilet Paper", value: "Toilet Paper" },
+          ],
+        },
+      ];
+
+    // Form validation
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: true,
 
         initialValues: {
-            name: (contact && contact.name) || "",
-            designation: (contact && contact.designation) || "",
-            tags: (contact && contact.tags) || "",
-            email: (contact && contact.email) || "",
-            projects: (contact && contact.projects) || "",
+            customer: '',
+            firstname: '',
+            lastname: 'Otto',
+            city: 'City',
+            state: '',
+            zip: 'Zip',
         },
         validationSchema: Yup.object({
-            name: Yup.string().required("Please Enter Your Name"),
-            designation: Yup.string().required("Please Enter Your Designation"),
-            tags: Yup.array().required("Please Enter Tag"),
-            email: Yup.string().required("Please Enter Your Email"),
-            projects: Yup.number().required("Please Enter Your Project"),
+            customer: Yup.string().required("Please Select Customer"),
+            firstname: Yup.string().required("Please Enter Your First Name"),
+            lastname: Yup.string().required("Please Enter Your Last Name"),
+            city: Yup.string().required("Please Enter Your City"),
+            state: Yup.string().required("Please Enter Your State"),
+            zip: Yup.string().required("Please Enter Your Zip"),
         }),
         onSubmit: (values) => {
-            if (isEdit) {
-                const updateUser = {
-                    id: contact.id,
-                    name: values.name,
-                    designation: values.designation,
-                    tags: values.tags,
-                    email: values.email,
-                    projects: values.projects,
-                };
-
-                // update user
-                dispatch(onUpdateUser(updateUser));
-                validation.resetForm();
-                setIsEdit(false);
-            } else {
-                const newUser = {
-                    id: Math.floor(Math.random() * (30 - 20)) + 20,
-                    name: values["name"],
-                    designation: values["designation"],
-                    email: values["email"],
-                    tags: values["tags"],
-                    projects: values["projects"],
-                };
-                // save new user
-                dispatch(onAddNewUser(newUser));
-                validation.resetForm();
-            }
-            toggle();
-        },
+        console.log("values", values);
+        }
     });
 
-    const { users } = useSelector((state) => ({
-        users: state.contacts.users,
-    }));
 
-    const [userList, setUserList] = useState([]);
-    const [modal, setModal] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
 
-    const columns = useMemo(
-        () => [
-            {
-                Header: "#",
-                Cell: () => {
-                    return (
-                        <input type="checkbox" className="form-check-input" />
-                    );
-                },
-            },
-            {
-                Header: "Img",
-                // accessor: "name",
-                disableFilters: true,
-                filterable: true,
-                accessor: (cellProps) => (
-                    <>
-                        {!cellProps.img ? (
-                            <div className="avatar-xs">
-                                <span className="avatar-title rounded-circle">
-                                    {cellProps.name.charAt(0)}
-                                </span>
-                            </div>
-                        ) : (
-                            <div>
-                                <img
-                                    className="rounded-circle avatar-xs"
-                                    src={cellProps.img}
-                                    alt=""
-                                />
-                            </div>
-                        )}
-                    </>
-                ),
-            },
-            {
-                Header: "Name",
-                accessor: "name",
-                filterable: true,
-                Cell: (cellProps) => {
-                    return <Name {...cellProps} />;
-                },
-            },
-            {
-                Header: "Email",
-                accessor: "email",
-                filterable: true,
-                Cell: (cellProps) => {
-                    return <Email {...cellProps} />;
-                },
-            },
-            {
-                Header: "Tags",
-                accessor: "tags",
-                filterable: true,
-                Cell: (cellProps) => {
-                    return <Tags {...cellProps} />;
-                },
-            },
-            {
-                Header: "Projects",
-                accessor: "projects",
-                filterable: true,
-                Cell: (cellProps) => {
-                    return (
-                        <>
-                            {" "}
-                            <Projects {...cellProps} />{" "}
-                        </>
-                    );
-                },
-            },
-            {
-                Header: "Action",
-                Cell: (cellProps) => {
-                    return (
-                        <div className="d-flex gap-3">
-                            <Link
-                                to="#"
-                                className="text-success"
-                                onClick={() => {
-                                    const userData = cellProps.row.original;
-                                    handleUserClick(userData);
-                                }}
-                            >
-                                <i
-                                    className="mdi mdi-pencil font-size-18"
-                                    id="edittooltip"
-                                />
-                                <UncontrolledTooltip
-                                    placement="top"
-                                    target="edittooltip"
-                                >
-                                    Edit
-                                </UncontrolledTooltip>
-                            </Link>
-                            <Link
-                                href="#"
-                                className="text-danger"
-                                onClick={() => {
-                                    const userData = cellProps.row.original;
-                                    onClickDelete(userData);
-                                }}
-                            >
-                                <i
-                                    className="mdi mdi-delete font-size-18"
-                                    id="deletetooltip"
-                                />
-                                <UncontrolledTooltip
-                                    placement="top"
-                                    target="deletetooltip"
-                                >
-                                    Delete
-                                </UncontrolledTooltip>
-                            </Link>
-                        </div>
-                    );
-                },
-            },
-        ],
-        []
-    );
-
-    useEffect(() => {
-        if (users && !users.length) {
-            dispatch(onGetUsers());
-            setIsEdit(false);
-        }
-    }, [dispatch, users]);
-
-    useEffect(() => {
-        setContact(users);
-        setIsEdit(false);
-    }, [users]);
-
-    useEffect(() => {
-        if (!isEmpty(users) && !!isEdit) {
-            setContact(users);
-            setIsEdit(false);
-        }
-    }, [users]);
-
-    const toggle = () => {
-        setModal(!modal);
-    };
-
-    const handleUserClick = (arg) => {
-        const user = arg;
-
-        setContact({
-            id: user.id,
-            name: user.name,
-            designation: user.designation,
-            email: user.email,
-            tags: user.tags,
-            projects: user.projects,
-        });
-        setIsEdit(true);
-
-        toggle();
-    };
+    // function handleSelectGroup(selectedGroup) {
+    //     setselectedGroup(selectedGroup);
+    //   }
 
     var node = useRef();
     const onPaginationPageChange = (page) => {
@@ -276,366 +97,401 @@ const ContactsList = (props) => {
         }
     };
 
-    //delete customer
-    const [deleteModal, setDeleteModal] = useState(false);
-
-    const onClickDelete = (users) => {
-        setContact(users);
-        setDeleteModal(true);
-    };
-
-    const handleDeleteUser = () => {
-        dispatch(onDeleteUser(contact));
-        onPaginationPageChange(1);
-        setDeleteModal(false);
-    };
-
-    const handleUserClicks = () => {
-        setUserList("");
-        setIsEdit(false);
-        toggle();
-    };
-
-    const keyField = "id";
-
     return (
         <>
-            <DeleteModal
-                show={deleteModal}
-                onDeleteClick={handleDeleteUser}
-                onCloseClick={() => setDeleteModal(false)}
-            />
-
-            <MainLayout auth={props.auth}>
-                <Head title="Dashboard" />
+            <Head title="Dashboard" />
                 <div className="page-content">
                     <Container fluid>
                         {/* Render Breadcrumbs */}
-                        <Breadcrumbs
-                            title="Contacts"
-                            breadcrumbItem="User List"
-                        />
+                        <Breadcrumb title="Contacts" breadcrumbItem="User List" />
                         <Row>
-                            <Col lg="12">
-                                <Card>
-                                    <CardBody>
-                                        <TableContainer
-                                            columns={columns}
-                                            data={users}
-                                            // customPageSizeOptions={true}
-                                            // isGlobalFilter={true}
-                                            isAddUserList={true}
-                                            handleUserClick={handleUserClicks}
-                                            customPageSize={10}
-                                            className="custom-header-css"
+                            <Col xl="8">
+                            <Card>
+                                <CardBody>
+                                <h4 className="card-title">React Validation - Normal</h4>
+                                <p className="card-title-desc">
+                                    Provide valuable, actionable feedback to your users with
+                                    HTML5 form validation–available in all our supported
+                                    browsers.
+                                </p>
+                                <Form className="needs-validation"
+                                    onSubmit={(e) => {
+                                    e.preventDefault();
+                                    validation.handleSubmit();
+                                    return false;
+                                    }}
+                                >
+                                    <Row>
+                                    <Col md="6">
+                                        <FormGroup className="mb-3">
+                                        <Label htmlFor="customer">First name</Label>
+                                        <Input
+                                            name="customer"
+                                            id="customer"
+                                            type="select"
+                                            className="form-control"
+                                            onChange={validation.handleChange}
+                                            onBlur={validation.handleBlur}
+                                            value={validation.values.customer || ""}
+                                            invalid={
+                                            validation.touched.customer && validation.errors.customer ? true : false
+                                            }
+                                        >
+                                            <option value={""}>Choose...</option>
+                                            <option>...</option>
+                                        </Input>
+                                        {validation.touched.customer && validation.errors.customer ? (
+                                            <FormFeedback type="invalid">{validation.errors.customer}</FormFeedback>
+                                        ) : null}
+                                        </FormGroup>
+                                    </Col>
+                                    <Col md="6">
+                                        <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom01">First name</Label>
+                                        <Input
+                                            name="firstname"
+                                            placeholder="First name"
+                                            type="text"
+                                            className="form-control"
+                                            id="validationCustom01"
+                                            onChange={validation.handleChange}
+                                            onBlur={validation.handleBlur}
+                                            value={validation.values.firstname || ""}
+                                            invalid={
+                                            validation.touched.firstname && validation.errors.firstname ? true : false
+                                            }
                                         />
+                                        {validation.touched.firstname && validation.errors.firstname ? (
+                                            <FormFeedback type="invalid">{validation.errors.firstname}</FormFeedback>
+                                        ) : null}
+                                        </FormGroup>
+                                    </Col>
 
-                                        <Modal isOpen={modal} toggle={toggle}>
-                                            <ModalHeader
-                                                toggle={toggle}
-                                                tag="h4"
+                                    <Col md="6">
+                                        <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom02">Last name</Label>
+                                        <Input
+                                            name="lastname"
+                                            placeholder="Last name"
+                                            type="text"
+                                            className="form-control"
+                                            id="validationCustom02"
+                                            onChange={validation.handleChange}
+                                            onBlur={validation.handleBlur}
+                                            value={validation.values.lastname || ""}
+                                            invalid={
+                                            validation.touched.lastname && validation.errors.lastname ? true : false
+                                            }
+                                        />
+                                        {validation.touched.lastname && validation.errors.lastname ? (
+                                            <FormFeedback type="invalid">{validation.errors.lastname}</FormFeedback>
+                                        ) : null}
+                                        </FormGroup>
+                                    </Col>
+                                    </Row>
+                                    <Row>
+                                    <Col md="4">
+                                        <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom04">State</Label>
+                                        <Input
+                                            name="state"
+                                            placeholder="State"
+                                            type="text"
+                                            className="form-control"
+                                            id="validationCustom04"
+                                            onChange={validation.handleChange}
+                                            onBlur={validation.handleBlur}
+                                            value={validation.values.state || ""}
+                                            invalid={
+                                            validation.touched.state && validation.errors.state ? true : false
+                                            }
+                                        />
+                                        {validation.touched.state && validation.errors.state ? (
+                                            <FormFeedback type="invalid">{validation.errors.state}</FormFeedback>
+                                        ) : null}
+                                        </FormGroup>
+                                    </Col>
+                                    <Col md="4">
+                                        <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom03">City</Label>
+                                        <Input
+                                            name="city"
+                                            placeholder="City"
+                                            type="text"
+                                            className="form-control"
+                                            onChange={validation.handleChange}
+                                            onBlur={validation.handleBlur}
+                                            value={validation.values.city || ""}
+                                            invalid={
+                                            validation.touched.city && validation.errors.city ? true : false
+                                            }
+                                        />
+                                        {validation.touched.city && validation.errors.city ? (
+                                            <FormFeedback type="invalid">{validation.errors.city}</FormFeedback>
+                                        ) : null}
+                                        </FormGroup>
+                                    </Col>
+
+                                    <Col md="4">
+                                        <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom05">Zip</Label>
+                                        <Input
+                                            name="zip"
+                                            placeholder="Zip Code"
+                                            type="text"
+                                            className="form-control"
+                                            id="validationCustom05"
+                                            onChange={validation.handleChange}
+                                            onBlur={validation.handleBlur}
+                                            value={validation.values.zip || ""}
+                                            invalid={
+                                            validation.touched.zip && validation.errors.zip ? true : false
+                                            }
+                                        />
+                                        {validation.touched.zip && validation.errors.zip ? (
+                                            <FormFeedback type="invalid">{validation.errors.zip}</FormFeedback>
+                                        ) : null}
+                                        </FormGroup>
+                                    </Col>
+                                    </Row>
+                                    <Row>
+                                    <Col lg="12">
+                                        <FormGroup className="mb-3">
+                                        <div className="form-check">
+                                            <Input
+                                            type="checkbox"
+                                            className="form-check-input"
+                                            id="invalidCheck"
+                                            />
+                                            <Label
+                                            className="form-check-label"
+                                            htmlFor="invalidCheck"
                                             >
-                                                {!!isEdit
-                                                    ? "Edit User"
-                                                    : "Add User"}
-                                            </ModalHeader>
-                                            <ModalBody>
-                                                <Form
-                                                    onSubmit={(e) => {
-                                                        e.preventDefault();
-                                                        validation.handleSubmit();
-                                                        return false;
-                                                    }}
+                                            {" "}
+                                            Agree to terms and conditions
+                                            </Label>
+                                        </div>
+                                        </FormGroup>
+                                    </Col>
+                                    </Row>
+                                    <Button color="primary" type="submit">
+                                    Submit form
+                                    </Button>
+                                </Form>
+                                </CardBody>
+                            </Card>
+                            </Col>
+
+                            <Col xl="4">
+                            <Card>
+                                <CardBody>
+                                <h4 className="card-title">React Validation (Tooltips)</h4>
+                                <p className="card-title-desc">
+                                    If your form layout allows it, you can swap the
+                                    <code>.{"{valid | invalid-}"}feedback</code> classes for
+                                    <code>.{"{valid | invalid-}"}-tooltip</code> classes to
+                                    display validation feedback in a styled tooltip.
+                                </p>
+                                <form
+                                    className="needs-validation"
+                                    method="post"
+                                    id="tooltipForm"
+                                    onSubmit={e => {
+                                    handleSubmit(e);
+                                    }}
+                                >
+                                    <Row>
+                                        <Col md="4">
+                                            <div className="mb-3 position-relative">
+                                            <Label htmlFor="validationTooltip01">
+                                                First name
+                                            </Label>
+                                            <Input
+                                                type="text"
+                                                className="form-control"
+                                                id="validationTooltip01"
+                                                placeholder="First name"
+                                                onChange={event => {
+                                                onChangeValidation("fnm", event.target.value);
+                                                }}
+                                                valid={validation["fnm"] === true}
+                                                invalid={
+                                                validation["fnm"] !== true &&
+                                                validation["fnm"] !== null
+                                                }
+                                            />
+
+                                            <div
+                                                className={
+                                                validation["fnm"] === true
+                                                    ? "valid-tooltip"
+                                                    : "invalid-tooltip"
+                                                }
+                                                name="validate"
+                                                id="validate1"
+                                            >
+                                                {validation["fnm"] === true
+                                                ? "Looks good!"
+                                                : "Please Enter Valid First Name"}
+                                            </div>
+                                            </div>
+                                        </Col>
+                                        <Col md="4">
+                                            <div className="mb-3 position-relative">
+                                            <Label htmlFor="validationTooltip02">Last name</Label>
+                                            <Input
+                                                type="text"
+                                                className="form-control"
+                                                id="validationTooltip02"
+                                                placeholder="Last name"
+                                                onChange={event =>
+                                                onChangeValidation("lnm", event.target.value)
+                                                }
+                                                valid={validation["lnm"] === true}
+                                                invalid={
+                                                validation["lnm"] !== true &&
+                                                validation["lnm"] !== null
+                                                }
+                                            />
+                                            <div
+                                                className={
+                                                validation["lnm"] === true
+                                                    ? "valid-tooltip"
+                                                    : "invalid-tooltip"
+                                                }
+                                                name="validate"
+                                                id="validate2"
+                                            >
+                                                {validation["lnm"] === true
+                                                ? "Looks good!"
+                                                : "Please Enter Valid Last Name"}
+                                            </div>
+                                            </div>
+                                        </Col>
+                                        <Col md="4">
+                                            <div className="mb-3 position-relative">
+                                            <Label htmlFor="validationTooltipUsername">
+                                                Username
+                                            </Label>
+                                            <div className="input-group">
+                                                <div className="input-group-prepend">
+                                                <span
+                                                    className="input-group-text"
+                                                    id="validationTooltipUsernamePrepend"
                                                 >
-                                                    <Row form>
-                                                        <Col xs={12}>
-                                                            <div className="mb-3">
-                                                                <Label className="form-label">
-                                                                    Name
-                                                                </Label>
-                                                                <Input
-                                                                    name="name"
-                                                                    type="text"
-                                                                    onChange={
-                                                                        validation.handleChange
-                                                                    }
-                                                                    onBlur={
-                                                                        validation.handleBlur
-                                                                    }
-                                                                    value={
-                                                                        validation
-                                                                            .values
-                                                                            .name ||
-                                                                        ""
-                                                                    }
-                                                                    invalid={
-                                                                        validation
-                                                                            .touched
-                                                                            .name &&
-                                                                        validation
-                                                                            .errors
-                                                                            .name
-                                                                            ? true
-                                                                            : false
-                                                                    }
-                                                                />
-                                                                {validation
-                                                                    .touched
-                                                                    .name &&
-                                                                validation
-                                                                    .errors
-                                                                    .name ? (
-                                                                    <FormFeedback type="invalid">
-                                                                        {
-                                                                            validation
-                                                                                .errors
-                                                                                .name
-                                                                        }
-                                                                    </FormFeedback>
-                                                                ) : null}
-                                                            </div>
-                                                            <div className="mb-3">
-                                                                <Label className="form-label">
-                                                                    Designation
-                                                                </Label>
-                                                                <Input
-                                                                    name="designation"
-                                                                    label="Designation"
-                                                                    type="text"
-                                                                    onChange={
-                                                                        validation.handleChange
-                                                                    }
-                                                                    onBlur={
-                                                                        validation.handleBlur
-                                                                    }
-                                                                    value={
-                                                                        validation
-                                                                            .values
-                                                                            .designation ||
-                                                                        ""
-                                                                    }
-                                                                    invalid={
-                                                                        validation
-                                                                            .touched
-                                                                            .designation &&
-                                                                        validation
-                                                                            .errors
-                                                                            .designation
-                                                                            ? true
-                                                                            : false
-                                                                    }
-                                                                />
-                                                                {validation
-                                                                    .touched
-                                                                    .designation &&
-                                                                validation
-                                                                    .errors
-                                                                    .designation ? (
-                                                                    <FormFeedback type="invalid">
-                                                                        {
-                                                                            validation
-                                                                                .errors
-                                                                                .designation
-                                                                        }
-                                                                    </FormFeedback>
-                                                                ) : null}
-                                                            </div>
-                                                            <div className="mb-3">
-                                                                <Label className="form-label">
-                                                                    Email
-                                                                </Label>
-                                                                <Input
-                                                                    name="email"
-                                                                    label="Email"
-                                                                    type="email"
-                                                                    onChange={
-                                                                        validation.handleChange
-                                                                    }
-                                                                    onBlur={
-                                                                        validation.handleBlur
-                                                                    }
-                                                                    value={
-                                                                        validation
-                                                                            .values
-                                                                            .email ||
-                                                                        ""
-                                                                    }
-                                                                    invalid={
-                                                                        validation
-                                                                            .touched
-                                                                            .email &&
-                                                                        validation
-                                                                            .errors
-                                                                            .email
-                                                                            ? true
-                                                                            : false
-                                                                    }
-                                                                />
-                                                                {validation
-                                                                    .touched
-                                                                    .email &&
-                                                                validation
-                                                                    .errors
-                                                                    .email ? (
-                                                                    <FormFeedback type="invalid">
-                                                                        {
-                                                                            validation
-                                                                                .errors
-                                                                                .email
-                                                                        }
-                                                                    </FormFeedback>
-                                                                ) : null}
-                                                            </div>
-                                                            <div className="mb-3">
-                                                                <Label className="form-label">
-                                                                    Option
-                                                                </Label>
-                                                                <Input
-                                                                    type="select"
-                                                                    name="tags"
-                                                                    className="form-select"
-                                                                    multiple={
-                                                                        true
-                                                                    }
-                                                                    onChange={
-                                                                        validation.handleChange
-                                                                    }
-                                                                    onBlur={
-                                                                        validation.handleBlur
-                                                                    }
-                                                                    value={
-                                                                        validation
-                                                                            .values
-                                                                            .tags ||
-                                                                        []
-                                                                    }
-                                                                    invalid={
-                                                                        validation
-                                                                            .touched
-                                                                            .tags &&
-                                                                        validation
-                                                                            .errors
-                                                                            .tags
-                                                                            ? true
-                                                                            : false
-                                                                    }
-                                                                >
-                                                                    <option>
-                                                                        Photoshop
-                                                                    </option>
-                                                                    <option>
-                                                                        illustrator
-                                                                    </option>
-                                                                    <option>
-                                                                        Html
-                                                                    </option>
-                                                                    <option>
-                                                                        Php
-                                                                    </option>
-                                                                    <option>
-                                                                        Java
-                                                                    </option>
-                                                                    <option>
-                                                                        Python
-                                                                    </option>
-                                                                    <option>
-                                                                        UI/UX
-                                                                        Designer
-                                                                    </option>
-                                                                    <option>
-                                                                        Ruby
-                                                                    </option>
-                                                                    <option>
-                                                                        Css
-                                                                    </option>
-                                                                </Input>
-                                                                {validation
-                                                                    .touched
-                                                                    .tags &&
-                                                                validation
-                                                                    .errors
-                                                                    .tags ? (
-                                                                    <FormFeedback type="invalid">
-                                                                        {
-                                                                            validation
-                                                                                .errors
-                                                                                .tags
-                                                                        }
-                                                                    </FormFeedback>
-                                                                ) : null}
-                                                            </div>
-                                                            <div className="mb-3">
-                                                                <Label className="form-label">
-                                                                    Projects
-                                                                </Label>
-                                                                <Input
-                                                                    name="projects"
-                                                                    label="Projects"
-                                                                    type="text"
-                                                                    onChange={
-                                                                        validation.handleChange
-                                                                    }
-                                                                    onBlur={
-                                                                        validation.handleBlur
-                                                                    }
-                                                                    value={
-                                                                        validation
-                                                                            .values
-                                                                            .projects ||
-                                                                        ""
-                                                                    }
-                                                                    invalid={
-                                                                        validation
-                                                                            .touched
-                                                                            .projects &&
-                                                                        validation
-                                                                            .errors
-                                                                            .projects
-                                                                            ? true
-                                                                            : false
-                                                                    }
-                                                                />
-                                                                {validation
-                                                                    .touched
-                                                                    .projects &&
-                                                                validation
-                                                                    .errors
-                                                                    .projects ? (
-                                                                    <FormFeedback type="invalid">
-                                                                        {
-                                                                            validation
-                                                                                .errors
-                                                                                .projects
-                                                                        }
-                                                                    </FormFeedback>
-                                                                ) : null}
-                                                            </div>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col>
-                                                            <div className="text-end">
-                                                                <button
-                                                                    type="submit"
-                                                                    className="btn btn-success save-user"
-                                                                >
-                                                                    Save
-                                                                </button>
-                                                            </div>
-                                                        </Col>
-                                                    </Row>
-                                                </Form>
-                                            </ModalBody>
-                                        </Modal>
-                                    </CardBody>
-                                </Card>
+                                                    @
+                                                </span>
+                                                </div>
+                                                <Input
+                                                type="text"
+                                                className="form-control"
+                                                id="validationTooltipUsername"
+                                                placeholder="Username"
+                                                onChange={event =>
+                                                    onChangeValidation("unm", event.target.value)
+                                                }
+                                                valid={validation["unm"] === true}
+                                                invalid={
+                                                    validation["unm"] !== true &&
+                                                    validation["unm"] !== null
+                                                }
+                                                />
+                                                <div
+                                                className={
+                                                    validation["unm"] === true
+                                                    ? "valid-tooltip"
+                                                    : "invalid-tooltip"
+                                                }
+                                                name="validate"
+                                                id="validate3"
+                                                >
+                                                {validation["unm"] === true
+                                                    ? "Looks good!"
+                                                    : "Please choose a unique and valid username."}
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                    <Col md="6">
+                                        <div className="mb-3 position-relative">
+                                        <Label htmlFor="validationTooltip03">City</Label>
+                                        <Input
+                                            type="text"
+                                            className="form-control"
+                                            id="validationTooltip03"
+                                            placeholder="City"
+                                            onChange={event =>
+                                            onChangeValidation("city", event.target.value)
+                                            }
+                                            valid={validation["city"] === true}
+                                            invalid={
+                                            validation["city"] !== true &&
+                                            validation["city"] !== null
+                                            }
+                                        />
+                                        <div
+                                            className={
+                                            validation["city"] === true
+                                                ? "valid-tooltip"
+                                                : "invalid-tooltip"
+                                            }
+                                            name="validate"
+                                            id="validate4"
+                                        >
+                                            {validation["city"] === true
+                                            ? "Looks good!"
+                                            : "Please choose a unique and valid username.Please provide a valid city."}
+                                        </div>
+                                        </div>
+                                    </Col>
+                                    <Col md="6">
+                                        <div className="mb-3 position-relative">
+                                        <Label htmlFor="validationTooltip04">State</Label>
+                                        <Input
+                                            type="text"
+                                            className="form-control"
+                                            id="validationTooltip04"
+                                            placeholder="State"
+                                            onChange={event =>
+                                            onChangeValidation("stateV", event.target.value)
+                                            }
+                                            valid={validation["stateV"] === true}
+                                            invalid={
+                                            validation["stateV"] !== true &&
+                                            validation["stateV"] !== null
+                                            }
+                                        />
+                                        <div
+                                            className={
+                                            validation["stateV"] === true
+                                                ? "valid-tooltip"
+                                                : "invalid-tooltip"
+                                            }
+                                            name="validate"
+                                            id="validate5"
+                                        >
+                                            {validation["stateV"] === true
+                                            ? "Looks good!"
+                                            : "Please provide a valid state."}
+                                        </div>
+                                        </div>
+                                    </Col>
+                                    </Row>
+                                    <Button color="primary" type="submit">
+                                    Submit form
+                                    </Button>
+                                </form>
+                                </CardBody>
+                            </Card>
                             </Col>
                         </Row>
                     </Container>
                 </div>
-            </MainLayout>
+
         </>
     );
 };
 
-export default ContactsList;
+export default SubscriptionCreate;

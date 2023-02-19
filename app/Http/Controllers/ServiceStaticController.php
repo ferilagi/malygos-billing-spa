@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ServiceStatic;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,8 +15,9 @@ class ServiceStaticController extends Controller
      */
     public function index()
     {
+        $sprofiles = ServiceStatic::all();
         return Inertia::render('Plan/Static/Index', [
-
+            'sprofiles' => $sprofiles,
         ]);
     }
 

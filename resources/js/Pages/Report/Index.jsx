@@ -15,6 +15,8 @@ import Flatpickr from "react-flatpickr";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
+import { currencyFormat } from "@/helpers/formatValue";
+
 const Report = (props) => {
     const dispatch = useDispatch();
 
@@ -26,6 +28,7 @@ const Report = (props) => {
 
     const [isMenu, setIsMenu] = useState(false);
     const [activeTab, setActiveTab] = useState("1");
+
 
     const toggleTab = (tab) => {
         if (activeTab !== tab) {
@@ -92,21 +95,6 @@ const Report = (props) => {
 
 
     };
-
-    const currencyFormat = (num) => {
-        return "IDR " + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    };
-
-    // useEffect(() => {
-    //     // fixthrottled.current(search), [search]
-    //     const deBounce = setTimeout(() => {
-    //         router.reload('/report',{rangePeriod: period}, {
-    //             preserveState: true,
-    //             replace:true,
-    //         });
-    //     }, 500);
-    //     return () => clearTimeout(deBounce);
-    // }, [period]);
 
     return (
         <>

@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../Layouts/Partials/Breadcrumb";
+import Breadcrumb from "../../Layouts/Partials/Breadcrumb";
 
 const CustomPage = (props) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +24,7 @@ const CustomPage = (props) => {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs title="Setting" breadcrumbItem="CustomPage" />
+                    <Breadcrumb title="Setting" breadcrumbItem="CustomPage" />
 
                     <Row>
                         <Col lg={12}>

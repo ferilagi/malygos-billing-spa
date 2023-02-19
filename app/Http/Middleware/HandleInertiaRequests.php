@@ -47,6 +47,10 @@ class HandleInertiaRequests extends Middleware
             ? $request->user()->only('name', 'avatar')
             : null,
 
+            'notif' => fn () => $request->user()
+            ? $request->user()->unreadNotifications()->take(5)->get()
+            : null,
+
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),

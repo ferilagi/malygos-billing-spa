@@ -23,11 +23,11 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@metismenu/react": "^0.0.3",
         "bootstrap": "^5.2.3",
         "formik": "^2.2.9",
         "i18next-browser-languagedetector": "^7.0.1",
         "leaflet": "^1.9.3",
-        "metismenujs": "^1.4.0",
         "moment": "^2.29.4",
         "nprogress": "^0.2.0",
         "prettier": "^2.8.3",

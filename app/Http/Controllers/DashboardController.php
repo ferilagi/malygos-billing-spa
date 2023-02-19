@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
 use App\Models\Subscription;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -73,6 +74,11 @@ class DashboardController extends Controller
 
     $comm = Auth::user()->commission->where('created_at', '>=', now()->startOfMonth())->sum('amount');
 
+    //top area
+    $areas = Area::with('subscription')->withCount('subscription')
+    ->orderBy('subscription_count', 'desc')
+    ->paginate(4);
+
     return Inertia::render('Dashboard/Index', [
         'totalsubs' => $totalsubs,
         'comm' => $comm,
@@ -91,6 +97,10 @@ class DashboardController extends Controller
             'earncash' => $earncash,
             'earntransfer' => $earntransfer,
         ],
+        'areas' => $areas->map(fn ($area) => [
+            'name' => $area->name,
+            'count' => $area->subscription->count(),
+        ]),
     ]);
   }
 

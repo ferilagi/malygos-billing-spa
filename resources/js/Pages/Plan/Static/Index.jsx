@@ -14,15 +14,18 @@ import {
 //Import Breadcrumb
 import Breadcrumbs from "../../../Layouts/Partials/Breadcrumb";
 import DatePicker from "react-flatpickr";
+import StaticData from "./StaticData";
 
 const PlanStatic = (props) => {
+
+    const sprofiles = props.sprofiles
 
     const [selectDate, setSelectDate] = useState();
     const dateChange = (date) => {
         setSelectDate(date)
     };
 
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
     return (
@@ -252,6 +255,7 @@ const PlanStatic = (props) => {
                         </Col>
                     </Row>
 
+                    <StaticData sprofiles={sprofiles} />
 
                 </Container>
             </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Head, Link, router } from "@inertiajs/react";
 import { isEmpty } from "lodash";
-import { Card, CardBody, Col, Container, Row } from "reactstrap";
+import { Button, Card, CardBody, Col, Container, Row } from "reactstrap";
 import "../../../assets/scss/datatables.scss";
 
 //Import Breadcrumb
@@ -98,7 +98,7 @@ const Invoice = (props) => {
                     <Breadcrumbs title="Invoice" breadcrumbItem="Invoice" />
 
                     <Row>
-                        <Col sm="4">
+                        <Col md={4}>
                             <Card className="mini-stats-wid">
                                 <CardBody>
                                     <div className="d-flex">
@@ -120,7 +120,7 @@ const Invoice = (props) => {
                                 </CardBody>
                             </Card>
                         </Col>
-                        <Col sm="4">
+                        <Col md={4}>
                             <Card className="mini-stats-wid">
                                 <CardBody>
                                     <div className="d-flex">
@@ -142,7 +142,7 @@ const Invoice = (props) => {
                                 </CardBody>
                             </Card>
                         </Col>
-                        <Col sm="4">
+                        <Col md={4}>
                             <Card className="mini-stats-wid">
                                 <CardBody>
                                     <div className="d-flex">

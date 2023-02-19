@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Area;
+use App\Models\Customer;
 use App\Models\Mikrotik;
 use App\Models\Setting;
 use App\Models\Subscription;
@@ -64,7 +65,9 @@ class SubscriptionController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Subs/Create', [
+        return Inertia::render('Subscription/Create', [
+            'cust' => Customer::select('id', 'name')->doesntHave("subscription")->get(),
+
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\User;
+use App\Notifications\CrudNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -29,7 +30,7 @@ class CustomerController extends Controller
 
         return Inertia::render('Customer/Index', [
             'filters' => FacadesRequest::all('search'),
-            'customers' => $customers->map(fn ($customer,) => [
+            'customers' => $customers->map(fn ($customer) => [
                 'id'  => $customer->id,
                 'name'  => $customer->name,
                 'phone'  => $customer->phone,
@@ -125,12 +126,12 @@ class CustomerController extends Controller
             'object' => $nc_object,
         ];
 
-        // $nc_prime->notify(new CrudNotification($nc_data));
-        // if (Auth::user()->level != 'admin') {
-        //     User::where('id', Auth::user()->id)
-        //     ->firstOrFail()
-        //     ->notify(new CrudNotification($nc_data));
-        // }
+        $nc_prime->notify(new CrudNotification($nc_data));
+        if (Auth::user()->level != 'admin') {
+            User::where('id', Auth::user()->id)
+            ->firstOrFail()
+            ->notify(new CrudNotification($nc_data));
+        }
 
         return redirect()->back()->with([
             'message' => [

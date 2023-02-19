@@ -25,7 +25,8 @@ import WelcomeComp from "./Partials/WelcomeComp";
 import MonthlyEarning from "./Partials/MonthlyEarning";
 import SocialSource from "./Partials/SocialSource";
 import ActivityComp from "./Partials/ActivityComp";
-import TopCities from "./Partials/TopCities";
+import TopArea from "./Partials/TopArea";
+import NewSubscribers from "./Partials/NewSubscribers";
 
 //import Charts
 import StackedColumnChart from "./Partials/StackedColumnChart";
@@ -47,6 +48,7 @@ const Dashboard = (props) => {
     const totalsubs = props.totalsubs;
     const comm = props.comm;
     const monthly = props.monthly;
+    const areas = props.areas;
 
     const { chartsData } = useSelector((state) => ({
         chartsData: state.Dashboard.chartsData,
@@ -211,14 +213,15 @@ const Dashboard = (props) => {
 
                     <Row>
                         <Col xl="4">
-                            <SocialSource />
-                        </Col>
-                        <Col xl="4">
                             <ActivityComp />
                         </Col>
 
                         <Col xl="4">
-                            <TopCities />
+                            <NewSubscribers />
+                        </Col>
+
+                        <Col xl="4">
+                            <TopArea areas={areas}/>
                         </Col>
                     </Row>
 
