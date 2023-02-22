@@ -29,28 +29,12 @@ import Breadcrumb from "../../Layouts/Partials/Breadcrumb";
 const SubscriptionCreate = (props) => {
 
     const cust = props.cust
+    const areas = props.areas
+    const pprofile = props.pprofile
+    const sprofile = props.sprofile
 
-    const [subs, setSubs] = useState("")
     const [selectedGroup, setselectedGroup] = useState(null);
-
-    const optionGroup = [
-        {
-          label: "Picnic",
-          options: [
-            { label: "Mustard", value: "Mustard" },
-            { label: "Ketchup", value: "Ketchup" },
-            { label: "Relish", value: "Relish" },
-          ],
-        },
-        {
-          label: "Camping",
-          options: [
-            { label: "Tent", value: "Tent" },
-            { label: "Flashlight", value: "Flashlight" },
-            { label: "Toilet Paper", value: "Toilet Paper" },
-          ],
-        },
-      ];
+    const [isPPP, setIsPPP] = useState(true)
 
     // Form validation
     const validation = useFormik({
@@ -59,43 +43,72 @@ const SubscriptionCreate = (props) => {
 
         initialValues: {
             customer: '',
-            firstname: '',
-            lastname: 'Otto',
-            city: 'City',
-            state: '',
-            zip: 'Zip',
+            type: 'ppp',
+            planable: '',
+            area: '',
+            ip_addr: '',
+            queuename: '',
+            username: '',
+            password: '',
+            is_taxed: 0,
+            integration: 0,
+            auto_disable: 0,
+            custom_duedate: 0,
         },
         validationSchema: Yup.object({
-            customer: Yup.string().required("Please Select Customer"),
-            firstname: Yup.string().required("Please Enter Your First Name"),
-            lastname: Yup.string().required("Please Enter Your Last Name"),
-            city: Yup.string().required("Please Enter Your City"),
-            state: Yup.string().required("Please Enter Your State"),
-            zip: Yup.string().required("Please Enter Your Zip"),
+            customer: Yup.string().required("Atleast Pick One Customer"),
+            type: Yup.string().required("Please Select Type"),
+            planable: Yup.string().required("Atleast Pick One Plan"),
+            area: Yup.string().required("Please Select Area"),
+            ip_addr: Yup.string().when("type", {
+                is: "static",
+                then: Yup.string().required("Please Enter IP Address")
+            }),
+            queuename: Yup.string().when("type", {
+                is: "static",
+                then: Yup.string().required("Please Enter Queue Name")
+            }),
+            username: Yup.string().when("type", {
+                is: "ppp",
+                then: Yup.string().required("Please Enter Username")
+            }),
+            password: Yup.string().when("type", {
+                is: "ppp",
+                then: Yup.string().required("Please Enter Password")
+            }),
+            is_taxed: Yup.boolean(),
+            integration: Yup.boolean(),
+            auto_disable: Yup.boolean(),
+            custom_duedate: Yup.boolean(),
         }),
         onSubmit: (values) => {
         console.log("values", values);
         }
     });
 
+    const optionPlan =
+    isPPP ?
+        (pprofile.map( pprof =>
+            <option key={pprof.id} value={pprof.id}>
+            {pprof.name_prof}
+            </option>
+        ))
 
+    :
+        (sprofile.map( sprof =>
+            <option key={sprof.id} value={sprof.id}>
+            {sprof.name_prof}
+            </option>
+        ))
+
+    useEffect(() => {
+        validation.values.type === 'ppp'? setIsPPP(true) : setIsPPP(false);
+        console.log(validation.values, isPPP)
+    }, [validation.values])
 
     // function handleSelectGroup(selectedGroup) {
     //     setselectedGroup(selectedGroup);
     //   }
-
-    var node = useRef();
-    const onPaginationPageChange = (page) => {
-        if (
-            node &&
-            node.current &&
-            node.current.props &&
-            node.current.props.pagination &&
-            node.current.props.pagination.options
-        ) {
-            node.current.props.pagination.options.onPageChange(page);
-        }
-    };
 
     return (
         <>
@@ -122,137 +135,305 @@ const SubscriptionCreate = (props) => {
                                     }}
                                 >
                                     <Row>
-                                    <Col md="6">
+                                        <Col md="8">
+                                            <FormGroup className="mb-3">
+                                            <Label htmlFor="customer">Customer Name</Label>
+                                            <Input
+                                                name="customer"
+                                                id="customer"
+                                                type="select"
+                                                className="form-control"
+                                                onChange={validation.handleChange}
+                                                onBlur={validation.handleBlur}
+                                                value={validation.values.customer || ""}
+                                                invalid={
+                                                validation.touched.customer && validation.errors.customer ? true : false
+                                                }
+                                            >
+                                                <option value=""></option>
+                                                {cust.map( ctm => (
+                                                <option key={ctm.id} value={ctm.id}>
+                                                    {ctm.name}
+                                                </option>
+                                                ))}
+                                            </Input>
+                                            {validation.touched.customer && validation.errors.customer ? (
+                                                <FormFeedback type="invalid">{validation.errors.customer}</FormFeedback>
+                                            ) : null}
+                                            </FormGroup>
+                                        </Col>
+                                        <Col md="4">
+                                            <FormGroup className="mb-3">
+                                            <Label htmlFor="type">Type</Label>
+                                            <Input
+                                                name="type"
+                                                id="type"
+                                                type="select"
+                                                className="form-control"
+                                                onChange={validation.handleChange}
+                                                onBlur={validation.handleBlur}
+                                                value={validation.values.type || ""}
+                                                invalid={
+                                                validation.touched.type && validation.errors.type ? true : false
+                                                }
+                                            >
+                                                <option value="ppp">PPPoE</option>
+                                                <option value="static">Static</option>
+                                            </Input>
+                                            {validation.touched.type && validation.errors.type ? (
+                                                <FormFeedback type="invalid">{validation.errors.type}</FormFeedback>
+                                            ) : null}
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col md="6">
                                         <FormGroup className="mb-3">
-                                        <Label htmlFor="customer">First name</Label>
+                                        <Label htmlFor="planable">Plan</Label>
                                         <Input
-                                            name="customer"
-                                            id="customer"
+                                        name="planable"
+                                        id="planable"
+                                        type="select"
+                                        className="form-control"
+                                        onChange={validation.handleChange}
+                                        onBlur={validation.handleBlur}
+                                        value={validation.values.planable || ""}
+                                        invalid={
+                                        validation.touched.planable && validation.errors.planable ? true : false
+                                        }
+                                        >
+                                            <option value="">Select</option>
+                                            {optionPlan}
+
+                                        {/* {planables.map( planable => (
+                                        <option key={planable.id} value={planable.id}>
+                                            {planable.name}
+                                        </option>
+                                        ))} */}
+                                        </Input>
+                                        {validation.touched.planable && validation.errors.planable ? (
+                                            <FormFeedback type="invalid">{validation.errors.planable}</FormFeedback>
+                                        ) : null}
+                                        </FormGroup>
+                                        </Col>
+                                        <Col md="6">
+                                        <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom03">Area</Label>
+                                        <Input
+                                            name="area"
+                                            id="area"
                                             type="select"
                                             className="form-control"
                                             onChange={validation.handleChange}
                                             onBlur={validation.handleBlur}
-                                            value={validation.values.customer || ""}
+                                            value={validation.values.area || ""}
                                             invalid={
-                                            validation.touched.customer && validation.errors.customer ? true : false
+                                            validation.touched.area && validation.errors.area ? true : false
                                             }
                                         >
-                                            <option value={""}>Choose...</option>
-                                            <option>...</option>
+                                            <option value=""></option>
+                                            {areas.map( area => (
+                                            <option key={area.id} value={area.id}>
+                                                {area.name}
+                                            </option>
+                                            ))}
                                         </Input>
-                                        {validation.touched.customer && validation.errors.customer ? (
-                                            <FormFeedback type="invalid">{validation.errors.customer}</FormFeedback>
+                                        {validation.touched.area && validation.errors.area ? (
+                                            <FormFeedback type="invalid">{validation.errors.area}</FormFeedback>
                                         ) : null}
                                         </FormGroup>
-                                    </Col>
-                                    <Col md="6">
-                                        <FormGroup className="mb-3">
-                                        <Label htmlFor="validationCustom01">First name</Label>
-                                        <Input
-                                            name="firstname"
-                                            placeholder="First name"
-                                            type="text"
-                                            className="form-control"
-                                            id="validationCustom01"
-                                            onChange={validation.handleChange}
-                                            onBlur={validation.handleBlur}
-                                            value={validation.values.firstname || ""}
-                                            invalid={
-                                            validation.touched.firstname && validation.errors.firstname ? true : false
-                                            }
-                                        />
-                                        {validation.touched.firstname && validation.errors.firstname ? (
-                                            <FormFeedback type="invalid">{validation.errors.firstname}</FormFeedback>
-                                        ) : null}
-                                        </FormGroup>
-                                    </Col>
+                                        </Col>
+                                    </Row>
 
+                                    {isPPP ?
+                                    <Row>
                                     <Col md="6">
                                         <FormGroup className="mb-3">
-                                        <Label htmlFor="validationCustom02">Last name</Label>
+                                        <Label htmlFor="username">Username</Label>
                                         <Input
-                                            name="lastname"
-                                            placeholder="Last name"
+                                            name="username"
+                                            id="username"
+                                            placeholder="Username"
                                             type="text"
                                             className="form-control"
-                                            id="validationCustom02"
                                             onChange={validation.handleChange}
                                             onBlur={validation.handleBlur}
-                                            value={validation.values.lastname || ""}
+                                            value={validation.values.username || ""}
                                             invalid={
-                                            validation.touched.lastname && validation.errors.lastname ? true : false
+                                            validation.touched.username && validation.errors.username ? true : false
                                             }
                                         />
-                                        {validation.touched.lastname && validation.errors.lastname ? (
-                                            <FormFeedback type="invalid">{validation.errors.lastname}</FormFeedback>
+                                        {validation.touched.username && validation.errors.username ? (
+                                            <FormFeedback type="invalid">{validation.errors.username}</FormFeedback>
+                                        ) : null}
+                                        </FormGroup>
+                                    </Col>
+                                    <Col md="6">
+                                        <FormGroup className="mb-3">
+                                        <Label htmlFor="password">Password</Label>
+                                        <Input
+                                            name="password"
+                                            id="password"
+                                            placeholder="Password"
+                                            type="text"
+                                            className="form-control"
+                                            onChange={validation.handleChange}
+                                            onBlur={validation.handleBlur}
+                                            value={validation.values.password || ""}
+                                            invalid={
+                                            validation.touched.password && validation.errors.password ? true : false
+                                            }
+                                        />
+                                        {validation.touched.password && validation.errors.password ? (
+                                            <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
                                         ) : null}
                                         </FormGroup>
                                     </Col>
                                     </Row>
+                                    :
                                     <Row>
-                                    <Col md="4">
+                                    <Col md="6">
                                         <FormGroup className="mb-3">
-                                        <Label htmlFor="validationCustom04">State</Label>
+                                        <Label htmlFor="ip_addr">IP Address</Label>
                                         <Input
-                                            name="state"
-                                            placeholder="State"
-                                            type="text"
-                                            className="form-control"
-                                            id="validationCustom04"
-                                            onChange={validation.handleChange}
-                                            onBlur={validation.handleBlur}
-                                            value={validation.values.state || ""}
-                                            invalid={
-                                            validation.touched.state && validation.errors.state ? true : false
-                                            }
-                                        />
-                                        {validation.touched.state && validation.errors.state ? (
-                                            <FormFeedback type="invalid">{validation.errors.state}</FormFeedback>
-                                        ) : null}
-                                        </FormGroup>
-                                    </Col>
-                                    <Col md="4">
-                                        <FormGroup className="mb-3">
-                                        <Label htmlFor="validationCustom03">City</Label>
-                                        <Input
-                                            name="city"
-                                            placeholder="City"
+                                            name="ip_addr"
+                                            id="ip_addr"
+                                            placeholder="IP Address"
                                             type="text"
                                             className="form-control"
                                             onChange={validation.handleChange}
                                             onBlur={validation.handleBlur}
-                                            value={validation.values.city || ""}
+                                            value={validation.values.ip_addr || ""}
                                             invalid={
-                                            validation.touched.city && validation.errors.city ? true : false
+                                            validation.touched.ip_addr && validation.errors.ip_addr ? true : false
                                             }
                                         />
-                                        {validation.touched.city && validation.errors.city ? (
-                                            <FormFeedback type="invalid">{validation.errors.city}</FormFeedback>
+                                        {validation.touched.ip_addr && validation.errors.ip_addr ? (
+                                            <FormFeedback type="invalid">{validation.errors.ip_addr}</FormFeedback>
                                         ) : null}
                                         </FormGroup>
                                     </Col>
+                                    <Col md="6">
+                                        <FormGroup className="mb-3">
+                                        <Label htmlFor="queuename">Queue Name</Label>
+                                        <Input
+                                            name="queuename"
+                                            id="queuename"
+                                            placeholder="Queue Name"
+                                            type="text"
+                                            className="form-control"
+                                            onChange={validation.handleChange}
+                                            onBlur={validation.handleBlur}
+                                            value={validation.values.queuename || ""}
+                                            invalid={
+                                            validation.touched.queuename && validation.errors.queuename ? true : false
+                                            }
+                                        />
+                                        {validation.touched.queuename && validation.errors.queuename ? (
+                                            <FormFeedback type="invalid">{validation.errors.queuename}</FormFeedback>
+                                        ) : null}
+                                        </FormGroup>
+                                    </Col>
+                                    </Row>
+                                    }
 
-                                    <Col md="4">
-                                        <FormGroup className="mb-3">
-                                        <Label htmlFor="validationCustom05">Zip</Label>
-                                        <Input
-                                            name="zip"
-                                            placeholder="Zip Code"
-                                            type="text"
-                                            className="form-control"
-                                            id="validationCustom05"
-                                            onChange={validation.handleChange}
-                                            onBlur={validation.handleBlur}
-                                            value={validation.values.zip || ""}
-                                            invalid={
-                                            validation.touched.zip && validation.errors.zip ? true : false
-                                            }
-                                        />
-                                        {validation.touched.zip && validation.errors.zip ? (
-                                            <FormFeedback type="invalid">{validation.errors.zip}</FormFeedback>
-                                        ) : null}
-                                        </FormGroup>
-                                    </Col>
+                                    <Row>
+                                        <Col md="6">
+                                            <FormGroup className="mb-3">
+                                            <Label htmlFor="is_taxed">Tax</Label>
+                                            <Input
+                                                name="is_taxed"
+                                                id="is_taxed"
+                                                type="select"
+                                                className="form-control"
+                                                onChange={validation.handleChange}
+                                                onBlur={validation.handleBlur}
+                                                value={validation.values.is_taxed || ""}
+                                                invalid={
+                                                validation.touched.is_taxed && validation.errors.is_taxed ? true : false
+                                                }
+                                            >
+                                                <option value="0">No</option>
+                                                <option value="1">Yes</option>
+                                            </Input>
+                                            {validation.touched.is_taxed && validation.errors.is_taxed ? (
+                                                <FormFeedback type="invalid">{validation.errors.is_taxed}</FormFeedback>
+                                            ) : null}
+                                            </FormGroup>
+                                        </Col>
+                                        <Col md="6">
+                                            <FormGroup className="mb-3">
+                                            <Label htmlFor="integration">Integration</Label>
+                                            <Input
+                                                name="integration"
+                                                id="integration"
+                                                type="select"
+                                                className="form-control"
+                                                onChange={validation.handleChange}
+                                                onBlur={validation.handleBlur}
+                                                value={validation.values.integration || ""}
+                                                invalid={
+                                                validation.touched.integration && validation.errors.integration ? true : false
+                                                }
+                                            >
+                                                <option value="0">No</option>
+                                                <option value="1">Yes</option>
+                                            </Input>
+                                            {validation.touched.integration && validation.errors.integration ? (
+                                                <FormFeedback type="invalid">{validation.errors.integration}</FormFeedback>
+                                            ) : null}
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col md="6">
+                                            <FormGroup className="mb-3">
+                                            <Label htmlFor="auto_disable">Auto Isolate</Label>
+                                            <Input
+                                                name="auto_disable"
+                                                id="auto_disable"
+                                                type="select"
+                                                className="form-control"
+                                                onChange={validation.handleChange}
+                                                onBlur={validation.handleBlur}
+                                                value={validation.values.auto_disable || ""}
+                                                invalid={
+                                                validation.touched.auto_disable && validation.errors.auto_disable ? true : false
+                                                }
+                                            >
+                                                <option value="0">No</option>
+                                                <option value="1">Yes</option>
+                                            </Input>
+                                            {validation.touched.auto_disable && validation.errors.auto_disable ? (
+                                                <FormFeedback type="invalid">{validation.errors.auto_disable}</FormFeedback>
+                                            ) : null}
+                                            </FormGroup>
+                                        </Col>
+                                        <Col md="6">
+                                            <FormGroup className="mb-3">
+                                            <Label htmlFor="custom_duedate">Duedate</Label>
+                                            <Input
+                                                name="custom_duedate"
+                                                id="custom_duedate"
+                                                type="select"
+                                                className="form-control"
+                                                onChange={validation.handleChange}
+                                                onBlur={validation.handleBlur}
+                                                value={validation.values.custom_duedate || ""}
+                                                invalid={
+                                                validation.touched.custom_duedate && validation.errors.custom_duedate ? true : false
+                                                }
+                                            >
+                                                <option value="0">No</option>
+                                                <option value="1">Yes</option>
+                                            </Input>
+                                            {validation.touched.custom_duedate && validation.errors.custom_duedate ? (
+                                                <FormFeedback type="invalid">{validation.errors.custom_duedate}</FormFeedback>
+                                            ) : null}
+                                            </FormGroup>
+                                        </Col>
                                     </Row>
                                     <Row>
                                     <Col lg="12">

@@ -16,6 +16,7 @@ import NotificationDropdown from "./TopbarDropdown/NotificationDropdown";
 import ProfileMenu from "./TopbarDropdown/ProfileMenu";
 
 import logo from "../../../assets/images/logo.svg";
+import masterlogo from "../../../assets/images/masterlogo.png"
 import logoLightSvg from "../../../assets/images/logo-light.svg";
 
 //i18n
@@ -72,7 +73,7 @@ const TopBar = (props) => {
                                 className="logo logo-dark"
                             >
                                 <span className="logo-sm">
-                                    <img src={logonew} alt="" height="22" />
+                                    <img src={masterlogo} alt="" height="22" />
                                 </span>
                             </Link>
 
@@ -82,7 +83,7 @@ const TopBar = (props) => {
                             >
                                 <span className="logo-sm">
                                     <img
-                                        src={logonew}
+                                        src={masterlogo}
                                         alt=""
                                         height="22"
                                     />

@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Head, Link, router } from "@inertiajs/react";
 import { isEmpty } from "lodash";
-import { Button, Card, CardBody, Col, Container, Row } from "reactstrap";
+import { Button, Card, CardBody, Col, Container, Form, Input, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
+import classnames from "classnames"
+
 import "../../../assets/scss/datatables.scss";
 
 //Import Breadcrumb
@@ -98,84 +100,99 @@ const Invoice = (props) => {
                     <Breadcrumbs title="Invoice" breadcrumbItem="Invoice" />
 
                     <Row>
-                        <Col md={4}>
-                            <Card className="mini-stats-wid">
-                                <CardBody>
-                                    <div className="d-flex">
-                                        <div className="me-3 align-self-center">
-                                            <i className="mdi mdi-bitcoin h2 text-warning mb-0" />
-                                        </div>
-                                        <div className="flex-grow-1">
-                                            <p className="text-muted mb-2">
-                                                Bitcoin Wallet
-                                            </p>
-                                            <h5 className="mb-0">
-                                                1.02356 BTC{" "}
-                                                <span className="font-size-14 text-muted">
-                                                    = $ 9148.00
-                                                </span>
-                                            </h5>
-                                        </div>
+                        <Row className="mb-3">
+                            <Col xl="9" sm="6">
+                                <div className="d-flex">
+                                    <div className="mx-1 align-self-center">
+                                        <i className="mdi mdi-bitcoin h2 text-warning mb-0" />
                                     </div>
-                                </CardBody>
-                            </Card>
-                        </Col>
-                        <Col md={4}>
-                            <Card className="mini-stats-wid">
-                                <CardBody>
-                                    <div className="d-flex">
-                                        <div className="me-3 align-self-center">
-                                            <i className="mdi mdi-ethereum h2 text-primary mb-0" />
-                                        </div>
-                                        <div className="flex-grow-1">
-                                            <p className="text-muted mb-2">
-                                                Ethereum Wallet
-                                            </p>
-                                            <h5 className="mb-0">
-                                                0.04121 ETH{" "}
-                                                <span className="font-size-14 text-muted">
-                                                    = $ 8235.00
-                                                </span>
-                                            </h5>
-                                        </div>
+                                    <div className="flex-grow-1">
+                                        <p className="text-muted mb-0">
+                                            Bitcoin
+                                        </p>
+                                        <h5 className="mb-0">
+                                            <span className="font-size-12 text-muted">
+                                            12.000.000
+                                            </span>
+                                        </h5>
                                     </div>
-                                </CardBody>
-                            </Card>
-                        </Col>
-                        <Col md={4}>
-                            <Card className="mini-stats-wid">
-                                <CardBody>
-                                    <div className="d-flex">
-                                        <div className="me-3 align-self-center">
-                                            <i className="mdi mdi-litecoin h2 text-info mb-0" />
-                                        </div>
-                                        <div className="flex-grow-1">
-                                            <p className="text-muted mb-2">
-                                                litecoin Wallet
-                                            </p>
-                                            <h5 className="mb-0">
-                                                0.00356 BTC{" "}
-                                                <span className="font-size-14 text-muted">
-                                                    = $ 4721.00
-                                                </span>
-                                            </h5>
-                                        </div>
-                                    </div>
-                                </CardBody>
-                            </Card>
-                        </Col>
-                    </Row>
 
-                    <Row>
-                        <Col>
-                            <InvoiceTable
-                                trans={trans}
-                                activeTab={activeTab}
-                                toggleTab={toggleTab}
-                                setPayModal={setPayModal}
-                                setPayInvoice={setPayInvoice}
-                            />
-                        </Col>
+                                    <div className="mx-1 align-self-center">
+                                        <i className="mdi mdi-ethereum h2 text-primary mb-0" />
+                                    </div>
+                                    <div className="flex-grow-1">
+                                        <p className="text-muted mb-0">
+                                            Bitcoin
+                                        </p>
+                                        <h5 className="mb-0">
+                                            <span className="font-size-12 text-muted">
+                                            12.000.000
+                                            </span>
+                                        </h5>
+                                    </div>
+
+                                    <div className="mx-1 align-self-center">
+                                        <i className="mdi mdi-litecoin h2 text-info mb-0" />
+                                    </div>
+                                    <div className="flex-grow-1">
+                                        <p className="text-muted mb-0">
+                                            Bitcoin
+                                        </p>
+                                        <h5 className="mb-0">
+                                            <span className="font-size-12 text-muted">
+                                            12.000.000
+                                            </span>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </Col>
+                            <Col lg="3" sm="6">
+                            <Form className="mt-4 mt-sm-0 float-sm-end d-flex align-items-center">
+                                <Nav className="product-view-nav" pills>
+                                <NavItem>
+                                    <NavLink
+                                    className={classnames({
+                                        active: activeTab === "1",
+                                    })}
+                                    onClick={() => {
+                                        toggleTab("1")
+                                    }}
+                                    >
+                                    <i className="bx bx-list-ul" />
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink
+                                    className={classnames({
+                                        active: activeTab === "2",
+                                    })}
+                                    onClick={() => {
+                                        toggleTab("2")
+                                    }}
+                                    >
+                                    <i className="bx bx-grid-alt" />
+                                    </NavLink>
+                                </NavItem>
+                                </Nav>
+                            </Form>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <TabContent activeTab={activeTab}>
+                                <TabPane tabId="1" id="table">
+                                    <InvoiceTable
+                                        trans={trans}
+                                        activeTab={activeTab}
+                                        toggleTab={toggleTab}
+                                        setPayModal={setPayModal}
+                                        setPayInvoice={setPayInvoice}
+                                    />
+                                </TabPane>
+                                <TabPane tabId="2" id="grid">
+
+                                </TabPane>
+                            </TabContent>
+                        </Row>
                     </Row>
                 </Container>
             </div>

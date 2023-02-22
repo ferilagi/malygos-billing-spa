@@ -1,6 +1,6 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
-import getChartColorsArray from "../../../components/Common/ChartsDynamicColor";
+import getChartColorsArray from "../../../Components/Common/ChartsDynamicColor";
 
 const ApexRadial = ({ dataColors }) => {
     const apexRadialColors = getChartColorsArray(dataColors);

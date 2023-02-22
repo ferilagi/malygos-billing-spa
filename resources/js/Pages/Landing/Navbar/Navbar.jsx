@@ -13,7 +13,7 @@ import ScrollspyNav from "./scrollSpy";
 
 //Import Images
 import logodark from "../../../../assets/images/logo-dark.png";
-import logolight from "../../../../assets/images/logo-light.png";
+import masterlogo from "../../../../assets/images/masterlogo.png";
 
 const navItems = [
     { id: 1, idnm: "home", navheading: "Home" },
@@ -33,6 +33,10 @@ const Navbar_Page = (props) => {
         return item.idnm;
     });
 
+    const toggle = () => {
+        setisOpenMenu(!isOpenMenu);
+    };
+
     return (
         <>
             <nav
@@ -45,25 +49,25 @@ const Navbar_Page = (props) => {
                     <Link className="navbar-logo" to="/">
                         {props.imglight !== true ? (
                             <img
-                                src={logodark}
-                                alt=""
-                                height="19"
+                                src={masterlogo}
+                                alt="masterlogo"
+                                height="54"
                                 className="logo logo-dark"
                             />
                         ) : (
                             <img
-                                src={logolight}
-                                alt=""
-                                height="19"
+                                src={masterlogo}
+                                alt="masterlogo"
+                                height="54"
                                 className="logo logo-light"
                             />
                         )}
                     </Link>
 
                     <NavbarToggler
-                        className="p-0"
+                        className="px-3 font-size-16 d-lg-none header-item waves-effect waves-light"
                         onClick={() => {
-                            setisOpenMenu();
+                            toggle();
                         }}
                     >
                         <i className="fa fa-fw fa-bars" />
@@ -102,7 +106,7 @@ const Navbar_Page = (props) => {
                                 ))}
                             </Nav>
                         </ScrollspyNav>
-                        <div className="ms-lg-2">
+                        <div className="my-2 ms-lg-2">
                             <Link
                                 href={route("login")}
                                 className="btn btn-outline-success w-xs"

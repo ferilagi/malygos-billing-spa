@@ -16,7 +16,7 @@ import {
     PaymentMethod,
 } from "./LatestTransactionCol";
 
-import TableContainer from "../../../components/Common/TableContainer";
+import TableContainer from "../../../Components/Common/TableContainer";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";

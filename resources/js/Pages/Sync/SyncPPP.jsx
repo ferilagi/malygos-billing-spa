@@ -1,5 +1,4 @@
 import { Link, router } from "@inertiajs/react";
-import nProgress from "nprogress";
 import { useState, useEffect } from "react";
 import { Row, Col, Table, UncontrolledTooltip } from "reactstrap";
 
@@ -28,9 +27,7 @@ const SyncPPP = (props) => {
     }
 
     const handleSaveSyncPPP = (item) => {
-        setIsLoading(true);
         const submitButton = document.getElementById("saveSyncButton");
-        nProgress.start();
         submitButton.disabled = true;
 
         const data = ({
@@ -45,21 +42,8 @@ const SyncPPP = (props) => {
             onProgress: (event) => {
                 console.log('Progress:', event.loaded, event.total);
                 const percentCompleted = (event.loaded / event.total) * 100;
-                nProgress.set(percentCompleted);
             },
-        }).then(() => {
-            setIsLoading(false);
-            nProgress.done();
-            submitButton.disabled = false;
-            console.log('Data saved successfully');
-            // Implementasi tindakan setelah data berhasil disimpan
-        }).catch((error) => {
-            setIsLoading(false);
-            nProgress.done();
-            submitButton.disabled = false;
-            console.log(error.message);
-            // Implementasi tindakan jika terjadi error
-        });
+        })
     };
 
     return (

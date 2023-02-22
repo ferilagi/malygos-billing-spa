@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ReactApexChart from "react-apexcharts";
-import getChartColorsArray from "../../../components/Common/ChartsDynamicColor";
+import getChartColorsArray from "../../../Components/Common/ChartsDynamicColor";
 
 const StackedColumnChart = ({ dataColors, periodData }) => {
     const stackedColumnChartColors = getChartColorsArray(dataColors);

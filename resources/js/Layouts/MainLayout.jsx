@@ -70,6 +70,22 @@ const MainLayout = ({ header, children, props }) => {
         }
     };
 
+    // const autoHideLeftSidebar = (event) => {
+    //     var bd = document.body;
+    //     var vmenu = document.getElementById("vertical-menu");
+    //     var vmenubutton = document.getElementById("vertical-menu-btn");
+    //     //if clicked in inside right bar, then do nothing
+    //     if (window.screen.width <= 998) {
+    //         if (vmenu && vmenu.contains(event.target)) {
+    //             return;
+    //         } else {
+    //             //if clicked in outside of rightbar then fire action for hide rightbar
+    //             bd.classList.remove("sidebar-enable");
+    //         }
+    //     }
+    // };
+
+
     /*
     layout  settings
     */
@@ -77,6 +93,7 @@ const MainLayout = ({ header, children, props }) => {
     useEffect(() => {
         //init body click event fot toggle rightbar
         document.body.addEventListener("click", hideRightbar, true);
+        // document.body.addEventListener("click", autoHideLeftSidebar, true);
 
         if (isPreloader === true) {
             document.getElementById("preloader").style.display = "block";

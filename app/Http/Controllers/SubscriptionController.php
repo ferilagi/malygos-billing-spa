@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Area;
 use App\Models\Customer;
 use App\Models\Mikrotik;
+use App\Models\ServicePpp;
+use App\Models\ServiceStatic;
 use App\Models\Setting;
 use App\Models\Subscription;
 use App\Models\User;
@@ -67,7 +69,9 @@ class SubscriptionController extends Controller
     {
         return Inertia::render('Subscription/Create', [
             'cust' => Customer::select('id', 'name')->doesntHave("subscription")->get(),
-
+            'areas' => Area::all('id','name'),
+            'pprofile' => ServicePpp::all('id', 'name_prof'),
+            'sprofile' => ServiceStatic::all('id', 'name_prof'),
         ]);
     }
 

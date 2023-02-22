@@ -12,6 +12,7 @@ import {
     Input,
     FormFeedback,
     Label,
+    FormGroup,
 } from "reactstrap";
 
 //redux
@@ -22,9 +23,11 @@ import profile from "../../../assets/images/profile-img.png";
 import logo from "../../../assets/images/logo.svg";
 
 import { Head, Link, useForm } from "@inertiajs/react";
+import { invalid } from "moment";
 
-const Login = ({ status, canResetPassword }) => {
-    const { data, setData, post, processing, errors, reset } = useForm({
+const Login = ({ canResetPassword }) => {
+
+    const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
         email: "",
         password: "",
         remember: "",
@@ -37,6 +40,7 @@ const Login = ({ status, canResetPassword }) => {
     }, []);
 
     const onHandleChange = (event) => {
+        clearErrors()
         setData(
             event.target.name,
             event.target.type === "checkbox"
@@ -60,12 +64,6 @@ const Login = ({ status, canResetPassword }) => {
                     <i className="bx bx-home h2" />
                 </Link>
             </div>
-
-            {status && (
-                <div className="mb-4 font-medium text-sm text-green-600">
-                    {status}
-                </div>
-            )}
 
             <div className="account-pages my-5 pt-sm-5">
                 <Container>
@@ -117,8 +115,8 @@ const Login = ({ status, canResetPassword }) => {
                                             className="form-horizontal"
                                             onSubmit={submit}
                                         >
-                                            <div className="mb-3">
-                                                <Label className="form-label">
+                                            <FormGroup className="mb-3">
+                                                <Label className="form-label" htmlFor="email">
                                                     Email
                                                 </Label>
                                                 <Input
@@ -129,14 +127,19 @@ const Login = ({ status, canResetPassword }) => {
                                                     className="form-control"
                                                     autoComplete="username"
                                                     onChange={onHandleChange}
+                                                    invalid={ errors.email &&
+                                                        data.email ? true : false
+                                                        }
                                                 />
+                                                {errors && errors.email ? (
                                                 <FormFeedback type="invalid">
                                                     {errors.email}
                                                 </FormFeedback>
-                                            </div>
+                                                ): null }
+                                            </FormGroup>
 
-                                            <div className="mb-3">
-                                                <Label className="form-label">
+                                            <FormGroup className="mb-3">
+                                                <Label className="form-label" htmlFor="password">
                                                     Password
                                                 </Label>
                                                 <Input
@@ -147,13 +150,18 @@ const Login = ({ status, canResetPassword }) => {
                                                     className="form-control"
                                                     autoComplete="current-password"
                                                     onChange={onHandleChange}
+                                                    invalid={
+                                                        errors.password ? true : false
+                                                        }
                                                 />
+                                                {errors && errors.password ? (
                                                 <FormFeedback type="invalid">
                                                     {errors.password}
                                                 </FormFeedback>
-                                            </div>
+                                                ): null}
+                                            </FormGroup>
 
-                                            <div className="form-check">
+                                            <FormGroup className="form-check">
                                                 <input
                                                     id="remember"
                                                     type="checkbox"
@@ -164,11 +172,11 @@ const Login = ({ status, canResetPassword }) => {
                                                 />
                                                 <label
                                                     className="form-check-label"
-                                                    htmlFor="customControlInline"
+                                                    htmlFor="remember"
                                                 >
                                                     Remember me
                                                 </label>
-                                            </div>
+                                            </FormGroup>
 
                                             <div className="mt-3 d-grid">
                                                 <button
