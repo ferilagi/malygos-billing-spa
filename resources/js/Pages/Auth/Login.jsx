@@ -78,8 +78,7 @@ const Login = ({ canResetPassword }) => {
                                                     Welcome Back !
                                                 </h5>
                                                 <p>
-                                                    Sign in to continue to
-                                                    Skote.
+                                                    Sign in to continue.
                                                 </p>
                                             </div>
                                         </Col>

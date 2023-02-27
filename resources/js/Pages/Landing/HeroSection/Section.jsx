@@ -63,7 +63,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
 
 const Section = () => {
     return (
-        <React.Fragment>
+        <>
             <section className="section hero-section bg-ico-hero" id="home">
                 <div className="bg-overlay bg-primary" />
                 <Container>
@@ -71,8 +71,7 @@ const Section = () => {
                         <Col lg="5">
                             <div className="text-white-50">
                                 <h1 className="text-white fw-semibold mb-3 hero-title">
-                                    Skote - Ico Landing for a cryptocurrency
-                                    business
+                                    #Malygos - Unintended Landing
                                 </h1>
                                 <p className="font-size-14">
                                     It will be as simple as occidental in fact
@@ -160,7 +159,7 @@ const Section = () => {
                     </Row>
                 </Container>
             </section>
-        </React.Fragment>
+        </>
     );
 };
 

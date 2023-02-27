@@ -1,15 +1,15 @@
 import usFlag from "../../../assets/images/flags/us.jpg";
-import indonesian from "../../../assets/images/flags/indonesia.jpg";
-import russia from "../../../assets/images/flags/russia.jpg";
+import indoFlag from "../../../assets/images/flags/indonesia.jpg";
+import rusFlag from "../../../assets/images/flags/russia.jpg";
 
 const languages = {
     id: {
         label: "Indonesia",
-        flag: indonesian,
+        flag: indoFlag,
     },
     rs: {
         label: "Russian",
-        flag: russia,
+        flag: rusFlag,
     },
     en: {
         label: "English",

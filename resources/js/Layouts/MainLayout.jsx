@@ -172,7 +172,11 @@ const MainLayout = ({ header, children, props }) => {
 
             <div id="layout-wrapper">
                 <TopBar toggleMenuCallback={toggleMenuCallback} />
-                <Sidebar />
+                <Sidebar
+                theme={leftSideBarTheme}
+                type={leftSideBarType}
+                isMobile={isMobile}
+                />
                 <div className="main-content">{children}</div>
                 <Footer />
             </div>

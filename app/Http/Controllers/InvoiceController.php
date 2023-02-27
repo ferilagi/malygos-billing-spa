@@ -56,7 +56,16 @@ class InvoiceController extends Controller
             ->whereBetween('created_at', [$start_date, $end_date])
             ->get();
 
+        $total = $trans->sum('total');
+        $paid = $trans->where('status', 'paid')->sum('total');
+        $unpaid = $total- $paid;
+
         return Inertia::render('Invoice/Index', [
+            'count' => [
+                'total' => $total,
+                'paid' => $paid,
+                'unpaid' => $unpaid,
+            ],
             'filters' => FacadesRequest::all('search'),
             'trans' => $trans->map(fn ($tran) => [
                 'id'  => $tran->invoice,

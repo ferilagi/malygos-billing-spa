@@ -12,7 +12,6 @@ import { Link } from "@inertiajs/react";
 import ScrollspyNav from "./scrollSpy";
 
 //Import Images
-import logodark from "../../../../assets/images/logo-dark.png";
 import masterlogo from "../../../../assets/images/masterlogo.png";
 
 const navItems = [
@@ -46,26 +45,17 @@ const Navbar_Page = (props) => {
                 }
             >
                 <Container>
-                    <Link className="navbar-logo" to="/">
-                        {props.imglight !== true ? (
-                            <img
-                                src={masterlogo}
-                                alt="masterlogo"
-                                height="54"
-                                className="logo logo-dark"
-                            />
-                        ) : (
-                            <img
-                                src={masterlogo}
-                                alt="masterlogo"
-                                height="54"
-                                className="logo logo-light"
-                            />
-                        )}
+                    <Link className="navbar-logo" href="/#">
+                        <img
+                            src={masterlogo}
+                            alt="masterlogo"
+                            height="52"
+                            className="logo"
+                        />
                     </Link>
 
                     <NavbarToggler
-                        className="px-3 font-size-16 d-lg-none header-item waves-effect waves-light"
+                        className="px-3 font-size-16 d-lg-none header-item"
                         onClick={() => {
                             toggle();
                         }}

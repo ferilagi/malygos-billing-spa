@@ -1,7 +1,5 @@
-import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 import { Link, usePage } from "@inertiajs/react";
-import { connect } from "react-redux";
 
 //i18n
 import { withTranslation } from "react-i18next";
@@ -19,8 +17,10 @@ import logo from "../../../assets/images/logo.svg";
 import logoLightSvg from "../../../assets/images/logo-light.svg";
 
 const Sidebar = (props) => {
+    console.log(props)
     const ref = useRef();
     const { url, component } = usePage();
+
     // console.log(usePage().component)
 
     // function hideDropdown(item) {
@@ -72,9 +72,9 @@ const Sidebar = (props) => {
 
     // }, [usePage().component])
 
-    useEffect(() => {
-        ref.current.recalculate()
-    })
+    // useEffect(() => {
+    //     ref.current.recalculate()
+    // })
 
     function scrollElement(item) {
     if (item) {
@@ -122,9 +122,6 @@ const Sidebar = (props) => {
     // return false
     // }
 
-
-
-
     return (
         <>
             <div className="vertical-menu" id="vertical-menu">
@@ -148,9 +145,10 @@ const Sidebar = (props) => {
                     </Link>
                 </div>
 
-                <SimpleBar className="h-100" ref={ref}>
+                <SimpleBar className="h-100">
                     <div id="sidebar-menu">
                         <MetisMenu
+                            toggle={true}
                             className="list-unstyled"
                         >
                             <li className="menu-title">
@@ -198,15 +196,33 @@ const Sidebar = (props) => {
                             </li>
 
                             <li>
-                                <Link href="/plan/ppp"
-                                className={
-                                    component.startsWith("Plan")
-                                        ? "mm-active navlink"
-                                        : ""
-                                }>
+                                <a to="/#" className="has-arrow">
                                     <i className="bx bx-server"></i>
                                     <span>{props.t("Plan")}</span>
-                                </Link>
+                                </a>
+                                <ul className="sub-menu">
+                                    <li>
+                                        <Link href="/plan/ppp"
+                                        className={
+                                        component.startsWith("Plan/PPP")
+                                            ? "mm-active navlink"
+                                            : ""
+                                        }>
+                                        <span>{props.t("PPP")}</span>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href="/plan/static"
+                                        className={
+                                        component.startsWith("Plan/Static")
+                                            ? "mm-active navlink"
+                                            : ""
+                                        }>
+                                        <span>{props.t("Static")}</span>
+                                        </Link>
+                                    </li>
+                                </ul>
+
                             </li>
 
                             <li>
@@ -222,15 +238,23 @@ const Sidebar = (props) => {
                             </li>
 
                             <li>
-                                <Link href="/report"
-                                    className={
-                                    component.startsWith("Report")
-                                        ? "mm-active navlink"
-                                        : ""
-                                }>
+                                <Link to="#" className="has-arrow">
                                     <i className="bx bx-bar-chart"></i>
                                     <span>{props.t("Report")}</span>
                                 </Link>
+                                <ul>
+                                    <li>
+                                        <Link href="/report"
+                                        className={
+                                        component.startsWith("Report")
+                                            ? "mm-active navlink"
+                                            : ""
+                                        }>
+                                        <span>{props.t("Report")}</span>
+                                        </Link>
+                                    </li>
+                                </ul>
+
                             </li>
 
                             <li>
@@ -262,10 +286,10 @@ const Sidebar = (props) => {
 
                             {/* DropDown But Still Not Work */}
                             <li>
-                                <a to="/#" className="has-arrow">
+                                <Link href="/#" className="has-arrow">
                                     <i className="bx bx-cog"></i>
                                     <span>{props.t("Setting")}</span>
-                                </a>
+                                </Link>
                                 <ul className="sub-menu">
                                     <li>
                                         <Link href="/setting/billing"
@@ -369,13 +393,4 @@ const Sidebar = (props) => {
     );
 };
 
-Sidebar.propTypes = {
-    type: PropTypes.string,
-};
-
-const mapStatetoProps = (state) => {
-    return {
-        layout: state.Layout,
-    };
-};
-export default connect(mapStatetoProps, {})(withTranslation()(Sidebar));
+export default (withTranslation()(Sidebar));

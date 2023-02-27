@@ -8,37 +8,31 @@ import classnames from "classnames"
 import "../../../assets/scss/datatables.scss";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../Layouts/Partials/Breadcrumb";
+import Breadcrumb from "../../Layouts/Partials/Breadcrumb";
 import InvoiceTable from "./InvoiceTable";
+import InvoiceCard from "./InvoiceCard";
 import PayModal from "./Partials/PayModal";
+
+import { currencyFormat, formatDate } from "@/helpers/formatValue";
 
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
 const Invoice = (props) => {
-    const dispatch = useDispatch();
 
+    const counts = props.count;
     const [trans, setTrans] = useState(props.trans);
 
     const [payInvoice, setPayInvoice] = useState();
     const [payModal, setPayModal] = useState(false);
 
-    const [isMenu, setIsMenu] = useState(false);
     const [activeTab, setActiveTab] = useState("1");
-
-    // useEffect(() => {
-    //   dispatch(onGetWallet());
-    // }, [onGetWallet]);
 
     const toggleTab = (tab) => {
         if (activeTab !== tab) {
             setActiveTab(tab);
         }
-    };
-
-    const toggleMenu = () => {
-        setIsMenu(!isMenu);
     };
 
     const handleCashPayEvent = () => {
@@ -75,8 +69,8 @@ const Invoice = (props) => {
                 status: invoice_status,
                 method: method,
             },
-            replace: false,
-            preserveState: false,
+            replace: true,
+            preserveState: true,
             preserveScroll: true,
         })
         setPayModal(false);
@@ -97,50 +91,49 @@ const Invoice = (props) => {
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumb */}
-                    <Breadcrumbs title="Invoice" breadcrumbItem="Invoice" />
+                    <Breadcrumb title="Invoice" breadcrumbItem="Invoice" />
 
-                    <Row>
                         <Row className="mb-3">
                             <Col xl="9" sm="6">
                                 <div className="d-flex">
-                                    <div className="mx-1 align-self-center">
-                                        <i className="mdi mdi-bitcoin h2 text-warning mb-0" />
-                                    </div>
-                                    <div className="flex-grow-1">
-                                        <p className="text-muted mb-0">
-                                            Bitcoin
-                                        </p>
-                                        <h5 className="mb-0">
-                                            <span className="font-size-12 text-muted">
-                                            12.000.000
-                                            </span>
-                                        </h5>
-                                    </div>
-
                                     <div className="mx-1 align-self-center">
                                         <i className="mdi mdi-ethereum h2 text-primary mb-0" />
                                     </div>
                                     <div className="flex-grow-1">
                                         <p className="text-muted mb-0">
-                                            Bitcoin
+                                            Total
                                         </p>
                                         <h5 className="mb-0">
                                             <span className="font-size-12 text-muted">
-                                            12.000.000
+                                            {currencyFormat(counts.total)}
                                             </span>
                                         </h5>
                                     </div>
 
                                     <div className="mx-1 align-self-center">
-                                        <i className="mdi mdi-litecoin h2 text-info mb-0" />
+                                        <i className="mdi mdi-ethereum h2 text-success mb-0" />
                                     </div>
                                     <div className="flex-grow-1">
                                         <p className="text-muted mb-0">
-                                            Bitcoin
+                                            Paid
                                         </p>
                                         <h5 className="mb-0">
                                             <span className="font-size-12 text-muted">
-                                            12.000.000
+                                            {currencyFormat(counts.paid)}
+                                            </span>
+                                        </h5>
+                                    </div>
+
+                                    <div className="mx-1 align-self-center">
+                                        <i className="mdi mdi-ethereum h2 text-danger mb-0" />
+                                    </div>
+                                    <div className="flex-grow-1">
+                                        <p className="text-muted mb-0">
+                                            Unpaid
+                                        </p>
+                                        <h5 className="mb-0">
+                                            <span className="font-size-12 text-muted">
+                                            {currencyFormat(counts.unpaid)}
                                             </span>
                                         </h5>
                                     </div>
@@ -177,6 +170,7 @@ const Invoice = (props) => {
                             </Form>
                             </Col>
                         </Row>
+
                         <Row>
                             <TabContent activeTab={activeTab}>
                                 <TabPane tabId="1" id="table">
@@ -189,11 +183,14 @@ const Invoice = (props) => {
                                     />
                                 </TabPane>
                                 <TabPane tabId="2" id="grid">
-
+                                    <InvoiceCard
+                                        trans={trans}
+                                        setPayModal={setPayModal}
+                                        setPayInvoice={setPayInvoice}
+                                    />
                                 </TabPane>
                             </TabContent>
                         </Row>
-                    </Row>
                 </Container>
             </div>
         </>

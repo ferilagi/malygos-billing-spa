@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect, useMemo, useCallback } from "react";
-import PropTypes from "prop-types";
 import { Link, router } from "@inertiajs/react";
 import {
     Col,
@@ -24,7 +23,7 @@ import { currencyFormat, formatDate } from "@/helpers/formatValue";
 import "flatpickr/dist/themes/dark.css";
 import Flatpickr from "react-flatpickr";
 
-const InvoiceTable = ({ trans, activeTab, toggleTab, setPayModal, setPayInvoice }) => {
+const InvoiceTable = ({ trans, setPayModal, setPayInvoice }) => {
 
     // Table Data
     const transData = trans;
@@ -269,12 +268,6 @@ const InvoiceTable = ({ trans, activeTab, toggleTab, setPayModal, setPayInvoice 
             </CardBody>
         </Card>
     );
-};
-
-InvoiceTable.propTypes = {
-    activeTab: PropTypes.string,
-    toggleTab: PropTypes.func,
-    invPay: PropTypes.func,
 };
 
 export default InvoiceTable;
