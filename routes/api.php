@@ -23,17 +23,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
+Route::prefix('v1')->name('api.')->middleware('auth:sanctum')->group(function () {
 
     // Only for User (Admin / Owner / Operator)
-    Route::prefix('admin')->group(function () {
-        Route::resource('customer', UserCustomerController::class);
-        Route::resource('invoice', UserInvoiceController::class);
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::apiResource('customer', UserCustomerController::class);
+        Route::apiResource('invoice', UserInvoiceController::class);
     });
 
     // Only for customers
     Route::middleware('type.customer')->group(function () {
-        Route::resource('/invoice', InvoiceController::class);
+        Route::apiResource('invoice', InvoiceController::class);
     });
 });
 
