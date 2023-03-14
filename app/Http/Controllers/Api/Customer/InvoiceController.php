@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class UserController extends Controller
+class InvoiceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,7 +27,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user): Response
+    public function show(string $id): Response
     {
         //
     }
@@ -36,7 +35,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user): Response
+    public function update(Request $request, string $id): Response
     {
         //
     }
@@ -44,7 +43,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user): Response
+    public function destroy(string $id): Response
     {
         //
     }

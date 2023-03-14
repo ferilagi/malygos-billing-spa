@@ -41,10 +41,9 @@ return [
             'provider' => 'users',
         ],
         'customers' => [
-            'redirectTo' => 'customers.home',
             'driver' => 'session',
             'provider' => 'customers',
-           ],
+        ],
     ],
 
     /*

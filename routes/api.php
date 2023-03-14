@@ -1,6 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\AdminAuthController;
+use App\Http\Controllers\Api\Auth\CustomerAuthController;
+use App\Http\Controllers\Api\Customer\InvoiceController;
+use App\Http\Controllers\Api\User\CustomerController as UserCustomerController;
+use App\Http\Controllers\Api\User\InvoiceController as UserInvoiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +23,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
+
+    // Only for User (Admin / Owner / Operator)
+    Route::prefix('admin')->group(function () {
+        Route::resource('customer', UserCustomerController::class);
+        Route::resource('invoice', UserInvoiceController::class);
+    });
+
+    // Only for customers
+    Route::middleware('type.customer')->group(function () {
+        Route::resource('/invoice', InvoiceController::class);
+    });
+});
+
 Route::prefix('v1')->group(function () {
-    Route::post('register', [AuthController::class, 'register']);
+    // AdminLogin
+    Route::post('admin/register', [AdminAuthController::class, 'register']);
+    Route::post('admin/login', [AdminAuthController::class, 'login']);
+    // CustomerLogin
+    Route::post('register', [CustomerAuthController::class, 'register']);
+    Route::post('login', [CustomerAuthController::class, 'login']);
 });

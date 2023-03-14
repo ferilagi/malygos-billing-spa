@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id()->startingValue(1001);
             $table->foreignId('user_id')
-                    ->unsigned()
-                    ->nullable()
-                    ->constrained('users')
-                    ->nullOnDelete();
+                ->unsigned()
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
             $table->string('name');
             $table->string('phone')->unique()->nullable();
             $table->string('email')->unique();
@@ -27,6 +27,8 @@ return new class extends Migration
             $table->timestamp('joined_at')->nullable();
             $table->string('lat')->nullable();
             $table->string('lon')->nullable();
+            $table->string('login_password')->default('$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
