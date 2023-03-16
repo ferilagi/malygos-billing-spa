@@ -78,12 +78,14 @@ class AdminAuthController extends Controller
         };
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-
-        // auth()->user()->tokens()->delete();
-        // return [
-        //     'message' => 'You have successfully logged out and the token was successfully deleted'
-        // ];
+        $user =  $request->user();
+        $user->tokens()->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Anda telah Logout, Terima Kasih',
+            'statusCode' => 200
+        ]);
     }
 }

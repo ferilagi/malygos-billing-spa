@@ -14,33 +14,47 @@ class Subscription extends Model
     ];
 
     public function planable()
-    { return $this->morphTo(); }
+    {
+        return $this->morphTo();
+    }
 
     public function customer()
-    { return $this->belongsTo(Customer::class, 'customer_id'); }
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
 
     public function area()
-    { return $this->belongsTo(Area::class, 'area_id'); }
+    {
+        return $this->belongsTo(Area::class, 'area_id');
+    }
 
     public function transaction()
-    { return $this->hasMany(Transaction::class, 'sub_id'); }
+    {
+        return $this->hasMany(Transaction::class, 'sub_id');
+    }
+
+    // Latest Invoice
+    public function latestTransaction()
+    {
+        return $this->hasOne(Transaction::class, 'sub_id')->latestOfMany();
+    }
 
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? null, function ($query, $search) {
             $query->where(function ($query) use ($search) {
-                $query->where('queuename', 'like', '%'.$search.'%')
-                    ->orWhere('username', 'like', '%'.$search.'%')
-                    ->orWhere('status', 'like', '%'.$search.'%')
+                $query->where('queuename', 'like', '%' . $search . '%')
+                    ->orWhere('username', 'like', '%' . $search . '%')
+                    ->orWhere('status', 'like', '%' . $search . '%')
                     ->orWhereHas('customer', function ($query) use ($search) {
-                      $query->where('name', 'like', '%'.$search.'%');
-                      })
+                        $query->where('name', 'like', '%' . $search . '%');
+                    })
                     ->orWhereHas('customer.user', function ($query) use ($search) {
-                        $query->where('name', 'like', '%'.$search.'%');
+                        $query->where('name', 'like', '%' . $search . '%');
                     })
                     ->orWhereHas('area', function ($query) use ($search) {
-                      $query->where('name', 'like', '%'.$search.'%');
-                  });
+                        $query->where('name', 'like', '%' . $search . '%');
+                    });
             });
         })->when($filters['trashed'] ?? null, function ($query, $trashed) {
             if ($trashed === 'with') {

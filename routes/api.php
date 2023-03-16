@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\AdminAuthController;
 use App\Http\Controllers\Api\Auth\CustomerAuthController;
+use App\Http\Controllers\Api\Customer\CommonInfoController;
 use App\Http\Controllers\Api\Customer\InvoiceController;
 use App\Http\Controllers\Api\User\CustomerController as UserCustomerController;
 use App\Http\Controllers\Api\User\InvoiceController as UserInvoiceController;
@@ -19,10 +20,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::prefix('v1')->name('api.')->middleware('auth:sanctum')->group(function () {
 
     // Only for User (Admin / Owner / Operator)
@@ -33,8 +30,16 @@ Route::prefix('v1')->name('api.')->middleware('auth:sanctum')->group(function ()
 
     // Only for customers
     Route::middleware('type.customer')->group(function () {
+        // initial route for customer
+        Route::get('mydata', [CommonInfoController::class, 'mydata']);
+        Route::get('myinvoice', [CommonInfoController::class, 'myinvoice']);
         Route::apiResource('invoice', InvoiceController::class);
     });
+
+    // logout User
+    Route::post('admin/logout', [AdminAuthController::class, 'logout']);
+    // logout Customer
+    Route::post('logout', [CustomerAuthController::class, 'logout']);
 });
 
 Route::prefix('v1')->group(function () {
