@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Auth\AdminAuthController;
 use App\Http\Controllers\Api\Auth\CustomerAuthController;
 use App\Http\Controllers\Api\Customer\CommonInfoController;
 use App\Http\Controllers\Api\Customer\InvoiceController;
+use App\Http\Controllers\Api\Customer\ProfileController;
 use App\Http\Controllers\Api\User\CustomerController as UserCustomerController;
 use App\Http\Controllers\Api\User\InvoiceController as UserInvoiceController;
 use Illuminate\Http\Request;
@@ -34,6 +35,9 @@ Route::prefix('v1')->name('api.')->middleware('auth:sanctum')->group(function ()
         Route::get('mydata', [CommonInfoController::class, 'mydata']);
         Route::get('myinvoice', [CommonInfoController::class, 'myinvoice']);
         Route::apiResource('invoice', InvoiceController::class);
+        // Update Data for Customer
+        Route::patch('profile/email', [ProfileController::class, 'profileEmail']);
+        Route::patch('profile/phone', [ProfileController::class, 'profilePhone']);
     });
 
     // logout User

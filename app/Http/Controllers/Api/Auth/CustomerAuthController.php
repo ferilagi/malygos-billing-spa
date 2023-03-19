@@ -24,10 +24,10 @@ class CustomerAuthController extends Controller
         $customer = Customer::where('email', $request->email)->first();
 
         if (!$customer || !Hash::check($request->password, $customer->login_password)) {
-            throw ValidationException::withMessages([
+            return response()->json([
                 'success' => false,
                 'message' => [
-                    'error' => 'Invalid credentials'
+                    'error' => 'Maaf Username / Password Salah, Silahkan coba lagi'
                 ],
                 'statusCode' => 401
             ]);
