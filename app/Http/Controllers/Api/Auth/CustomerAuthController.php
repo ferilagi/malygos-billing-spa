@@ -23,6 +23,9 @@ class CustomerAuthController extends Controller
 
         $customer = Customer::where('email', $request->email)->first();
 
+        $token = $customer->tokens;
+
+        // if (!$customer || !Hash::check($request->password, $customer->getAuthPassword())) {
         if (!$customer || !Hash::check($request->password, $customer->login_password)) {
             return response()->json([
                 'success' => false,
@@ -47,16 +50,14 @@ class CustomerAuthController extends Controller
      */
     public function logout(Request $request)
     {
-        // Get user who requested the logout
-        $user = $request->user(); //or Auth::user()
-        // Revoke current user token
-        $user->tokens()->where('id', $user->currentAccessToken()->id)->delete();
-        // $customer =  $request->user();
-        // $customer->tokens()->delete();
+
+        // Delete customer token
+        auth()->user()->currentAccessToken()->first();
+
+        // Return response
         return response()->json([
             'success' => true,
             'message' => 'Anda telah Logout, Terima Kasih',
-            'statusCode' => 200
         ]);
     }
 }

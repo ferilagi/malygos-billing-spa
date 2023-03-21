@@ -40,16 +40,14 @@ class CommonInfoController extends Controller
                     'status' => $subscription->status,
                     'lastInvoice' => $latest_invoice,
                     'plan' => $subscription->planable,
-                ],
-                'statusCode' => 200
+                ]
             ]);
         } else {
             return response()->json([
                 'success' => false,
                 'message' => [
                     'error' => 'Maaf anda belum Berlangganan'
-                ],
-                'statusCode' => 401
+                ]
             ]);
         }
     }

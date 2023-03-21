@@ -38,6 +38,7 @@ Route::prefix('v1')->name('api.')->middleware('auth:sanctum')->group(function ()
         // Update Data for Customer
         Route::patch('profile/email', [ProfileController::class, 'profileEmail']);
         Route::patch('profile/phone', [ProfileController::class, 'profilePhone']);
+        Route::put('profile/password-update', [ProfileController::class, 'profilePassword']);
     });
 
     // logout User
