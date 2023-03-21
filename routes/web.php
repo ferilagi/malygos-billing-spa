@@ -15,6 +15,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SyncImportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -28,6 +29,15 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+// Privacy Policy  and term and usage
+Route::get('/privacy', function () {
+    return File::get(public_path() . '/privacy.html');
+});
+Route::get('/terms-and-conditions', function () {
+    return File::get(public_path() . '/terms-and-conditions.html');
+});
 
 Route::get('/', function () {
     return Inertia::render('Landing/Index', [
@@ -73,21 +83,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/notification', [NotificationController::class, 'index'])->name('notif.index');
 
     // Settings
-    Route::prefix('setting')->group( function () {
-      Route::resource('/billing', SettingController::class);
-      Route::resource('/mikrotik', MikrotikController::class);
-      Route::resource('/user', UserController::class);
+    Route::prefix('setting')->group(function () {
+        Route::resource('/billing', SettingController::class);
+        Route::resource('/mikrotik', MikrotikController::class);
+        Route::resource('/user', UserController::class);
 
-      // Setting Test
-      Route::get('/custom', [SettingController::class, 'testing'])->name('setting.custom');
+        // Setting Test
+        Route::get('/custom', [SettingController::class, 'testing'])->name('setting.custom');
     });
 
     Route::prefix('map')->group(function () {
         Route::resource('/area', AreaController::class);
         Route::get('/views', [AreaController::class, 'detailShow'])->name('detailShow');
-        Route::get('/leaflet', function () {return view('maps.leaflet');});
+        Route::get('/leaflet', function () {
+            return view('maps.leaflet');
+        });
     });
-
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
