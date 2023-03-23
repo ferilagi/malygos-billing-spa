@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Events\InvoiceMonthlyCreated;
 use App\Models\Setting;
 use App\Models\Subscription;
 use App\Models\Transaction;
@@ -38,8 +39,8 @@ class MonthlyTransaction extends Command
         $m = Carbon::now()->format('m');
         $s = Carbon::now()->format('s');
         $subs = Subscription::where('status', '!=', 'nonactive')
-                            ->where('first_transaction', 0)
-                            ->get();
+            ->where('first_transaction', 0)
+            ->get();
         if ($subs) {
             foreach ($subs as $sub) {
                 $duedate = Carbon::now()->setDay($sub->custom_duedate);
@@ -53,7 +54,7 @@ class MonthlyTransaction extends Command
                     $taxtotal = invTax($sub->planable->price);
                 }
 
-                Transaction::create([
+                $trans = Transaction::create([
                     'invoice' => $prefix . $y . $m . $s . $sub->id,
                     'sub_id' => $sub->id,
                     'name' => $sub->customer->name,
@@ -64,8 +65,11 @@ class MonthlyTransaction extends Command
                     'dueDate' => $duedate,
                     'status' => 'unpaid',
                 ]);
+
+                // event(new InvoiceMonthlyCreated($trans));
+                InvoiceMonthlyCreated::dispatch($trans);
             }
         } else
-        return 0;
+            return 0;
     }
 }

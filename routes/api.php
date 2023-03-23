@@ -33,7 +33,9 @@ Route::prefix('v1')->name('api.')->middleware('auth:sanctum')->group(function ()
     Route::middleware('type.customer')->group(function () {
         // initial route for customer
         Route::get('mydata', [CommonInfoController::class, 'mydata']);
+        Route::get('mynotification', [CommonInfoController::class, 'mynotification']);
         Route::get('myinvoice', [CommonInfoController::class, 'myinvoice']);
+        Route::get('myconnection', [CommonInfoController::class, 'myconnection']);
         Route::apiResource('invoice', InvoiceController::class);
         // Update Data for Customer
         Route::patch('profile/email', [ProfileController::class, 'profileEmail']);

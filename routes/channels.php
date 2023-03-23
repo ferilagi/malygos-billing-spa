@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Customer;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -15,4 +17,8 @@ use Illuminate\Support\Facades\Broadcast;
 
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
+});
+
+Broadcast::channel('invoice.{id}', function (Customer $customer, $id) {
+    return (int) $customer->id === Transaction::findOrNew($id)->subscription->customer->id;
 });

@@ -13,6 +13,7 @@ use App\Http\Controllers\ServiceStaticController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SyncImportController;
+use App\Http\Controllers\TestingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\File;
@@ -98,6 +99,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/leaflet', function () {
             return view('maps.leaflet');
         });
+    });
+
+    Route::prefix('testing')->group(function () {
+        Route::get('/testing-event', [TestingController::class, 'testingEventSubscriber'])->name('testing.eventSubscriber');
     });
 });
 

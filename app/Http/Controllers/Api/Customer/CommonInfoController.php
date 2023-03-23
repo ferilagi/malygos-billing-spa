@@ -25,29 +25,51 @@ class CommonInfoController extends Controller
     public function mydata(Request $request)
     {
         $customer =  $request->user();
-        $subscription = $customer->subscription;
-        // check if has transaction
-        $latest_invoice = $subscription->latestTransaction;
-        if (!$latest_invoice) {
+
+        // Check if has transaction
+        $latest_invoice = $customer->subscription->latestTransaction;
+        if ($latest_invoice) {
+            $latest_invoice = [
+                'invoice'  => $latest_invoice->invoice,
+                'name'  => $latest_invoice->name,
+                'status'  => $latest_invoice->status == 'paid' ? 'lunas' : 'belum lunas',
+                'method'  => $latest_invoice->method,
+                'subtotal'  => $latest_invoice->subtotal,
+                'taxtotal'  => $latest_invoice->taxtotal,
+                'total'  => $latest_invoice->total,
+                'date'  => $latest_invoice->date,
+                'dueDate'  => $latest_invoice->dueDate,
+            ];
+        } else {
             $latest_invoice = [];
         }
 
-        if ($subscription) {
+        // Format Packet
+        $plan = $customer->subscription->planable;
+        if ($plan) {
+            $plan = [
+                'name_prof' => $plan->name_prof,
+                // 'rateLimit' => $plan->rateLimit,
+                'price' => $plan->price,
+                'spelled' => $plan->spelled,
+                'alias' => $plan->alias,
+            ];
+        }
+
+        if ($customer->subscription) {
             return response()->json([
                 'success' => true,
-                'mydata' => [
-                    'type' => $subscription->type,
-                    'status' => $subscription->status,
+                'data' => [
+                    'type' => $customer->subscription->type,
+                    'status' => $customer->subscription->status,
                     'lastInvoice' => $latest_invoice,
-                    'plan' => $subscription->planable,
+                    'plan' => $plan,
                 ]
             ]);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => [
-                    'error' => 'Maaf anda belum Berlangganan'
-                ]
+                'message' => 'Maaf anda belum Berlangganan'
             ]);
         }
     }
@@ -63,22 +85,55 @@ class CommonInfoController extends Controller
         if ($invoices) {
             return response()->json([
                 'success' => true,
-                'myinvoices' => $invoices,
-                'statusCode' => 200
+                'data' => $invoices->map(fn ($invoice) => [
+                    'invoice'  => $invoice->invoice,
+                    'name'  => $invoice->name,
+                    'status'  => $invoice->status == 'paid' ? 'lunas' : 'belum lunas',
+                    'method'  => $invoice->method,
+                    'subtotal'  => $invoice->subtotal,
+                    'taxtotal'  => $invoice->taxtotal,
+                    'total'  => $invoice->total,
+                    'date'  => $invoice->date,
+                    'dueDate, '  => $invoice->dueDate,
+                ]),
             ]);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => [
-                    'error' => 'Maaf tidak ada invoice'
-                ],
-                'statusCode' => 401
+                'message' => 'Maaf tidak ada invoice',
             ]);
         }
     }
 
-    public function otherdata(Request $request): Response
+    /**
+     * Api EndPoint for getting Notification each Customer.
+     */
+    public function mynotification(Request $request)
+    {
+        $customer =  $request->user();
+        $notifications = $customer->notifications;
+
+
+        return response()->json([
+            'success' => true,
+            'data' => $notifications->map(fn ($notif) => [
+                'id' => $notif->id,
+                'notif' => $notif->data,
+                'read_at' => $notif->read_at,
+                'created_at' => $notif->created_at,
+            ]),
+        ]);
+    }
+
+    /**
+     * Api EndPoint for getting Internet Status each Customer.
+     */
+    public function myconnection(Request $request)
     {
         $user =  $request->user();
+        return response()->json([
+            'success' => true,
+            'message' => 'Normal',
+        ]);
     }
 }

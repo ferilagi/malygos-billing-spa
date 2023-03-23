@@ -26,35 +26,24 @@ class ProfileController extends Controller
     public function profileEmail(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'email',
-            'phone' => 'numeric',
-            'address' => 'max:255',
+            'email' => 'email:rfc,dns',
+            'phone' => 'numeric || min:8 || max:15',
+            'address' => 'min:10 || max:255',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'messages' => $validator->errors(), 'statusCode' => 401]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ]);
         }
-        // $user = $request->user();
-
-        // $customer = Customer::where('email', $user->email)->first();
-
-        // if (!$customer || !Hash::check($request->password, $customer->login_password)) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => [
-        //             'error' => 'Maaf Username / Password Salah, Silahkan coba lagi'
-        //         ],
-        //         'statusCode' => 401
-        //     ]);
-        // }
 
         $request->user()->fill($validator->validate());
         $request->user()->save();
 
         return response()->json([
             'success' => true,
-            'user' => $request->user(),
-            'statusCode' => 200
+            'user' => $request->user()
         ]);
     }
 
