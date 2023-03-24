@@ -81,7 +81,7 @@ const Section = () => {
 
                                 <div className="d-flex flex-wrap gap-2 mt-4">
                                     <Link
-                                        to="https://play.google.com/store/apps/details?id=com.ferilagi.malygos"
+                                        href="https://play.google.com/store/apps/details?id=com.ferilagi.malygos"
                                         className="btn btn-success"
                                     >
                                         Get the Apps
