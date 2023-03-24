@@ -34,8 +34,9 @@ use Inertia\Inertia;
 
 // Privacy Policy  and term and usage
 Route::get('/privacy', function () {
-    return File::get(public_path() . '/privacy.html');
+    return Inertia::render('Landing/Privacy');
 });
+
 Route::get('/terms-and-conditions', function () {
     return File::get(public_path() . '/terms-and-conditions.html');
 });
