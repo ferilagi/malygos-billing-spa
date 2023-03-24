@@ -80,8 +80,11 @@ const Section = () => {
                                 </p>
 
                                 <div className="d-flex flex-wrap gap-2 mt-4">
-                                    <Link to="#" className="btn btn-success">
-                                        Get Whitepaper
+                                    <Link
+                                        to="https://play.google.com/store/apps/details?id=com.ferilagi.malygos"
+                                        className="btn btn-success"
+                                    >
+                                        Get the Apps
                                     </Link>
                                     <Link to="#" className="btn btn-light">
                                         How it work

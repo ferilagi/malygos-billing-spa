@@ -31,32 +31,32 @@ class SubscriptionController extends Controller
     public function index()
     {
         $subs = Subscription::with(
-                'customer',
-                'customer.user:id,name',
-                'planable:id,name_prof,price',
-                'area'
-            )
-            ->when(Auth::user()->level === 'operator', function($q) {
-                $q->whereHas('customer', function($w) {
+            'customer',
+            'customer.user:id,name',
+            'planable:id,name_prof,price',
+            'area'
+        )
+            ->when(Auth::user()->level === 'operator', function ($q) {
+                $q->whereHas('customer', function ($w) {
                     $w->where('user_id', Auth::user()->id);
                 });
             })
-        //   ->filter(Request::only('search'))
-        //   ->paginate()
-        //   ->withQueryString()
-        //   ->through(fn ($subs) => [
+            //   ->filter(Request::only('search'))
+            //   ->paginate()
+            //   ->withQueryString()
+            //   ->through(fn ($subs) => [
             ->get();
 
         return Inertia::render('Subscription/Index', [
-          'filters' => FacadesRequest::all('search'),
-          'subs' => $subs->map(fn ($subs,) => [
-                    'id'  => $subs->id,
-                    'name'  => $subs->customer->name,
-                    'type'  => $subs->type,
-                    'status'  => $subs->status,
-                    'plan'  => $subs->planable->name_prof,
-                    'owner'   => $subs->customer->user ? $subs->customer->user->only('name') : null,
-                ]),
+            'filters' => FacadesRequest::all('search'),
+            'subs' => $subs->map(fn ($subs,) => [
+                'id'  => $subs->id,
+                'name'  => $subs->customer->name,
+                'type'  => $subs->type,
+                'status'  => $subs->status,
+                'plan'  => $subs->planable->name_prof,
+                'owner'   => $subs->customer->user ? $subs->customer->user->only('name') : null,
+            ]),
         ]);
     }
 
@@ -69,7 +69,7 @@ class SubscriptionController extends Controller
     {
         return Inertia::render('Subscription/Create', [
             'cust' => Customer::select('id', 'name')->doesntHave("subscription")->get(),
-            'areas' => Area::all('id','name'),
+            'areas' => Area::all('id', 'name'),
             'pprofile' => ServicePpp::all('id', 'name_prof'),
             'sprofile' => ServiceStatic::all('id', 'name_prof'),
         ]);
@@ -105,7 +105,7 @@ class SubscriptionController extends Controller
                 'status' => $subscription->status,
                 'integration' => $subscription->integration,
             ],
-            'trans' => $subscription->transaction->sortByDesc('updated_at'),
+            'trans' => $subscription->transaction->sortByDesc('created_at'),
             'trans_count' => [
                 'paid' => $subscription->transaction->where('status', 'paid')->count(),
                 'total' => $subscription->transaction->count(),
@@ -135,12 +135,12 @@ class SubscriptionController extends Controller
     public function changeStatus(Request $request)
     {
 
-        $validatedData = Validator::make($request->all(),[
-            'sub_id'=> 'required',
-            'sub_status'=> 'required',
+        $validatedData = Validator::make($request->all(), [
+            'sub_id' => 'required',
+            'sub_status' => 'required',
         ]);
-        if ($validatedData->fails()){
-            return back()->with('error',$validatedData->errors()->toJson());
+        if ($validatedData->fails()) {
+            return back()->with('error', $validatedData->errors()->toJson());
         }
 
         $id = $request->sub_id;
@@ -153,7 +153,7 @@ class SubscriptionController extends Controller
             return redirect()->back()->with([
                 'message' => [
                     'status' => 'warning',
-                    'text' => 'Already in '.$status.' Status',
+                    'text' => 'Already in ' . $status . ' Status',
                 ]
             ]);
         }
@@ -181,65 +181,65 @@ class SubscriptionController extends Controller
             $mikrotik = Mikrotik::where('name', $sub->planable->routers)->first();
             // Sync to Mikrotik
             if ($mikrotik) {
-                    $config =
+                $config =
                     (new Config())
-                        ->set('host', $mikrotik->{'ip_addr'})
-                        ->set('port', $mikrotik->{'port'})
-                        ->set('pass', $mikrotik->{'pass'})
-                        ->set('user', $mikrotik->{'user'});
-                    try {
-                        $client = new Client($config);
-                        } catch (ConnectException $e) {
-                            die('Unable to connect to the router.');
-                            return response()->json(['success' => false, 'message' => 'Unable to connect to the Router.']);
-                        }
-                            $query = new Query('/ppp/secret/set');
-                            if ($status == 'active') {
-                                        $query->equal('.id', $username);
-                                        $query->equal('profile', $name_prof);
-                                        // Send query and read response from RouterOS
-                                        $response = $client->query($query)->read();
-                            } elseif ($status == 'nonactive') {
-                                        $query->equal('.id', $username);
-                                        $query->equal('profile', $listIsolir);
-                                        // Send query and read response from RouterOS
-                                        $response = $client->query($query)->read();
-                            } elseif ($status == 'isolated') {
-                                        $query->equal('.id', $username);
-                                        $query->equal('profile', $listIsolir);
-                                        // Send query and read response from RouterOS
-                                        $response = $client->query($query)->read();
-                            }
-                        $njlimet = $client->query('/ppp/active/print', ['name', $username])->read();
-                        if ($njlimet) {
-                            $oldId = $njlimet[0]['.id'];
-                            $query = new Query('/ppp/active/remove');
-                                        $query->equal('.id', $oldId);
-                                        $response = $client->query($query)->read();
-                        }
-                    $sub->update([
-                        'status' => $status,
-                    ]);
-                    $nc_data = [
-                        'subject' => $nc_subject,
-                        'action' => 'Change Status '. $status,
-                        'status' => 'Success',
-                        'table' => 'Subscriptions',
-                        'object' => $nc_object,
-                    ];
+                    ->set('host', $mikrotik->{'ip_addr'})
+                    ->set('port', $mikrotik->{'port'})
+                    ->set('pass', $mikrotik->{'pass'})
+                    ->set('user', $mikrotik->{'user'});
+                try {
+                    $client = new Client($config);
+                } catch (ConnectException $e) {
+                    die('Unable to connect to the router.');
+                    return response()->json(['success' => false, 'message' => 'Unable to connect to the Router.']);
+                }
+                $query = new Query('/ppp/secret/set');
+                if ($status == 'active') {
+                    $query->equal('.id', $username);
+                    $query->equal('profile', $name_prof);
+                    // Send query and read response from RouterOS
+                    $response = $client->query($query)->read();
+                } elseif ($status == 'nonactive') {
+                    $query->equal('.id', $username);
+                    $query->equal('profile', $listIsolir);
+                    // Send query and read response from RouterOS
+                    $response = $client->query($query)->read();
+                } elseif ($status == 'isolated') {
+                    $query->equal('.id', $username);
+                    $query->equal('profile', $listIsolir);
+                    // Send query and read response from RouterOS
+                    $response = $client->query($query)->read();
+                }
+                $njlimet = $client->query('/ppp/active/print', ['name', $username])->read();
+                if ($njlimet) {
+                    $oldId = $njlimet[0]['.id'];
+                    $query = new Query('/ppp/active/remove');
+                    $query->equal('.id', $oldId);
+                    $response = $client->query($query)->read();
+                }
+                $sub->update([
+                    'status' => $status,
+                ]);
+                $nc_data = [
+                    'subject' => $nc_subject,
+                    'action' => 'Change Status ' . $status,
+                    'status' => 'Success',
+                    'table' => 'Subscriptions',
+                    'object' => $nc_object,
+                ];
 
-                    $nc_prime->notify(new CrudNotification($nc_data));
-                    if (Auth::user()->level != 'admin') {
-                        User::where('id', Auth::user()->id)
+                $nc_prime->notify(new CrudNotification($nc_data));
+                if (Auth::user()->level != 'admin') {
+                    User::where('id', Auth::user()->id)
                         ->firstOrFail()
                         ->notify(new CrudNotification($nc_data));
-                    }
-                    return redirect()->back()->with([
-                        'message' => [
-                            'status' => 'success',
-                            'text' => $sub->customer->name . ', Status Change to ' . $status,
-                        ]
-                    ]);
+                }
+                return redirect()->back()->with([
+                    'message' => [
+                        'status' => 'success',
+                        'text' => $sub->customer->name . ', Status Change to ' . $status,
+                    ]
+                ]);
             } else {
                 return redirect()->back()->with([
                     'message' => [
@@ -248,7 +248,6 @@ class SubscriptionController extends Controller
                     ]
                 ]);
             }
-
         } elseif ($sub->type == 'static') {
             // Prepare Variable
             $username = $sub->planable->prefixQueue . $sub->queuename . $sub->planable->sufixQueue;
@@ -258,83 +257,83 @@ class SubscriptionController extends Controller
             $mikrotik = Mikrotik::where('name', $sub->planable->routers)->first();
             // Sync to Mikrotik
             if ($mikrotik) {
-                    $config =
+                $config =
                     (new Config())
-                        ->set('host', $mikrotik->{'ip_addr'})
-                        ->set('port', $mikrotik->{'port'})
-                        ->set('pass', $mikrotik->{'pass'})
-                        ->set('user', $mikrotik->{'user'});
-                    try {
-                        $client = new Client($config);
-                        } catch (ConnectException $e) {
-                            die('Unable to connect to the router.');
-                            return response()->json(['success' => false, 'message' => 'Unable to connect to the Router.']);
-                        }
-                    $njlimet = $client->query('/ip/firewall/address-list/print', [
-                                        ['address', $sub->ip_addr],
-                                        ['comment', $commentaddrlist],],'|')->read();
+                    ->set('host', $mikrotik->{'ip_addr'})
+                    ->set('port', $mikrotik->{'port'})
+                    ->set('pass', $mikrotik->{'pass'})
+                    ->set('user', $mikrotik->{'user'});
+                try {
+                    $client = new Client($config);
+                } catch (ConnectException $e) {
+                    die('Unable to connect to the router.');
+                    return response()->json(['success' => false, 'message' => 'Unable to connect to the Router.']);
+                }
+                $njlimet = $client->query('/ip/firewall/address-list/print', [
+                    ['address', $sub->ip_addr],
+                    ['comment', $commentaddrlist],
+                ], '|')->read();
 
-                    // Jika di Address-List tidak ketemu
-                    if (!$njlimet) {
-                        if ($status == 'active') {
-                            $newList = $listNormal;
-                        } elseif ($status == 'isolated') {
-                            $newList = $listIsolir;
-                        } else {
-                            return response()->json(['success' => false, 'message' => 'Failed Search IP in Address List']);
-                        }
-
-                        $query = new Query('/ip/firewall/address-list/add');
-                                $query->equal('list', $newList);
-                                $query->equal('address', $sub->ip_addr);
-                                $query->equal('comment', $commentaddrlist);
-                            // Send query and read response from RouterOS
-                            $response = $client->query($query)->read();
-
+                // Jika di Address-List tidak ketemu
+                if (!$njlimet) {
+                    if ($status == 'active') {
+                        $newList = $listNormal;
+                    } elseif ($status == 'isolated') {
+                        $newList = $listIsolir;
                     } else {
-                        $oldId = $njlimet[0]['.id'];
-                                $query = new Query('/ip/firewall/address-list/set');
-                            if ($status == 'active') {
-                                        $query->equal('.id', $oldId);
-                                        $query->equal('list', $listNormal);
-                                        // Send query and read response from RouterOS
-                                        $response = $client->query($query)->read();
-                            } elseif ($status == 'nonactive') {
-                                        $query->equal('.id', $oldId);
-                                        $query->equal('list', $listIsolir);
-                                        // Send query and read response from RouterOS
-                                        $response = $client->query($query)->read();
-                            } elseif ($status == 'isolated') {
-                                        $query->equal('.id', $oldId);
-                                        $query->equal('list', $listIsolir);
-                                        // Send query and read response from RouterOS
-                                        $response = $client->query($query)->read();
-                            }
+                        return response()->json(['success' => false, 'message' => 'Failed Search IP in Address List']);
                     }
 
-                    $sub->update([
-                        'status' => $status,
-                    ]);
-                    $nc_data = [
-                        'subject' => $nc_subject,
-                        'action' => 'Change Status '. $status,
-                        'status' => 'Success',
-                        'table' => 'Subscriptions',
-                        'object' => $nc_object,
-                    ];
+                    $query = new Query('/ip/firewall/address-list/add');
+                    $query->equal('list', $newList);
+                    $query->equal('address', $sub->ip_addr);
+                    $query->equal('comment', $commentaddrlist);
+                    // Send query and read response from RouterOS
+                    $response = $client->query($query)->read();
+                } else {
+                    $oldId = $njlimet[0]['.id'];
+                    $query = new Query('/ip/firewall/address-list/set');
+                    if ($status == 'active') {
+                        $query->equal('.id', $oldId);
+                        $query->equal('list', $listNormal);
+                        // Send query and read response from RouterOS
+                        $response = $client->query($query)->read();
+                    } elseif ($status == 'nonactive') {
+                        $query->equal('.id', $oldId);
+                        $query->equal('list', $listIsolir);
+                        // Send query and read response from RouterOS
+                        $response = $client->query($query)->read();
+                    } elseif ($status == 'isolated') {
+                        $query->equal('.id', $oldId);
+                        $query->equal('list', $listIsolir);
+                        // Send query and read response from RouterOS
+                        $response = $client->query($query)->read();
+                    }
+                }
 
-                    $nc_prime->notify(new CrudNotification($nc_data));
-                    if (Auth::user()->level != 'admin') {
-                        User::where('id', Auth::user()->id)
+                $sub->update([
+                    'status' => $status,
+                ]);
+                $nc_data = [
+                    'subject' => $nc_subject,
+                    'action' => 'Change Status ' . $status,
+                    'status' => 'Success',
+                    'table' => 'Subscriptions',
+                    'object' => $nc_object,
+                ];
+
+                $nc_prime->notify(new CrudNotification($nc_data));
+                if (Auth::user()->level != 'admin') {
+                    User::where('id', Auth::user()->id)
                         ->firstOrFail()
                         ->notify(new CrudNotification($nc_data));
-                    }
-                    return redirect()->back()->with([
-                        'message' => [
-                            'status' => 'success',
-                            'text' => $sub->customer->name . ', Status Change to ' . $status,
-                        ]
-                    ]);
+                }
+                return redirect()->back()->with([
+                    'message' => [
+                        'status' => 'success',
+                        'text' => $sub->customer->name . ', Status Change to ' . $status,
+                    ]
+                ]);
             } else {
                 return redirect()->back()->with([
                     'message' => [

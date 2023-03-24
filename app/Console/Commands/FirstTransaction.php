@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use App\Models\Setting;
 use App\Models\Subscription;
 use App\Models\Transaction;
+use App\Models\User;
+use App\Notifications\CrudNotification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -56,23 +58,34 @@ class FirstTransaction extends Command
                     $taxtotal = invTax($proprice);
                 }
 
-                Transaction::create([
-                    'invoice' => $prefix . $y . $m . $s . $sub->id,
-                    'sub_id' => $sub->id,
-                    'name' => $sub->customer->name,
-                    'subtotal' => $subtotal,
-                    'taxtotal' => $taxtotal,
-                    'total' => $subtotal + $taxtotal,
-                    'date' => $datenow,
-                    'dueDate' => $duedate,
-                    'status' => 'unpaid',
+                Transaction::create(
+                    [
+                        'invoice' => $prefix . $y . $m . $s . $sub->id,
+                        'sub_id' => $sub->id,
+                        'name' => $sub->customer->name,
+                        'subtotal' => $subtotal,
+                        'taxtotal' => $taxtotal,
+                        'total' => $subtotal + $taxtotal,
+                        'date' => $datenow,
+                        'dueDate' => $duedate,
+                        'status' => 'unpaid',
                     ]
                 );
                 $first = Subscription::find($sub->id);
                 $first->first_transaction = 0;
                 $first->save();
+                // Create Notification about the transaction
+                $nc_prime = User::first();
+                $nc_data = [
+                    'subject' => 'Invis_Bot',
+                    'action' => 'Create First Transaction',
+                    'status' => 'Success',
+                    'table' => 'Transaction',
+                    'object' => $sub->customer->name,
+                ];
+                $nc_prime->notify(new CrudNotification($nc_data));
             }
         } else
-        return 0;
+            return 0;
     }
 }

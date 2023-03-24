@@ -27,8 +27,8 @@ class ProfileController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'email:rfc,dns',
-            'phone' => 'numeric || min:8 || max:15',
-            'address' => 'min:10 || max:255',
+            'phone' => 'numeric|digits_between:8,15',
+            'address' => 'min:10|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -43,6 +43,7 @@ class ProfileController extends Controller
 
         return response()->json([
             'success' => true,
+            'message' => 'Data anda berhasil dirubah',
             'user' => $request->user()
         ]);
     }

@@ -95,6 +95,7 @@ class CommonInfoController extends Controller
                     'total'  => $invoice->total,
                     'date'  => $invoice->date,
                     'dueDate, '  => $invoice->dueDate,
+                    'created_at, '  => $invoice->created_at,
                 ]),
             ]);
         } else {
