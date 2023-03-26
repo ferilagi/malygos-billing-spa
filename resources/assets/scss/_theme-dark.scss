@@ -2,9 +2,9 @@
 
 [data-layout-mode="dark"] {
     // Color system - Dark Mode only
-    $gray-100: #212529;
-    $gray-200: #2a3042;
-    $gray-300: #32394e;
+    $gray-100: #0f1827;
+    $gray-200: #121d30;
+    $gray-300: #1f3352;
     $gray-400: #a6b0cf;
     $gray-500: #bfc8e2;
     $gray-600: #c3cbe4;
@@ -29,7 +29,7 @@
         --#{$prefix}gray-#{$color}: #{$value};
     }
 
-    --#{$prefix}body-bg: #222736;
+    --#{$prefix}body-bg: #151f32;
     --#{$prefix}body-bg-rgb: rgb(34, 39, 54);
     --#{$prefix}body-color-rgb: #{to-rgb($gray-400)};
     --#{$prefix}body-color: #{$gray-400};
@@ -49,20 +49,20 @@
     --#{$prefix}dark-rgb: #{to-rgb($gray-700)};
 
     //topbar
-    --#{$prefix}heading-bg: #262b3c;
+    --#{$prefix}heading-bg: #151f32;
     --#{$prefix}header-item-color: #{$gray-400};
-    --#{$prefix}topbar-search-bg: #{$gray-200};
+    --#{$prefix}topbar-search-bg: #{$gray-300};
 
     --#{$prefix}heading-dark-bg: #{$primary};
 
-    --#{$prefix}boxed-body-bg: #32394f;
+    --#{$prefix}boxed-body-bg: #151f32;
 
-    --#{$prefix}topnav-bg: #282e3f;
+    --#{$prefix}topnav-bg: #151f32;
     --#{$prefix}menu-item-color: #a6b0cf;
 
     //footer
-    --#{$prefix}footer-bg: #262b3c;
-    --#{$prefix}footer-color: #{$gray-400};
+    --#{$prefix}footer-bg: #151f32;
+    --#{$prefix}footer-color: #{$gray-100};
 
     .card {
         --#{$prefix}card-bg: #{$gray-200};

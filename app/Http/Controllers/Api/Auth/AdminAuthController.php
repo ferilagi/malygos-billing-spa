@@ -73,19 +73,18 @@ class AdminAuthController extends Controller
                 'message' => [
                     'error' => 'Invalid credentials'
                 ],
-                'statusCode' => 401
             ]);
         };
     }
 
     public function logout(Request $request)
     {
-        $user =  $request->user();
-        $user->tokens()->delete();
+        // Delete customer token
+        auth()->user()->currentAccessToken()->first();
+
         return response()->json([
             'success' => true,
             'message' => 'Anda telah Logout, Terima Kasih',
-            'statusCode' => 200
         ]);
     }
 }
