@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mikrotik;
 use App\Models\ServiceStatic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class ServiceStaticController extends Controller
@@ -15,9 +17,9 @@ class ServiceStaticController extends Controller
      */
     public function index()
     {
-        $sprofiles = ServiceStatic::all();
         return Inertia::render('Plan/Static/Index', [
-            'sprofiles' => $sprofiles,
+            'sprofiles' => ServiceStatic::all(),
+            'routers' => Mikrotik::all('id', 'name'),
         ]);
     }
 
@@ -39,7 +41,65 @@ class ServiceStaticController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validatedData = Validator::make($request->all(), [
+            'name' => 'required|min:4',
+            'netmask' => 'required',
+            'rateLimit' => 'required',
+            'router' => 'required',
+
+        ]);
+        if ($validatedData->fails()) {
+            return redirect()->back()->with([
+                'message' => [
+                    'status' => 'error',
+                    'text' => $validatedData->errors()->__toString(),
+                ]
+            ]);
+        }
+
+        $name = $request->name;
+        $alias = $request->input('alias', $name);
+
+        $id = $request->prof_id;
+        ServiceStatic::updateOrCreate(
+            [
+                'id' => $id
+            ],
+            [
+                'name_prof' => $request->name,
+                'ip_range' => $request->ipRange,
+                'netmask' => $request->netmask,
+                'limitAt' => $request->limitAt,
+                'rateLimit' => $request->rateLimit,
+                'burstLimit' => $request->burstLimit,
+                'burstThres' => $request->burstThres,
+                'burstTime' => $request->burstTime,
+                'priority' => $request->priority,
+                'parentQueue' => $request->parentQueue,
+                'prefixQueue' => $request->prefixQueue,
+                'sufixQueue' => $request->sufixQueue,
+                'comment' => $request->comment,
+                'price' => $request->price,
+                'commission' => $request->commission,
+                'spelled' => $request->spelled,
+                'alias' => $alias,
+                'routers' => $request->router,
+            ]
+        );
+
+        if (empty($request->prof_id))
+            $msg = 'Profile added successfully.';
+
+        else
+            $msg = 'Profile update successfully.';
+
+        return redirect()->back()->with([
+            'message' => [
+                'status' => 'success',
+                'text' => $msg,
+            ]
+        ]);
     }
 
     /**

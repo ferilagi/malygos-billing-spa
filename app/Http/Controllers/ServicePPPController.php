@@ -22,9 +22,9 @@ class ServicePPPController extends Controller
      */
     public function index()
     {
-        $pprofiles = ServicePpp::all();
         return Inertia::render('Plan/PPP/Index', [
-            'pprofiles' => $pprofiles,
+            'pprofiles' => ServicePpp::all(),
+            'routers' => Mikrotik::all('id', 'name'),
         ]);
     }
 
@@ -47,7 +47,7 @@ class ServicePPPController extends Controller
 
     public function sync(Request $request)
     {
-        $routers = Mikrotik::select('id','name')->where('is_active', true)->get();
+        $routers = Mikrotik::select('id', 'name')->where('is_active', true)->get();
         $profiles = [];
 
         if ($request->router) {
@@ -55,12 +55,12 @@ class ServicePPPController extends Controller
             $mikrotik = Mikrotik::where('name', $request->router)->first();
             $config =
                 (new Config())
-                    ->set('host', $mikrotik->{'ip_addr'})
-                    ->set('port', $mikrotik->{'port'})
-                    ->set('pass', $mikrotik->{'pass'})
-                    ->set('user', $mikrotik->{'user'});
+                ->set('host', $mikrotik->{'ip_addr'})
+                ->set('port', $mikrotik->{'port'})
+                ->set('pass', $mikrotik->{'pass'})
+                ->set('user', $mikrotik->{'user'});
 
-            if($mikrotik){
+            if ($mikrotik) {
                 try {
                     $client = new Client($config);
                 } catch (ConnectException $e) {
@@ -91,8 +91,9 @@ class ServicePPPController extends Controller
                 $exist = [];
                 $prof = ServicePpp::whereNotNull('name_prof')->get();
                 if ($prof) {
-                    foreach($prof as $profile)
-                    { $exist[] = $profile->name_prof; }
+                    foreach ($prof as $profile) {
+                        $exist[] = $profile->name_prof;
+                    }
                 }
                 // Ready to Go!!!!!!!!!!!!!
                 $profiles = $collection->whereNotIn('name', $exist);
@@ -122,15 +123,15 @@ class ServicePPPController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = Validator::make($request->all(),[
-            'name'=> 'required|min:4',
-            'remoteAddress'=> 'required',
-            'rateLimit'=> 'required',
-            'router'=> 'required',
+        $validatedData = Validator::make($request->all(), [
+            'name' => 'required|min:4',
+            'remoteAddress' => 'required',
+            'rateLimit' => 'required',
+            'router' => 'required',
 
         ]);
 
-        if ($validatedData->fails()){
+        if ($validatedData->fails()) {
             return redirect()->back()->with([
                 'message' => [
                     'status' => 'error',
@@ -159,17 +160,17 @@ class ServicePPPController extends Controller
 
         $msg = '';
 
-        $mikrotik = Mikrotik::where('name',$routers)->first();
+        $mikrotik = Mikrotik::where('name', $routers)->first();
         $listNormal = Setting::where('id', 8)->first();
         $config =
-        (new Config())
+            (new Config())
             ->set('host', $mikrotik->{'ip_addr'})
             ->set('port', $mikrotik->{'port'})
             ->set('pass', $mikrotik->{'pass'})
             ->set('user', $mikrotik->{'user'});
 
         if ($prof_id) {
-            if($msg == ''){
+            if ($msg == '') {
                 try {
                     $client = new Client($config);
                 } catch (ConnectException $e) {
@@ -181,165 +182,159 @@ class ServicePPPController extends Controller
                             'text' => $e,
                         ]
                     ]);
-
                 }
                 $query = new Query('/ppp/profile/set');
-                            $query->equal('name', $name);
-                            $query->equal('local-address', $localAddress);
-                            $query->equal('remote-address', $remoteAddress);
-                            $query->equal('address-list', $listNormal->value);
-                            $query->equal('rate-limit', $rateLimit);
-                            $query->equal('parent-queue', $parentQueue);
-                            $query->equal('only-one', $onlyOne);
-                        if ($onUp) {
-                            $query->equal('on-up', $onUp);
-                        }
-                        if ($onDown) {
-                            $query->equal('on-down', $onDown);
-                        }
-                        if ($comment) {
-                            $query->equal('comment', $comment);
-                        }
-                    // Send query and read response from RouterOS
-                    $response = $client->query($query)->read();
-
-                    $prof = ServicePpp::find($prof_id);
-                    $prof->name_prof = $name;
-                    $prof->localAddress = $localAddress;
-                    $prof->remoteAddress = $remoteAddress;
-                    $prof->rateLimit = $rateLimit;
-                    $prof->parentQueue = $parentQueue;
-                    $prof->addressList = $listNormal->value;
-                    $prof->onlyOne = $onlyOne;
-                    $prof->onUp = $onUp;
-                    $prof->onDown = $onDown;
-                    $prof->prefixQueue = $prefixQueue;
-                    $prof->sufixQueue = $sufixQueue;
-                    $prof->comment = $comment;
-                    $prof->price = $price;
-                    $prof->commission = $commission;
-                    $prof->spelled = $spelled;
-                    $prof->alias = $alias;
-                    $prof->routers = $routers;
-                    $prof->update();
-
-                    return redirect()->back()->with([
-                        'message' => [
-                            'status' => 'success',
-                            'text' => 'Profile Update successfully!',
-                        ]
-                    ]);
-
-                }else{
-
-                    return redirect()->back()->with([
-                        'message' => [
-                            'status' => 'error',
-                            'text' => 'Profile Update failed!',
-                        ]
-                    ]);
+                $query->equal('name', $name);
+                $query->equal('local-address', $localAddress);
+                $query->equal('remote-address', $remoteAddress);
+                $query->equal('address-list', $listNormal->value);
+                $query->equal('rate-limit', $rateLimit);
+                $query->equal('parent-queue', $parentQueue);
+                $query->equal('only-one', $onlyOne);
+                if ($onUp) {
+                    $query->equal('on-up', $onUp);
                 }
+                if ($onDown) {
+                    $query->equal('on-down', $onDown);
+                }
+                if ($comment) {
+                    $query->equal('comment', $comment);
+                }
+                // Send query and read response from RouterOS
+                $response = $client->query($query)->read();
 
+                $prof = ServicePpp::find($prof_id);
+                $prof->name_prof = $name;
+                $prof->localAddress = $localAddress;
+                $prof->remoteAddress = $remoteAddress;
+                $prof->rateLimit = $rateLimit;
+                $prof->parentQueue = $parentQueue;
+                $prof->addressList = $listNormal->value;
+                $prof->onlyOne = $onlyOne;
+                $prof->onUp = $onUp;
+                $prof->onDown = $onDown;
+                $prof->prefixQueue = $prefixQueue;
+                $prof->sufixQueue = $sufixQueue;
+                $prof->comment = $comment;
+                $prof->price = $price;
+                $prof->commission = $commission;
+                $prof->spelled = $spelled;
+                $prof->alias = $alias;
+                $prof->routers = $routers;
+                $prof->update();
 
+                return redirect()->back()->with([
+                    'message' => [
+                        'status' => 'success',
+                        'text' => 'Profile Update successfully!',
+                    ]
+                ]);
+            } else {
+
+                return redirect()->back()->with([
+                    'message' => [
+                        'status' => 'error',
+                        'text' => 'Profile Update failed!',
+                    ]
+                ]);
+            }
         } else {
 
-            $d = ServicePpp::where('name_prof',$name)->first();
-            if($d){
+            $d = ServicePpp::where('name_prof', $name)->first();
+            if ($d) {
                 return back()->with('error', 'Profile Already Exist');
             }
-            if($msg == ''){
+            if ($msg == '') {
                 try {
                     $client = new Client($config);
                 } catch (ConnectException $e) {
                     die('Unable to connect to the router.');
                     return redirect()->route('mikrotik')->with('info', $e);
-
                 }
                 $query = new Query('/ppp/profile/print');
-                    $query->where('name', $name);
-                    $resp = $client->query($query)->read();
-                    if ( $resp) {
-
-                        ServicePpp::create([
-                            'name_prof' => $name,
-                            'localAddress' => $localAddress,
-                            'remoteAddress' => $remoteAddress,
-                            'rateLimit' => $rateLimit,
-                            'parentQueue' => $parentQueue,
-                            'addressList' => $listNormal->value,
-                            'onlyOne' => $onlyOne,
-                            'onUp' => $onUp,
-                            'onDown' => $onDown,
-                            'prefixQueue'=> $prefixQueue,
-                            'sufixQueue' => $sufixQueue,
-                            'comment' => $comment,
-                            'price' => $price,
-                            'commission' => $commission,
-                            'spelled' => $spelled,
-                            'alias' => $alias,
-                            'routers' => $routers,
-                        ]);
-                        return redirect()->back()->with([
-                            'message' => [
-                                'status' => 'success',
-                                'text' => 'Profile Sync successfully!',
-                            ]
-                        ]);
-                    } else {
-                        $query = new Query('/ppp/profile/add');
-                            $query->equal('name', $name);
-                            $query->equal('local-address', $localAddress);
-                            $query->equal('remote-address', $remoteAddress);
-                            $query->equal('address-list', $listNormal->value);
-                            $query->equal('rate-limit', $rateLimit);
-                            $query->equal('parent-queue', $parentQueue);
-                            $query->equal('only-one', $onlyOne);
-                        if ($onUp) {
-                            $query->equal('on-up', $onUp);
-                        }
-                        if ($onDown) {
-                            $query->equal('on-down', $onDown);
-                        }
-                        if ($comment) {
-                            $query->equal('comment', $comment);
-                        }
-                        // Send query and read response from RouterOS
-                        $response = $client->query($query)->read();
-
-                        ServicePpp::create([
-                            'name_prof' => $name,
-                            'localAddress' => $localAddress,
-                            'remoteAddress' => $remoteAddress,
-                            'rateLimit' => $rateLimit,
-                            'parentQueue' => $parentQueue,
-                            'addressList' => $listNormal->value,
-                            'onlyOne' => $onlyOne,
-                            'onUp' => $onUp,
-                            'onDown' => $onDown,
-                            'prefixQueue'=> $prefixQueue,
-                            'sufixQueue' => $sufixQueue,
-                            'comment' => $comment,
-                            'price' => $price,
-                            'commission' => $commission,
-                            'spelled' => $spelled,
-                            'alias' => $alias,
-                            'routers' => $routers,
-                        ]);
-                        return redirect()->back()->with([
-                            'message' => [
-                                'status' => 'success',
-                                'text' => 'Profile Add successfully!',
-                            ]
-                        ]);
-                    }
-                }else{
+                $query->where('name', $name);
+                $resp = $client->query($query)->read();
+                if ($resp) {
+                    ServicePpp::create([
+                        'name_prof' => $name,
+                        'localAddress' => $localAddress,
+                        'remoteAddress' => $remoteAddress,
+                        'rateLimit' => $rateLimit,
+                        'parentQueue' => $parentQueue,
+                        'addressList' => $listNormal->value,
+                        'onlyOne' => $onlyOne,
+                        'onUp' => $onUp,
+                        'onDown' => $onDown,
+                        'prefixQueue' => $prefixQueue,
+                        'sufixQueue' => $sufixQueue,
+                        'comment' => $comment,
+                        'price' => $price,
+                        'commission' => $commission,
+                        'spelled' => $spelled,
+                        'alias' => $alias,
+                        'routers' => $routers,
+                    ]);
                     return redirect()->back()->with([
                         'message' => [
-                            'status' => 'error',
-                            'text' => 'Something went wrong!',
+                            'status' => 'success',
+                            'text' => 'Profile Sync successfully!',
+                        ]
+                    ]);
+                } else {
+                    $query = new Query('/ppp/profile/add');
+                    $query->equal('name', $name);
+                    $query->equal('local-address', $localAddress);
+                    $query->equal('remote-address', $remoteAddress);
+                    $query->equal('address-list', $listNormal->value);
+                    $query->equal('rate-limit', $rateLimit);
+                    $query->equal('parent-queue', $parentQueue);
+                    $query->equal('only-one', $onlyOne);
+                    if ($onUp) {
+                        $query->equal('on-up', $onUp);
+                    }
+                    if ($onDown) {
+                        $query->equal('on-down', $onDown);
+                    }
+                    if ($comment) {
+                        $query->equal('comment', $comment);
+                    }
+                    // Send query and read response from RouterOS
+                    $response = $client->query($query)->read();
+
+                    ServicePpp::create([
+                        'name_prof' => $name,
+                        'localAddress' => $localAddress,
+                        'remoteAddress' => $remoteAddress,
+                        'rateLimit' => $rateLimit,
+                        'parentQueue' => $parentQueue,
+                        'addressList' => $listNormal->value,
+                        'onlyOne' => $onlyOne,
+                        'onUp' => $onUp,
+                        'onDown' => $onDown,
+                        'prefixQueue' => $prefixQueue,
+                        'sufixQueue' => $sufixQueue,
+                        'comment' => $comment,
+                        'price' => $price,
+                        'commission' => $commission,
+                        'spelled' => $spelled,
+                        'alias' => $alias,
+                        'routers' => $routers,
+                    ]);
+                    return redirect()->back()->with([
+                        'message' => [
+                            'status' => 'success',
+                            'text' => 'Profile Add successfully!',
                         ]
                     ]);
                 }
+            } else {
+                return redirect()->back()->with([
+                    'message' => [
+                        'status' => 'error',
+                        'text' => 'Something went wrong!',
+                    ]
+                ]);
+            }
         }
     }
 
